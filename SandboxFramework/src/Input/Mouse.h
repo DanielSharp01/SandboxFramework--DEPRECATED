@@ -1,17 +1,12 @@
 #pragma once
 
 #include "MouseState.h"
-
-namespace SandboxFramework
-{
-	class Game;
-}
+#include <GLFW\glfw3.h>
 
 namespace SandboxFramework {
 	namespace Input {
 		class Mouse
 		{
-			friend class SandboxFramework::Game;
 		private:
 			static MouseState actual;
 		public:
@@ -20,6 +15,12 @@ namespace SandboxFramework {
 			static void setButtonState(int button, bool state);
 			static void setCursorState(float x, float y);
 			static void setScrollState(float x, float y);
+
+			friend void cursorPositionCallback(GLFWwindow* sender, double xpos, double ypos);
+
+			friend void mouseButtonCallback(GLFWwindow* sender, int button, int action, int mods);
+
+			friend void mouseScrollCallback(GLFWwindow *sender, double xoffs, double yoffs);
 		};
 	}
 }

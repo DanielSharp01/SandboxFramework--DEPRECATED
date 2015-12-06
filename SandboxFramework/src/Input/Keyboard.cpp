@@ -9,5 +9,10 @@ namespace SandboxFramework {
 		{
 			Keyboard::actual.states[key] = state;
 		}
+
+		void keyboardCallback(GLFWwindow* sender, int key, int scancode, int action, int mods)
+		{
+			Keyboard::setState(key, action == GLFW_PRESS);
+		}
 	}
 }

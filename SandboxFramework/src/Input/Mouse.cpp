@@ -20,5 +20,20 @@ namespace SandboxFramework
 		{
 			Mouse::actual.scroll = Math::Vector2(xoffs, yoffs);
 		}
+
+		void cursorPositionCallback(GLFWwindow* sender, double xpos, double ypos)
+		{
+			Mouse::setCursorState(xpos, ypos);
+		}
+
+		void mouseButtonCallback(GLFWwindow* sender, int button, int action, int mods)
+		{
+			Mouse::setButtonState(button, action == GLFW_PRESS);
+		}
+
+		void mouseScrollCallback(GLFWwindow *sender, double xoffs, double yoffs)
+		{
+			Mouse::setScrollState(xoffs, yoffs);
+		}
 	}
 }

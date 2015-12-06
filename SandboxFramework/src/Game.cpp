@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "Graphics/GraphicsDevice.h"
+#include "Input/Keyboard.h"
+#include "Input/Mouse.h"
 
 namespace SandboxFramework {
 
@@ -62,10 +64,10 @@ namespace SandboxFramework {
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwSetWindowSizeCallback(m_Window, frameResizeCallback);
 		glfwSetFramebufferSizeCallback(m_Window, frameResizeCallback);
-		glfwSetCursorPosCallback(m_Window, cursorPositionCallback);
-		glfwSetMouseButtonCallback(m_Window, mouseButtonCallback);
-		glfwSetScrollCallback(m_Window, mouseScrollCallback);
-		glfwSetKeyCallback(m_Window, keyboardCallback);
+		glfwSetCursorPosCallback(m_Window, Input::cursorPositionCallback);
+		glfwSetMouseButtonCallback(m_Window, Input::mouseButtonCallback);
+		glfwSetScrollCallback(m_Window, Input::mouseScrollCallback);
+		glfwSetKeyCallback(m_Window, Input::keyboardCallback);
 
 		if (glewInit() != GLEW_OK)
 		{
@@ -80,8 +82,7 @@ namespace SandboxFramework {
 	{
 		glfwPollEvents();
 		Game::Update();
-
-		fh_mouseScrCB(0, 0); //Hotfix for no infinite scroll
+		Input::mouseScrollCallback(m_Window, 0, 0);
 	}
 
 	void Game::draw()
@@ -111,46 +112,6 @@ namespace SandboxFramework {
 	void frameResizeCallback(GLFWwindow *sender, int width, int height)
 	{
 		glViewport(0, 0, width, height);
-	}
-
-	void keyboardCallback(GLFWwindow* sender, int key, int scancode, int action, int mods)
-	{
-		Game::fh_keyCB(key, action == GLFW_PRESS);
-	}
-
-	void cursorPositionCallback(GLFWwindow* sender, double xpos, double ypos)
-	{
-		Game::fh_mouseCrsCB((float)xpos, (float)ypos);
-	}
-
-	void mouseButtonCallback(GLFWwindow* sender, int button, int action, int mods)
-	{
-		Game::fh_mouseBtnCB(button, action == GLFW_PRESS);
-	}
-
-	void mouseScrollCallback(GLFWwindow *sender, double xoffs, double yoffs)
-	{
-		Game::fh_mouseScrCB((float)xoffs, (float)yoffs);
-	}
-
-	void Game::fh_keyCB(int key, bool state)
-	{
-		Input::Keyboard::setState(key, state);
-	}
-
-	void Game::fh_mouseBtnCB(int button, bool state)
-	{
-		Input::Mouse::setButtonState(button, state);
-	}
-
-	void Game::fh_mouseCrsCB(float x, float y)
-	{
-		Input::Mouse::setCursorState(x, y);
-	}
-
-	void Game::fh_mouseScrCB(float xoffs, float yoffs)
-	{
-		Input::Mouse::setScrollState(xoffs, yoffs);
 	}
 
 	//TODO: Get Rid of this

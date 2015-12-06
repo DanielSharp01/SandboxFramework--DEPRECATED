@@ -6,9 +6,6 @@
 #include <time.h>
 #include <iostream>
 #include <GLFW/glfw3.h>
-
-#include "Input/Keyboard.h"
-#include "Input/Mouse.h"
 #include "Graphics/Color.h"
 
 namespace SandboxFramework {
@@ -57,16 +54,7 @@ namespace SandboxFramework {
 
 		bool isClosing() const;
 
-		friend static void resizeCallback(GLFWwindow *sender, int width, int height);
-		friend static void frameResizeCallback(GLFWwindow *sender, int width, int height);
-		friend static void cursorPositionCallback(GLFWwindow *sender, double xpos, double ypos);
-		friend static void mouseButtonCallback(GLFWwindow *sender, int button, int action, int mods);
-		friend static void mouseScrollCallback(GLFWwindow *sender, double xoffs, double yoffs);
-		friend static void keyboardCallback(GLFWwindow *sender, int key, int scancode, int action, int mods);
-
-		static void fh_keyCB(int key, bool action);
-		static void fh_mouseBtnCB(int button, bool action);
-		static void fh_mouseCrsCB(float x, float y);
-		static void fh_mouseScrCB(float xoffs, float yoffs);
+		friend void resizeCallback(GLFWwindow *sender, int width, int height);
+		friend void frameResizeCallback(GLFWwindow *sender, int width, int height);
 	};
 }
