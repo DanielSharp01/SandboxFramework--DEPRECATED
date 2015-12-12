@@ -24,80 +24,57 @@ namespace Collections {
 			delete headTail;
 		}
 
-		T Insert(LinkedElement<T>* linkedElement, T element)
+		T Insert(int index, T element) override
 		{
+			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			LinkedElement<T>* newEl = new LinkedElement<T>(element);
-			newEl->Previous = linkedElement->Previous;
-			newEl->Next = linkedElement;
-			linkedElement->Previous->Next = newEl;
-			linkedElement->Previous = newEl;
+			newEl->linkBefore(getLinkedElement(index));
 			m_Count++;
 			return *(newEl->Value);
 		}
 
-		T Insert(int index, T element) override
+		T RemoveAt(int index) override
 		{
-			if (index < 0 || index > m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
-			return Insert(GetLinkedElement(index), element);
-		}
-
-		T RemoveAt(LinkedElement<T>* linkedElement)
-		{
-			LinkedElement<T>* lePrev = linkedElement->Previous;
-			LinkedElement<T>* leNext = linkedElement->Next;
-			lePrev->Next = leNext;
-			leNext->Previous = lePrev;
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			getLinkedElement(index)->linkOut();
 			T removed = *(linkedElement->Value);
 			delete linkedElement;
 			m_Count--;
 			return removed;
 		}
 
-		T RemoveAt(int index) override
-		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
-			return RemoveAt(GetLinkedElement(index));
-		}
-
-		LinkedElement<T>* GetLinkedElement(int index)
+		LinkedElement<T>* getLinkedElement(int index)
 		{
 			LinkedElement<T>* el = headTail;
-			for (int i = 0; i <= index; i++)
-			{
-				el = el->Next;
-			}
-
+			if (index < m_Count / 2) for (int i = 0; i <= index; i++) el = el->next;
+			else for (int i = 0; i <= m_Count - index; i++) el = el->previous;
 			return el;
 		}
 
-		T Get(int index) override
+		T Get(int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
-			return *(GetLinkedElement(index)->Value);
-		}
-
-		void Set(LinkedElement<T>* linkedElement, T value)
-		{
-			*(linkedElement->Value) = value;
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			return *(getLinkedElement(index)->Value);
 		}
 
 		void Set(int index, T value) override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
-			Set(GetLinkedElement(index), value);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			getLinkedElement(index)->Value = value;
 		}
 
 		T& operator[](int index) override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
-			return *(GetLinkedElement(index)->Value);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			return *(getLinkedElement(index)->Value);
 		}
 
-		T& operator[](LinkedElement<T>* index)
+		const T& operator[](int index) const override
 		{
-			return index->Value;
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			return *(getLinkedElement(index)->Value);
 		}
 
-		inline int getCount() override { return m_Count; }
+		inline int GetCount() const override { return m_Count; }
 	};
 }

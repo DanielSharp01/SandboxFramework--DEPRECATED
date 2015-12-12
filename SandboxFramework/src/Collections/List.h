@@ -9,18 +9,23 @@ namespace Collections {
 	public:
 		T Add(T element)
 		{
-			return Insert(getCount(), element);
+			return Insert(GetCount(), element);
 		}
 
 		virtual T Insert(int index, T element) = 0;
 		virtual T RemoveAt(int index) = 0;
 
-		virtual T Get(int index) = 0;
+		virtual T Get(int index) const = 0;
 		virtual void Set(int index, T value) = 0;
 
 		virtual T& operator[] (int index) = 0;
+		virtual const T& operator[](int index) const = 0;
 
-		virtual inline int getCount() = 0;
-		inline bool isEmpty() { return getCount() == 0; };
+		virtual inline int GetCount() const = 0;
+
+		inline T First() const { return Get(0); }
+		inline T Last() const { return Get(getCount() - 1); }
+
+		inline bool IsEmpty() const { return GetCount() == 0; };
 	};
 }

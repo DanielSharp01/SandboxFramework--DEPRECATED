@@ -9,23 +9,33 @@ namespace Collections
 	class Queue
 	{
 	private:
-		LinkedList<T> data;
+		LinkedList<T>* m_Data;
 	public:
+		Queue()
+		{
+			m_Data = new LinkedList<T>();
+		}
+
+		~Queue()
+		{
+			delete m_Data;
+		}
+
 		T Peek()
 		{
-			if (isEmpty()) throw new Exceptions::EmptyException("Queue");
-			return data[0];
+			if (IsEmpty()) throw Exceptions::EmptyException("Cannot peek as the Queue ");
+			return m_Data[0];
 		}
 
 		T Deque()
 		{
-			if (isEmpty()) throw new Exceptions::EmptyException("Queue");
-			return data.RemoveAt(0);
+			if (IsEmpty()) throw Exceptions::EmptyException("Cannot deque as the Queue ");
+			return m_Data.RemoveAt(0);
 		}
 
-		void Enque(T value) { data.Add(value); }
+		void Enque(T value) { m_Data.Add(value); }
 
-		inline int getCount() { return data.getCount(); }
-		inline bool isEmpty() { return getCount() == 0; };
+		inline int GetCount() const { return m_Data.GetCount(); }
+		inline bool IsEmpty() const { return GetCount() == 0; };
 	};
 }

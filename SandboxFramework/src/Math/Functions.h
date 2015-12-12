@@ -7,13 +7,13 @@ namespace SandboxFramework
 {
 	namespace Math
 	{
-		int random(int min, int max);
-		float randomFloat();
+		int Random(int min, int max);
+		float RandomFloat();
 
-		float linearInterpolation(float min, float max, float rate);
-		float randomLinearInterpolation(float min, float max);
+		float LinearInterpolation(float min, float max, float rate);
+		float RandomLinearInterpolation(float min, float max);
 
-		float degree2Radian(float degree);
-		float radian2Degree(float radian);
+		float Degree2Radian(float degree);
+		float Radian2Degree(float radian);
 	}
 }

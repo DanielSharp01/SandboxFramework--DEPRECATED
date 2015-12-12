@@ -1,11 +1,7 @@
 #pragma once
 
 #include "GraphicsDevice.h"
-#include "../Math/Vector2.h"
-#include "../Math/Vector3.h"
-#include "../Math/Vector4.h"
-#include "../Math/Matrix.h"
-
+#include "../Math/structs.h"
 #include "../Collections/Dictionary.h"
 #include "../Content/FileReader.h"
 
@@ -26,16 +22,18 @@ namespace SandboxFramework
 			Shader(GraphicsDevice* graphics, std::string vertexPath, std::string fragmentPath);
 			~Shader();
 
-			bool compile(std::string vertexSrc, std::string fragmentSrc);
-			void Use();
+			void Bind() const;
+			void Unbind() const;
 
-			GLint getLocation(std::string uniformName);
+			GLint getLocation(std::string uniformName) const;
 			void setUniformInt(std::string name, int value);
 			void setUniformFloat(std::string name, float value);
 			void setUniformVector2(std::string name, Math::Vector2 vector);
 			void setUniformVector3(std::string name, Math::Vector3 vector);
 			void setUniformVector4(std::string name, Math::Vector4 vector);
 			void setUniformMatrix(std::string name, Math::Matrix matrix);
+		private:
+			bool compile(std::string vertexSrc, std::string fragmentSrc);
 		};
 	}
 }

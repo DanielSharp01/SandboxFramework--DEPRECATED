@@ -7,7 +7,7 @@ namespace SandboxFramework
 			: m_Graphics(graphics), m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
 		{
 			locationCache = new Collections::Dictionary<std::string, GLint>();
-			compile(Content::FileReader(vertexPath, "rt").ReadToEnd(), Content::FileReader(vertexPath, "rt").ReadToEnd());
+			compile(Content::FileReader(vertexPath, "t").ReadToEnd(), Content::FileReader(fragmentPath, "t").ReadToEnd());
 		}
 
 		Shader::~Shader()
@@ -18,15 +18,21 @@ namespace SandboxFramework
 
 		bool Shader::compile(std::string vertexSrc, std::string fragmentSrc)
 		{
-			return m_Graphics->gl_createShaderProgram(vertexSrc, fragmentSrc) != 0;
+			m_Program = m_Graphics->gl_createShaderProgram(vertexSrc, fragmentSrc) != 0;
+			return m_Program != 0;
 		}
 
-		void Shader::Use()
+		void Shader::Bind() const
 		{
 			m_Graphics->gl_bindShader(this);
 		}
 
-		GLint Shader::getLocation(std::string uniformName)
+		void Shader::Unbind() const
+		{
+			m_Graphics->gl_unbindShader(this);
+		}
+
+		GLint Shader::getLocation(std::string uniformName) const
 		{
 			if (locationCache->ContainsKey(uniformName))
 			{

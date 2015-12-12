@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#include "Functions.h"
+
 namespace SandboxFramework
 {
 	namespace Math
@@ -272,7 +274,7 @@ namespace SandboxFramework
 		{
 			Matrix result;
 
-			float q = 1.0 / tan(degree2Radian(0.5f * fov));
+			float q = 1.0 / tan(Degree2Radian(0.5f * fov));
 
 			result.Elements[0 + 0 * 4] = q;
 			result.Elements[1 + 1 * 4] = q / aspectRatio;
@@ -308,7 +310,7 @@ namespace SandboxFramework
 		{
 			Matrix result(1.0f);
 
-			float r = degree2Radian(angle);
+			float r = Degree2Radian(angle);
 			float c = cos(r);
 			float s = sin(r);
 			float omc = 1.0f - c;

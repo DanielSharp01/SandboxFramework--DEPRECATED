@@ -1,19 +1,15 @@
 #pragma once
 
-#include <string>
+#include <stdexcept>
+#include <sstream>
 
-namespace Exceptions
-{
-	class EmptyException
+namespace Exceptions {
+	class EmptyException : public std::runtime_error
 	{
 	private:
-		std::string m_What;
+		std::string m_Problem;
 	public:
-		EmptyException(std::string whatIsEmpty)
-			: m_What(whatIsEmpty)
-		{ }
-		std::string what() const {
-			return m_What + " is empty!";
-		}
+		EmptyException(std::string problem);
+		virtual const char* what() const throw();
 	};
 }

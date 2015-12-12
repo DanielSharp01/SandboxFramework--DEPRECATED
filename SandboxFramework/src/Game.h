@@ -17,7 +17,7 @@ namespace SandboxFramework {
 	
 	class Game
 	{
-	private:
+	protected:
 		int m_Width;
 		int m_Height;
 		std::string m_Title;
@@ -34,17 +34,11 @@ namespace SandboxFramework {
 		inline int GetHeight() const { return m_Height; }
 		void SetSize(int width, int height);
 	protected:
-		/*virtual void Initialize() = 0;
+		virtual void Initialize() = 0;
 		virtual void LoadContent() = 0;
 		virtual void Update() = 0;
 		virtual void Draw() = 0;
-		virtual void UnloadContent() = 0;*/
-
-		void Initialize();
-		void LoadContent();
-		void Update();
-		void Draw();
-		void UnloadContent();
+		virtual void UnloadContent() = 0;
 
 		void Exit();
 	private:

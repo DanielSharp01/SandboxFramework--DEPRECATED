@@ -17,9 +17,7 @@ namespace SandboxFramework {
 			static void setScrollState(float x, float y);
 
 			friend void cursorPositionCallback(GLFWwindow* sender, double xpos, double ypos);
-
 			friend void mouseButtonCallback(GLFWwindow* sender, int button, int action, int mods);
-
 			friend void mouseScrollCallback(GLFWwindow *sender, double xoffs, double yoffs);
 		};
 	}

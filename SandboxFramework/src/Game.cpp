@@ -27,7 +27,7 @@ namespace SandboxFramework {
 			return;
 		}
 		Initialize();
-		Game::LoadContent();
+		LoadContent();
 
 		while (!isClosing())
 		{
@@ -59,7 +59,6 @@ namespace SandboxFramework {
 			return false;
 		}
 
-
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwSetWindowSizeCallback(m_Window, frameResizeCallback);
@@ -75,25 +74,27 @@ namespace SandboxFramework {
 			return false;
 		}
 
+		m_Graphics = new Graphics::GraphicsDevice(this);
+
 		return true;
 	}
 
 	void Game::update()
 	{
 		glfwPollEvents();
-		Game::Update();
+		Update();
 		Input::mouseScrollCallback(m_Window, 0, 0);
 	}
 
 	void Game::draw()
 	{
-		Game::Draw();
+		Draw();
 		glfwSwapBuffers(m_Window);
 	}
 
 	void Game::Exit()
 	{
-		Game::UnloadContent();
+		UnloadContent();
 		glfwSetWindowShouldClose(m_Window, GL_TRUE);
 	}
 
@@ -113,25 +114,4 @@ namespace SandboxFramework {
 	{
 		glViewport(0, 0, width, height);
 	}
-
-	//TODO: Get Rid of this
-	void Game::Initialize() { m_Graphics = new Graphics::GraphicsDevice(this); }
-	void Game::LoadContent() {}
-
-	Input::KeyboardState lastState;
-	Input::MouseState lastMState;
-	void Game::Update()
-	{
-		using namespace Input;
-		KeyboardState currentState = Keyboard::GetState();
-		Input::MouseState currentMState = Mouse::GetState();
-		if (currentState.IsKeyDown(GLFW_KEY_A) && lastState.IsKeyUp(GLFW_KEY_A)) std::cout << "Key \"A\" down!" << std::endl;
-		if (currentMState.IsButtonDown(GLFW_MOUSE_BUTTON_MIDDLE) && lastMState.IsButtonUp(GLFW_MOUSE_BUTTON_MIDDLE)) std::cout << "Middle MButton down!" << std::endl;
-		float scroll = currentMState.GetScroll().Y;
-		if (scroll != 0) std::cout << "Delta scroll " << scroll << std::endl;
-		lastState = currentState;
-		lastMState = currentMState;
-	}
-	void Game::Draw() { m_Graphics->Clear(Graphics::Color(0.392f, 0.584f, 0.929f, 1)); }
-	void Game::UnloadContent() {}
 }

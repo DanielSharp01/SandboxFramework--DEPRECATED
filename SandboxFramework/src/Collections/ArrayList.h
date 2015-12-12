@@ -26,7 +26,7 @@ namespace Collections {
 
 		T Insert(int index, T element) override
 		{
-			if (index < 0 || index > m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			if (m_Capacity < m_Count + 1)
 			{
 				reallocate();
@@ -44,7 +44,7 @@ namespace Collections {
 
 		T RemoveAt(int index) override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			T removed = arr[index];
 			for (int i = index + 1; i < m_Count; i++)
 			{
@@ -56,25 +56,31 @@ namespace Collections {
 			return removed;
 		}
 
-		T Get(int index) override
+		T Get(int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			return arr[index];
 		}
 
 		void Set(int index, T value) override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			arr[index] = value;
 		}
 
 		T& operator[](int index) override
 		{
-			if (index < 0 || index >= m_Count) throw new Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
 			return arr[index];
 		}
 
-		inline int getCount() override { return m_Count; }
+		const T& operator[](int index) const override
+		{
+			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			return arr[index];
+		}
+
+		inline int GetCount() const override { return m_Count; }
 	private:
 		void reallocate()
 		{

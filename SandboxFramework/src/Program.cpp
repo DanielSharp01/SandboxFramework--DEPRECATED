@@ -1,16 +1,15 @@
-#define DEBUG_CONSOLE 0
+#define DEBUG_CONSOLE 1
 
 #if DEBUG_CONSOLE != 1
 	#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #endif
 
-#include "Game.h"
+#include "MyGame.h"
 #include <iostream>
 
 int main()
 {
-	using namespace SandboxFramework;
-	Game* game = new Game("SandboxFramework Window");
+	MyGame* game = new MyGame("SandboxFramework Window");
 	game->Run();
 	delete game;
 	return 0;

@@ -1,19 +1,18 @@
 #pragma once
 
-#include "../Exceptions/KeyNotFoundException.h"
 #include "ArrayList.h"
 
 namespace Collections {
-	template<class T, class V>
+	template<class K, class V>
 	class Dictionary
 	{
 	private:
-		ArrayList<T>* m_Keys;
+		ArrayList<K>* m_Keys;
 		ArrayList<V>* m_Values;
 	public:
 		Dictionary()
 		{
-			m_Keys = new ArrayList<T>();
+			m_Keys = new ArrayList<K>();
 			m_Values = new ArrayList<V>();
 		}
 
@@ -23,55 +22,62 @@ namespace Collections {
 			delete m_Values;
 		}
 
-		V Add(T key, V value)
+		V Add(K key, V value)
 		{
 			m_Keys->Add(key);
 			return m_Values->Add(value);
 		}
 
-		V RemoveAt(T key)
+		V RemoveAt(K key)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw new Exceptions::KeyNotFoundException("std::to_string(key)");
+			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
 			m_Keys->RemoveAt(index);
 			return m_Values->RemoveAt(index);
 		}
 
-		V Get(T key)
+		V Get(K key) const
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw new Exceptions::KeyNotFoundException("std::to_string(key)");
+			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
 			return (*m_Values)[index];
 		}
 
-		void Set(T key, V value)
+		void Set(K key, V value)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw new Exceptions::KeyNotFoundException("std::to_string(key)");
+			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
 			return (*m_Values)[index] = value;
 		}
 
-		V& operator[] (T key)
+		V& operator[] (K key)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw new Exceptions::KeyNotFoundException("std::to_string(key)"); //TODO::Think about this or just make non parameter exceptions
+			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
 			return (*m_Values)[index];
 		}
 
-		bool ContainsKey(T key)
+		const V& operator[] (K key) const
+		{
+			int index = findKeyIndex(key);
+			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			return (*m_Values)[index];
+		}
+
+		bool ContainsKey(K key) const
 		{
 			return findKeyIndex(key) != -1;
 		}
 
-		inline ArrayList<T>* getKeys() { return m_Keys; } //TODO: CONST and IMPLEMENT non-reference array operator (the friend)
-		inline ArrayList<V>* getValues() { return m_Values; }
+		inline ArrayList<K>* GetKeys() const { return m_Keys; }
+		inline ArrayList<V>* GetValues() const { return m_Values; }
 
-		inline int getCount() { return m_Keys->getCount(); }
-		inline bool isEmpty() { return getCount() == 0; };
+		inline int GetCount() const { return m_Keys->GetCount(); }
+		inline bool IsEmpty() const { return GetCount() == 0; };
 	private:
-		int findKeyIndex(T key)
+		int findKeyIndex(K key) const
 		{
-			for (int i = 0; i < getCount(); i++)
+			for (int i = 0; i < GetCount(); i++)
 			{
 				if ((*m_Keys)[i] == key) return i;
 			}

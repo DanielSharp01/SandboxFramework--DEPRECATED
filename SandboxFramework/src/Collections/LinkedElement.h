@@ -25,5 +25,19 @@ namespace Collections {
 		{
 			if (Value) delete Value;
 		}
+
+		void linkBefore(LinkedElement<T>* next)
+		{
+			Previous = next->Previous;
+			Previous->next = this;
+			next->Previous = this;
+			Next = next;
+		}
+
+		void linkOut()
+		{
+			Previous->Next = Next;
+			Next->Previous = Previous;
+		}
 	};
 }

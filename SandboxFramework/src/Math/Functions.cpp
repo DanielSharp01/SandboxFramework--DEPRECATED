@@ -4,32 +4,32 @@ namespace SandboxFramework
 {
 	namespace Math
 	{
-		int random(int min, int max)
+		int Random(int min, int max)
 		{
 			return min + rand() % (max - min + 1);
 		}
 
-		float randomFloat()
+		float RandomFloat()
 		{
 			return (float)rand() / (float)RAND_MAX;
 		}
 
-		float linearInterpolation(float min, float max, float rate)
+		float LinearInterpolation(float min, float max, float rate)
 		{
 			return min + max * rate;
 		}
 
-		float randomLinearInterpolation(float min, float max)
+		float RandomLinearInterpolation(float min, float max)
 		{
-			return linearInterpolation(min, max, randomFloat());
+			return LinearInterpolation(min, max, RandomFloat());
 		} 
 
-		float degree2Radian(float degree)
+		float Degree2Radian(float degree)
 		{
 			return degree * (float)M_PI / (float)180;
 		}
 
-		float radian2Degree(float radian)
+		float Radian2Degree(float radian)
 		{
 			return radian * (float)180 / (float)M_PI;
 		}
