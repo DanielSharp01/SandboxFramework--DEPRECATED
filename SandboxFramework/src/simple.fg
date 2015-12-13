@@ -1,7 +1,11 @@
 #version 150
 precision highp float;
 uniform vec4 color;
+uniform vec2 light_pos;
+varying vec4 vs_position;
+varying vec4 vs_Color;
 
 void main(void) {
-    gl_FragColor = color;
+	float intensity = 1.0 / length(vs_position.xy - light_pos);
+    gl_FragColor = color * vs_Color * intensity;
 }

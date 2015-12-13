@@ -1,6 +1,12 @@
 #version 150
-in vec3 in_Position;
+uniform mat4 proj;
+attribute vec4 in_Position;
+attribute vec4 in_Color;
+varying vec4 vs_position;
+varying vec4 vs_Color;
 
 void main(void) {
-    gl_Position = vec4(in_Position, 1.0);
+	vs_position = in_Position;
+	vs_Color = in_Color;
+    gl_Position = proj * vs_position;
 }

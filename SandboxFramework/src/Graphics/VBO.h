@@ -11,10 +11,9 @@ namespace SandboxFramework {
 			GraphicsDevice* m_Graphics;
 			GLuint m_ID;
 			GLsizei m_Count;
-			GLsizei m_ComponentCount;
 		public:
-			VBO(GraphicsDevice* graphics, GLfloat* vertices, GLsizei count, GLsizei componentCount);
-			VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei componentCount);
+			VBO(GraphicsDevice* graphics, GLvoid* vertices, GLsizei vertexSize, GLsizei count);
+			VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei vertexSize);
 			~VBO();
 
 			GLvoid* Map();

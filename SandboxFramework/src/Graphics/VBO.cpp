@@ -4,15 +4,17 @@
 
 namespace SandboxFramework {
 	namespace Graphics {
-		VBO::VBO(GraphicsDevice* graphics, GLfloat* vertices, GLsizei count, GLsizei componentCount)
-			: m_Graphics(graphics), m_Count(count), m_ComponentCount(componentCount)
+
+		VBO::VBO(GraphicsDevice* graphics, GLvoid* vertices, GLsizei vertexSize, GLsizei count)
+			: m_Graphics(graphics), m_Count(count)
 		{
-			m_ID = m_Graphics->gl_createVBO(vertices, m_Count, m_ComponentCount);
+			m_ID = m_Graphics->gl_createVBO(vertices, vertexSize * count);
 		}
 
-		VBO::VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei componentCount)
+		VBO::VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei vertexSize)
+			: m_Graphics(graphics), m_Count(maxVertices)
 		{
-			m_ID = m_Graphics->gl_createVBO(maxVertices * componentCount * sizeof(GLfloat));
+			m_ID = m_Graphics->gl_createVBO(maxVertices * vertexSize);
 		}
 
 		VBO::~VBO()

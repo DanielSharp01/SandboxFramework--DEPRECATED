@@ -1,4 +1,5 @@
 #include "Color.h"
+#include "../Math/Vector4.h"
 
 namespace SandboxFramework
 {
@@ -9,6 +10,11 @@ namespace SandboxFramework
 		bool Color::Equals(const Color& b) const
 		{
 			return R == b.R && G == b.G && B == b.B && A == b.A;
+		}
+
+		Math::Vector4 Color::ToVector4()
+		{
+			return Math::Vector4(R, G, B, A);
 		}
 
 		bool operator==(Color a, const Color& b)

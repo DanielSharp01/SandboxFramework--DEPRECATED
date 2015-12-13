@@ -24,7 +24,7 @@ namespace SandboxFramework {
 			m_Graphics->gl_destroyVAO(this);
 		}
 
-		void VAO::BindVBOToLocation(VBO* vbo, GLint location, GLint stride = 0, GLint offset = 0)
+		void VAO::BindVBOToLocation(VBO* vbo, GLint location, GLint componentCount, GLenum componentType, GLint stride, const GLvoid* offset)
 		{
 			if (m_VBOLocations->ContainsKey(vbo))
 			{
@@ -37,7 +37,7 @@ namespace SandboxFramework {
 			}
 
 			Bind();
-			m_Graphics->gl_bindVBOToLocation(vbo, location, stride * sizeof(GLfloat), offset * sizeof(GLfloat));
+			m_Graphics->gl_bindVBOToLocation(vbo, location, componentType, componentCount, stride, offset);
 		}
 
 		void VAO::Bind() const

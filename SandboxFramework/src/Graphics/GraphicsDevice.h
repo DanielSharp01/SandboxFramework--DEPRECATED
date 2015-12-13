@@ -45,10 +45,10 @@ namespace SandboxFramework {
 			void gl_bindVAO(const VAO* vao);
 			void gl_unbindVAO(const VAO* vao);
 			void gl_destroyVAO(VAO* vao);
-			void gl_bindVBOToLocation(const VBO* vbo, GLint location, GLsizei stride, GLsizei offset);
+			void gl_bindVBOToLocation(const VBO* vbo, GLint location, GLenum componentType, GLsizei componentCount, GLsizei stride, const GLvoid* offset);
 
 			GLuint gl_createVBO(GLsizei maxSize);
-			GLuint gl_createVBO(GLfloat* data, GLsizei count, GLsizei componentCount);
+			GLuint gl_createVBO(GLvoid* data, GLsizei size);
 			void gl_bindVBO(const VBO* vbo);
 			void gl_unbindVBO(const VBO* vbo);
 			void gl_destroyVBO(VBO* vbo);

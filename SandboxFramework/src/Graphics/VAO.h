@@ -21,7 +21,7 @@ namespace SandboxFramework {
 			VAO(GraphicsDevice* graphics);
 			~VAO();
 
-			void BindVBOToLocation(VBO* vbo, GLint location, GLint stride, GLint offset);
+			void BindVBOToLocation(VBO* vbo, GLint location, GLint componentCount, GLenum componentType = GL_FLOAT, GLint stride = 0, const GLvoid* offset = (const GLvoid*)0);
 
 			void Bind() const;
 			void Unbind() const;

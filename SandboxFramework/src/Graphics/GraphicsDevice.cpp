@@ -160,11 +160,11 @@ namespace SandboxFramework
 			glDeleteVertexArrays(1, &vao->m_ID);
 		}
 
-		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, GLint location, GLsizei stride, GLsizei offset)
+		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, GLint location, GLenum componentType, GLsizei componentCount, GLsizei stride, const GLvoid* offset)
 		{
 			vbo->Bind();
 			glEnableVertexAttribArray(location);
-			glVertexAttribPointer(location, vbo->m_ComponentCount, GL_FLOAT, GL_FALSE, stride, (const GLvoid*)offset);
+			glVertexAttribPointer(location, componentCount, componentType, GL_FALSE, stride, offset);
 		}
 
 		
@@ -178,12 +178,12 @@ namespace SandboxFramework
 			return ret;
 		}
 
-		GLuint GraphicsDevice::gl_createVBO(GLfloat* data, GLsizei count, GLsizei componentCount)
+		GLuint GraphicsDevice::gl_createVBO(GLvoid* data, GLsizei size)
 		{
 			GLuint ret;
 			glGenBuffers(1, &ret);
 			glBindBuffer(GL_ARRAY_BUFFER, ret);
-			glBufferData(GL_ARRAY_BUFFER, count * componentCount * sizeof(GLfloat), data, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 			return ret;
 		}
 
