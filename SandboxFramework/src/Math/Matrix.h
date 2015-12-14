@@ -27,8 +27,8 @@ namespace SandboxFramework
 			Matrix& operator*=(float b);
 			Matrix& operator*=(const Matrix& b);
 
-			friend Matrix& operator*(Matrix a, float b);
-			friend Matrix& operator*(Matrix a, const Matrix& b);
+			friend Matrix operator*(Matrix a, float b);
+			friend Matrix operator*(Matrix a, const Matrix& b);
 
 			friend bool operator==(Matrix a, const Matrix& b);
 			friend bool operator!=(Matrix a, const Matrix& b);
@@ -41,7 +41,7 @@ namespace SandboxFramework
 			static Matrix Orthographic(float left, float right, float bottom, float top, float near, float far);
 			static Matrix Perspective(float fov, float aspectRatio, float near, float far);
 
-			static Matrix Trasnlation(const Vector3 translation);
+			static Matrix Translation(const Vector3 translation);
 			static Matrix Scale(const Vector3 scale);
 			static Matrix Rotation(float angle, const Vector3 axis);
 		};

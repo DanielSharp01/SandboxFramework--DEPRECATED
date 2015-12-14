@@ -90,12 +90,12 @@ namespace SandboxFramework
 			return Multiply(b);
 		}
 
-		Matrix& operator*(Matrix a, float b)
+		Matrix operator*(Matrix a, float b)
 		{
 			return a.Multiply(b);
 		}
 
-		Matrix& operator*(Matrix a, const Matrix& b)
+		Matrix operator*(Matrix a, const Matrix& b)
 		{
 			return a.Multiply(b);
 		}
@@ -285,7 +285,7 @@ namespace SandboxFramework
 			return result;
 		}
 
-		Matrix Matrix::Trasnlation(const Vector3 translation)
+		Matrix Matrix::Translation(const Vector3 translation)
 		{
 			Matrix result(1.0f);
 
@@ -320,7 +320,7 @@ namespace SandboxFramework
 			float z = axis.Z;
 
 			result.Elements[0 + 0 * 4] = x * omc + c;
-			result.Elements[1 + 0 * 4] = x * y * omc + z * s;
+			result.Elements[1 + 0 * 4] = y * x * omc + z * s;
 			result.Elements[2 + 0 * 4] = x * z * omc - y * s;
 
 			result.Elements[0 + 1 * 4] = x * y * omc - z * s;

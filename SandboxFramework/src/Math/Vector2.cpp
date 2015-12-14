@@ -49,7 +49,7 @@ namespace SandboxFramework
 			return *this;
 		}
 
-		Vector2& Vector2::Transform(Vector2 a, const Matrix& b)
+		Vector2 Vector2::Transform(Vector2 a, const Matrix& b)
 		{
 			return a.Transform(b);
 		}
@@ -123,32 +123,32 @@ namespace SandboxFramework
 			return !(a.Equals(b));
 		}
 
-		Vector2& operator+(Vector2 a, const Vector2& b)
+		Vector2 operator+(Vector2 a, const Vector2& b)
 		{
 			return a.Add(b);
 		}
 
-		Vector2& operator-(Vector2 a, const Vector2& b)
+		Vector2 operator-(Vector2 a, const Vector2& b)
 		{
 			return a.Subtract(b);
 		}
 
-		Vector2& operator*(Vector2 a, float b)
+		Vector2 operator*(Vector2 a, float b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector2& operator*(Vector2 a, const Vector2& b)
+		Vector2 operator*(Vector2 a, const Vector2& b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector2& operator/(Vector2 a, float b)
+		Vector2 operator/(Vector2 a, float b)
 		{
 			return a.Divide(b);
 		}
 
-		Vector2& operator/(Vector2 a, const Vector2& b)
+		Vector2 operator/(Vector2 a, const Vector2& b)
 		{
 			return a.Divide(b);
 		}

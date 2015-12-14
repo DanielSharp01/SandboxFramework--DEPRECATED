@@ -77,7 +77,7 @@ namespace SandboxFramework
 			return *this;
 		}
 
-		Vector3& Vector3::Cross(Vector3 a, const Vector3& b)
+		Vector3 Vector3::Cross(Vector3 a, const Vector3& b)
 		{
 			return a.Cross(b);
 		}
@@ -94,7 +94,7 @@ namespace SandboxFramework
 			return *this;
 		}
 
-		Vector3& Vector3::Transform(Vector3 a, const Matrix& b)
+		Vector3 Vector3::Transform(Vector3 a, const Matrix& b)
 		{
 			return a.Transform(b);
 		}
@@ -144,32 +144,32 @@ namespace SandboxFramework
 			return !(a.Equals(b));
 		}
 
-		Vector3& operator+(Vector3 a, const Vector3& b)
+		Vector3 operator+(Vector3 a, const Vector3& b)
 		{
 			return a.Add(b);
 		}
 
-		Vector3& operator-(Vector3 a, const Vector3& b)
+		Vector3 operator-(Vector3 a, const Vector3& b)
 		{
 			return a.Subtract(b);
 		}
 
-		Vector3& operator*(Vector3 a, float b)
+		Vector3 operator*(Vector3 a, float b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector3& operator*(Vector3 a, const Vector3& b)
+		Vector3 operator*(Vector3 a, const Vector3& b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector3& operator/(Vector3 a, float b)
+		Vector3 operator/(Vector3 a, float b)
 		{
 			return a.Divide(b);
 		}
 
-		Vector3& operator/(Vector3 a, const Vector3& b)
+		Vector3 operator/(Vector3 a, const Vector3& b)
 		{
 			return a.Divide(b);
 		}

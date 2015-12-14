@@ -25,7 +25,7 @@ namespace SandboxFramework
 			float PerpDot(const Vector2& b);
 
 			Vector2& Transform(const Matrix& b);
-			static Vector2& Transform(Vector2 a, const Matrix& b);
+			static Vector2 Transform(Vector2 a, const Matrix& b);
 			bool Equals(const Vector2& b) const;
 
 			Vector2& operator+=(const Vector2& b);
@@ -38,12 +38,12 @@ namespace SandboxFramework
 			friend bool operator==(Vector2& a, const Vector2& b);
 			friend bool operator!=(Vector2& a, const Vector2& b);
 
-			friend Vector2& operator+(Vector2 a, const Vector2& b);
-			friend Vector2& operator-(Vector2 a, const Vector2& b);
-			friend Vector2& operator*(Vector2 a, float b);
-			friend Vector2& operator*(Vector2 a, const Vector2& b);
-			friend Vector2& operator/(Vector2 a, float b);
-			friend Vector2& operator/(Vector2 a, const Vector2& b);
+			friend Vector2 operator+(Vector2 a, const Vector2& b);
+			friend Vector2 operator-(Vector2 a, const Vector2& b);
+			friend Vector2 operator*(Vector2 a, float b);
+			friend Vector2 operator*(Vector2 a, const Vector2& b);
+			friend Vector2 operator/(Vector2 a, float b);
+			friend Vector2 operator/(Vector2 a, const Vector2& b);
 
 
 			friend std::ostream& operator<<(std::ostream& stream, const Vector2& b);

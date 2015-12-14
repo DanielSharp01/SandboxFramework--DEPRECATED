@@ -154,6 +154,7 @@
     <ClCompile Include="src\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="src\Graphics\IBO.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Graphics\SpriteBatch.cpp" />
     <ClCompile Include="src\Graphics\VAO.cpp" />
     <ClCompile Include="src\Graphics\VBO.cpp" />
     <ClCompile Include="src\input\Keyboard.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="src\Graphics\Color.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\Graphics\SpriteBatch.h" />
     <ClInclude Include="src\Graphics\VAO.h" />
     <ClInclude Include="src\Graphics\VBO.h" />
     <ClInclude Include="src\Graphics\VBOLocation.h" />

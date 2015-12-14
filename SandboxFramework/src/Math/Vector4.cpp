@@ -87,7 +87,7 @@ namespace SandboxFramework
 		}
 
 		//3D cross product
-		Vector4& Vector4::Cross(Vector4 a, const Vector4& b)
+		Vector4 Vector4::Cross(Vector4 a, const Vector4& b)
 		{
 			return a.Cross(b);
 		}
@@ -106,7 +106,7 @@ namespace SandboxFramework
 			return *this;
 		}
 
-		Vector4& Vector4::Transform(Vector4 a, const Matrix& b)
+		Vector4 Vector4::Transform(Vector4 a, const Matrix& b)
 		{
 			return a.Transform(b);
 		}
@@ -156,32 +156,32 @@ namespace SandboxFramework
 			return !(a.Equals(b));
 		}
 
-		Vector4& operator+(Vector4 a, const Vector4& b)
+		Vector4 operator+(Vector4 a, const Vector4& b)
 		{
 			return a.Add(b);
 		}
 
-		Vector4& operator-(Vector4 a, const Vector4& b)
+		Vector4 operator-(Vector4 a, const Vector4& b)
 		{
 			return a.Subtract(b);
 		}
 
-		Vector4& operator*(Vector4 a, float b)
+		Vector4 operator*(Vector4 a, float b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector4& operator*(Vector4 a, const Vector4& b)
+		Vector4 operator*(Vector4 a, const Vector4& b)
 		{
 			return a.Multiply(b);
 		}
 
-		Vector4& operator/(Vector4 a, float b)
+		Vector4 operator/(Vector4 a, float b)
 		{
 			return a.Divide(b);
 		}
 
-		Vector4& operator/(Vector4 a, const Vector4& b)
+		Vector4 operator/(Vector4 a, const Vector4& b)
 		{
 			return a.Divide(b);
 		}

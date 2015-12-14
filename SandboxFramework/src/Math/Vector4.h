@@ -24,10 +24,10 @@ namespace SandboxFramework
 			float Dot(const Vector4& b);
 
 			Vector4& Cross(const Vector4& b);
-			static Vector4& Cross(Vector4 a, const Vector4& b);
+			static Vector4 Cross(Vector4 a, const Vector4& b);
 
 			Vector4& Transform(const Matrix& b);
-			static Vector4& Transform(Vector4 a, const Matrix& b);
+			static Vector4 Transform(Vector4 a, const Matrix& b);
 			bool Equals(const Vector4& b) const;
 
 			Vector4& operator+=(const Vector4& b);
@@ -40,12 +40,12 @@ namespace SandboxFramework
 			friend bool operator==(Vector4& a, const Vector4& b);
 			friend bool operator!=(Vector4& a, const Vector4& b);
 
-			friend Vector4& operator+(Vector4 a, const Vector4& b);
-			friend Vector4& operator-(Vector4 a, const Vector4& b);
-			friend Vector4& operator*(Vector4 a, float b);
-			friend Vector4& operator*(Vector4 a, const Vector4& b);
-			friend Vector4& operator/(Vector4 a, float b);
-			friend Vector4& operator/(Vector4 a, const Vector4& b);
+			friend Vector4 operator+(Vector4 a, const Vector4& b);
+			friend Vector4 operator-(Vector4 a, const Vector4& b);
+			friend Vector4 operator*(Vector4 a, float b);
+			friend Vector4 operator*(Vector4 a, const Vector4& b);
+			friend Vector4 operator/(Vector4 a, float b);
+			friend Vector4 operator/(Vector4 a, const Vector4& b);
 
 
 			friend std::ostream& operator<<(std::ostream& stream, const Vector4& b);
