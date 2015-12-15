@@ -19,6 +19,8 @@ namespace SandboxFramework
 		{
 			Math::Vector4 Position;
 			Math::Vector4 Color;
+			Math::Vector2 UV;
+			float TexID;
 		};
 
 		class SpriteBatch

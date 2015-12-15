@@ -4,7 +4,7 @@ namespace SandboxFramework
 {
 	namespace Math
 	{
-		class Vector4;
+		struct Vector4;
 	}
 	namespace Graphics
 	{

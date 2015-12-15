@@ -19,12 +19,11 @@ namespace SandboxFramework
 			FileReader(std::string path, std::string mode);
 			~FileReader();
 
-			inline int getPosition() const { return m_Position; }
-			inline int getLength() const { return m_Length; }
+			inline int GetPosition() const { return m_Position; }
+			inline int GetLength() const { return m_Length; }
 
 			void Seek(int position);
 			std::string ReadToEnd();
-			void Close();
 		};
 	}
 }

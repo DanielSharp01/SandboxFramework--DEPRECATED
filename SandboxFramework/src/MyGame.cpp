@@ -8,6 +8,8 @@
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
 #include "Math/Functions.h"
+#include "Graphics/Texture2D.h"
+#include "Content/ImageReader.h"
 
 using namespace SandboxFramework;
 
@@ -19,14 +21,31 @@ void MyGame::Initialize() { }
 
 Graphics::Shader* shader;
 Graphics::SpriteBatch* spriteBatch;
+Graphics::Color* colArray;
 
 void MyGame::LoadContent()
 {
 	shader = new Graphics::Shader(m_Graphics, "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.vt", "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.fg");
 	shader->Bind();
-	shader->setUniformVector4("color", Graphics::Color(1, 1, 1, 1).ToVector4());
+
+	Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/BoxTexture.jpg");
+	Graphics::Texture2D* texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGR);
+	delete reader;
+	texture->SetFilters(GL_LINEAR, GL_LINEAR);
+	texture->Bind(0);
+	shader->setUniformInt("texture", 0);
+	shader->setUniformColor("color", Graphics::Color(1, 1, 1, 1));
 	shader->setUniformMatrix("proj", Math::Matrix::Orthographic(0.0f, 16.0f, 9.0f, 0.0f, -1.0f, 1.0f));
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
+
+	colArray = new Graphics::Color[128 * 72];
+
+	for (int i = 0; i < 128 * 72; i++)
+	{
+		colArray[i] = Graphics::Color(1.0f, 1.0f, 1.0f, 1.0f);
+		//colArray[i] = Graphics::Color(Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), 1.0f);
+	}
+
 }
 
 Input::KeyboardState lastState;
@@ -55,15 +74,16 @@ void MyGame::Draw()
 	Math::Vector2 lightVector = Math::Vector2(x, y);
 	shader->setUniformVector2("light_pos", lightVector);
 
-	float size = 0.1f;
+	float size = 0.125f;
 
 	spriteBatch->Begin();
-	
-	for (float x = 0; x < 16.0f; x += 0.1f)
-		for (float y = 0; y < 9.0f; y += 0.1f)
+	/*for (float x = 0; x < 16.0f; x += 0.125f)
+		for (float y = 0; y < 9.0f; y += 0.125f)
 		spriteBatch->Draw(Math::Vector2(x + size / 2, y + size / 2), Math::Vector2(size, size),
-			Graphics::Color(Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), 1.0f),
-			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
+			colArray[(int)(y * 8) + (int)(x * 8) * 9],
+			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);*/
+
+	spriteBatch->Draw(Math::Vector2(2, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
 
 	spriteBatch->End();
 }

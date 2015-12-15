@@ -31,6 +31,7 @@ namespace SandboxFramework
 			void setUniformVector2(std::string name, Math::Vector2 vector);
 			void setUniformVector3(std::string name, Math::Vector3 vector);
 			void setUniformVector4(std::string name, Math::Vector4 vector);
+			void setUniformColor(std::string name, Color color);
 			void setUniformMatrix(std::string name, Math::Matrix matrix);
 		private:
 			bool compile(std::string vertexSrc, std::string fragmentSrc);

@@ -30,10 +30,12 @@ namespace SandboxFramework
 
 
 			ibo = new IBO(graphics, allIndex, SPRITE_BATCH_MAX_INDICES);
-			delete allIndex; //TODO: If you move the delete inside IBO remove
+			delete allIndex;
 
 			vao->BindVBOToLocation(vbo, 1, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
 			vao->BindVBOToLocation(vbo, 0, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
+			vao->BindVBOToLocation(vbo, 3, 2, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
+			vao->BindVBOToLocation(vbo, 2, 1, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
 		}
 
 		SpriteBatch::~SpriteBatch()
@@ -75,18 +77,26 @@ namespace SandboxFramework
 
 			m_Pointer->Position = topLeft;
 			m_Pointer->Color = colour;
+			m_Pointer->UV = Math::Vector2(0, 1);
+			m_Pointer->TexID = 0;
 			m_Pointer++;
 
 			m_Pointer->Position = topRight;
 			m_Pointer->Color = colour;
+			m_Pointer->UV = Math::Vector2(1, 1);
+			m_Pointer->TexID = 0;
 			m_Pointer++;
 
 			m_Pointer->Position = bottomRight;
 			m_Pointer->Color = colour;
+			m_Pointer->UV = Math::Vector2(1, 0);
+			m_Pointer->TexID = 1;
 			m_Pointer++;
 
 			m_Pointer->Position = bottomLeft;
 			m_Pointer->Color = colour;
+			m_Pointer->UV = Math::Vector2(0, 0);
+			m_Pointer->TexID = 1;
 			m_Pointer++;
 
 			m_SpriteCount++;
@@ -97,6 +107,8 @@ namespace SandboxFramework
 			vbo->Unmap();
 			vao->Bind();
 			ibo->Bind();
+
+			//std::cout << m_SpriteCount << std::endl;
 
 			m_Graphics->Draw(m_SpriteCount * 6);
 		}

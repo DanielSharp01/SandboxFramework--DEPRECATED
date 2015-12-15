@@ -1,3 +1,4 @@
+//TODO: FreeImage as static library
 #define DEBUG_CONSOLE 1
 
 #if DEBUG_CONSOLE != 1
@@ -7,13 +8,33 @@
 #include "Math/structs.h"
 #include "MyGame.h"
 #include <iostream>
+#include "Content/ImageReader.h"
 
 int main()
 {
+	using namespace SandboxFramework;
 	MyGame* game = new MyGame("SandboxFramework Window");
 	game->Run();
 	delete game;
-	std::cin.get();
 
+	/*Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/BoxTexture.png");
+
+	
+	BYTE* bytes = reader->GetPixelData();
+	unsigned int w = reader->GetWidth();
+	unsigned int h = reader->GetHeight();
+
+	for (int i = 0; i < w * h; i++)
+	{
+		std::cout << +(*bytes++) << " ";
+		std::cout << +(*bytes++) << " ";
+		std::cout << +(*bytes++) << " ";
+		std::cout << +(*bytes++) << " ";
+		std::cout << std::endl;
+	}
+
+	delete reader;
+
+	std::cin.get();*/
 	return 0;
 }

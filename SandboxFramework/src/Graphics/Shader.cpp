@@ -69,6 +69,11 @@ namespace SandboxFramework
 			m_Graphics->gl_setUniformVector4(getLocation(name), vector);
 		}
 
+		void Shader::setUniformColor(std::string name, Color color)
+		{
+			m_Graphics->gl_setUniformVector4(getLocation(name), color.ToVector4());
+		}
+
 		void Shader::setUniformMatrix(std::string name, Math::Matrix matrix)
 		{
 			m_Graphics->gl_setUniformMatrix(getLocation(name), matrix);

@@ -4,13 +4,16 @@
 #include "../Math/structs.h"
 #include "Color.h"
 
+
 namespace SandboxFramework {
 	namespace Graphics
 	{
+		typedef unsigned char BYTE;
 		class Shader;
 		class VAO;
 		class VBO;
 		class IBO;
+		class Texture2D;
 
 		class GraphicsDevice
 		{
@@ -18,6 +21,7 @@ namespace SandboxFramework {
 			friend VAO;
 			friend VBO;
 			friend IBO;
+			friend Texture2D;
 		public:
 			GraphicsDevice(Game* game);
 			~GraphicsDevice();
@@ -28,18 +32,30 @@ namespace SandboxFramework {
 		private:
 			Game* m_Game;
 
+			//OpenGL constants
+			GLint gl_MAXTEXNUM;
+
 			//OpenGL state management
+			Color glstate_ClearColor;
 			GLuint glstate_ActiveShaderProgram;
 			GLuint glstate_ActiveVAO;
 			GLuint glstate_ActiveVBO;
 			GLuint glstate_ActiveIBO;
-			Color glstate_ClearColor;
+			GLuint glstate_ActiveTexture2D;
 
 			//OpenGL methods for friends:
 			GLuint gl_createShaderProgram(std::string vertexSrc, std::string fragmentSrc);
 			void gl_bindShader(const Shader* shader);
 			void gl_unbindShader(const Shader* shader);
 			void gl_destroyShader(Shader* shader);
+			
+			GLint gl_getLocation(const Shader* shader, std::string uniformName);
+			void gl_setUniformInt(GLint location, int value);
+			void gl_setUniformFloat(GLint location, float value);
+			void gl_setUniformVector2(GLint location, Math::Vector2 vector);
+			void gl_setUniformVector3(GLint location, Math::Vector3 vector);
+			void gl_setUniformVector4(GLint location, Math::Vector4 vector);
+			void gl_setUniformMatrix(GLint location, Math::Matrix matrix);
 
 			GLuint gl_createVAO();
 			void gl_bindVAO(const VAO* vao);
@@ -60,14 +76,12 @@ namespace SandboxFramework {
 			void gl_unbindIBO(const IBO* ibo);
 			void gl_destroyIBO(IBO* vbo);
 
-
-			GLint gl_getLocation(const Shader* shader, std::string uniformName);
-			void gl_setUniformInt(GLint location, int value);
-			void gl_setUniformFloat(GLint location, float value);
-			void gl_setUniformVector2(GLint location, Math::Vector2 vector);
-			void gl_setUniformVector3(GLint location, Math::Vector3 vector);
-			void gl_setUniformVector4(GLint location, Math::Vector4 vector);
-			void gl_setUniformMatrix(GLint location, Math::Matrix matrix);
+			GLuint gl_createTexture2D(BYTE* data, GLsizei width, GLsizei height, GLenum imageFormat);
+			void gl_setTextureFilters(const Texture2D* texture, GLint minFilter, GLint magFilter);
+			void gl_SetActiveTexture(GLuint slot);
+			void gl_bindTexture2D(const Texture2D* texture);
+			void gl_unbindTexture2D(const Texture2D* texture);
+			void gl_destroyTexture2D(Texture2D* texture);
 		};
 	}
 }

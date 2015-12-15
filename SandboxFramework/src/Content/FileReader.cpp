@@ -17,7 +17,8 @@ namespace SandboxFramework
 
 		FileReader::~FileReader()
 		{
-			if (file) Close();
+			fclose(file);
+			file = NULL;
 		}
 
 		void FileReader::Seek(int position)
@@ -32,12 +33,6 @@ namespace SandboxFramework
 			memset(ret, 0, m_Length + 1);
 			fread(ret, 1, m_Length, file);
 			return std::string(ret);
-		}
-
-		void FileReader::Close()
-		{
-			fclose(file);
-			file = NULL;
 		}
 	}
 }

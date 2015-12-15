@@ -4,6 +4,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "IBO.h"
+#include "Texture2D.h"
 
 namespace SandboxFramework
 {
@@ -12,6 +13,8 @@ namespace SandboxFramework
 		GraphicsDevice::GraphicsDevice(Game* game)
 		{
 			m_Game = game;
+
+			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &gl_MAXTEXNUM);
 		}
 
 		GraphicsDevice::~GraphicsDevice()
@@ -121,6 +124,41 @@ namespace SandboxFramework
 		{
 			gl_unbindShader(shader);
 			glDeleteProgram(shader->m_Program);
+		}
+
+		GLint GraphicsDevice::gl_getLocation(const Shader* shader, std::string uniformName)
+		{
+			return glGetUniformLocation(shader->m_Program, uniformName.c_str());
+		}
+
+		void GraphicsDevice::gl_setUniformInt(GLint location, int value)
+		{
+			glUniform1i(location, value);
+		}
+
+		void GraphicsDevice::gl_setUniformFloat(GLint location, float value)
+		{
+			glUniform1f(location, value);
+		}
+
+		void GraphicsDevice::gl_setUniformVector2(GLint location, Math::Vector2 vector)
+		{
+			glUniform2f(location, vector.X, vector.Y);
+		}
+
+		void GraphicsDevice::gl_setUniformVector3(GLint location, Math::Vector3 vector)
+		{
+			glUniform3f(location, vector.X, vector.Y, vector.Z);
+		}
+
+		void GraphicsDevice::gl_setUniformVector4(GLint location, Math::Vector4 vector)
+		{
+			glUniform4f(location, vector.X, vector.Y, vector.Z, vector.W);
+		}
+
+		void GraphicsDevice::gl_setUniformMatrix(GLint location, Math::Matrix matrix)
+		{
+			glUniformMatrix4fv(location, 1, GL_FALSE, matrix.Elements);
 		}
 
 		GLuint GraphicsDevice::gl_createVAO()
@@ -268,39 +306,59 @@ namespace SandboxFramework
 			glDeleteBuffers(1, &ibo->m_ID);
 		}
 
-		GLint GraphicsDevice::gl_getLocation(const Shader* shader, std::string uniformName)
+		GLuint GraphicsDevice::gl_createTexture2D(BYTE* data, GLsizei width, GLsizei height, GLenum imageFormat)
 		{
-			return glGetUniformLocation(shader->m_Program, uniformName.c_str());
+			GLuint ret;
+			glGenTextures(1, &ret);
+			glBindTexture(GL_TEXTURE_2D, ret);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, imageFormat, GL_UNSIGNED_BYTE, data);
+			
+			return ret;
 		}
 
-		void GraphicsDevice::gl_setUniformInt(GLint location, int value)
+		void GraphicsDevice::gl_setTextureFilters(const Texture2D* texture, GLint minFilter, GLint magFilter)
 		{
-			glUniform1i(location, value);
+			gl_bindTexture2D(texture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 		}
 
-		void GraphicsDevice::gl_setUniformFloat(GLint location, float value)
+		void GraphicsDevice::gl_bindTexture2D(const Texture2D* texture)
 		{
-			glUniform1f(location, value);
+			if (texture == NULL)
+			{
+				if (glstate_ActiveTexture2D == NULL) return;
+				glBindTexture(GL_TEXTURE_2D, NULL);
+				glstate_ActiveTexture2D = NULL;
+			}
+			if (glstate_ActiveTexture2D != texture->m_ID)
+			{
+				glBindTexture(GL_TEXTURE_2D, texture->m_ID);
+				glstate_ActiveTexture2D = texture->m_ID;
+			}
 		}
 
-		void GraphicsDevice::gl_setUniformVector2(GLint location, Math::Vector2 vector)
+		void GraphicsDevice::gl_unbindTexture2D(const Texture2D* texture)
 		{
-			glUniform2f(location, vector.X, vector.Y);
+			if (glstate_ActiveTexture2D == texture->m_ID)
+			{
+				glBindTexture(GL_TEXTURE_2D, NULL);
+				glstate_ActiveTexture2D = NULL;
+			}
 		}
 
-		void GraphicsDevice::gl_setUniformVector3(GLint location, Math::Vector3 vector)
+		//TODO: Think about throwing an exception
+		void GraphicsDevice::gl_SetActiveTexture(GLuint slot)
 		{
-			glUniform3f(location, vector.X, vector.Y, vector.Z);
+			if (slot >= gl_MAXTEXNUM) return;
+			
+			glActiveTexture(GL_TEXTURE0 + slot);
 		}
 
-		void GraphicsDevice::gl_setUniformVector4(GLint location, Math::Vector4 vector)
+		void GraphicsDevice::gl_destroyTexture2D(Texture2D* texture)
 		{
-			glUniform4f(location, vector.X, vector.Y, vector.Z, vector.W);
-		}
-
-		void GraphicsDevice::gl_setUniformMatrix(GLint location, Math::Matrix matrix)
-		{
-			glUniformMatrix4fv(location, 1, GL_FALSE, matrix.Elements);
+			gl_unbindTexture2D(texture);
+			glDeleteTextures(1, &texture->m_ID);
 		}
 	}
 }

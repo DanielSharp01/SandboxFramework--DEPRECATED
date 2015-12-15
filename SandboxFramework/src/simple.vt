@@ -2,11 +2,17 @@
 uniform mat4 proj;
 attribute vec4 in_Position;
 attribute vec4 in_Color;
+attribute vec2 in_UV;
+attribute float in_TexID;
 varying vec4 vs_position;
 varying vec4 vs_Color;
+varying vec2 vs_UV;
+varying float vs_TexID;
 
 void main(void) {
 	vs_position = in_Position;
 	vs_Color = in_Color;
+	vs_UV = in_UV;
+	vs_TexID = in_TexID;
     gl_Position = proj * vs_position;
 }
