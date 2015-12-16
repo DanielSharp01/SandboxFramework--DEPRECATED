@@ -6,11 +6,13 @@ namespace SandboxFramework
 {
 	namespace Graphics
 	{
+		class SpriteBatch;
 		//TODO: Changable BYTE data
 		//TODO: Savable to PNG, JPG
 		class Texture2D
 		{
 			friend GraphicsDevice;
+			friend SpriteBatch;
 		private:
 			GraphicsDevice* m_Graphics;
 			GLuint m_ID;

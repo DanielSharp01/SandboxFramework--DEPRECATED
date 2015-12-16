@@ -13,8 +13,6 @@ namespace SandboxFramework
 		GraphicsDevice::GraphicsDevice(Game* game)
 		{
 			m_Game = game;
-
-			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &gl_MAXTEXNUM);
 		}
 
 		GraphicsDevice::~GraphicsDevice()
@@ -134,6 +132,11 @@ namespace SandboxFramework
 		void GraphicsDevice::gl_setUniformInt(GLint location, int value)
 		{
 			glUniform1i(location, value);
+		}
+
+		void GraphicsDevice::gl_setUniformIntV(GLint location, int* value, unsigned int count)
+		{
+			glUniform1iv(location, count, value);
 		}
 
 		void GraphicsDevice::gl_setUniformFloat(GLint location, float value)
@@ -349,9 +352,7 @@ namespace SandboxFramework
 
 		//TODO: Think about throwing an exception
 		void GraphicsDevice::gl_SetActiveTexture(GLuint slot)
-		{
-			if (slot >= gl_MAXTEXNUM) return;
-			
+		{	
 			glActiveTexture(GL_TEXTURE0 + slot);
 		}
 

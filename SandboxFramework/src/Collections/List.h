@@ -12,6 +12,8 @@ namespace Collections {
 			return Insert(GetCount(), element);
 		}
 
+		virtual void Clear() = 0;
+
 		virtual T Insert(int index, T element) = 0;
 		virtual T RemoveAt(int index) = 0;
 

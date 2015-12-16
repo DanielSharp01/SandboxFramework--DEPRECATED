@@ -32,9 +32,6 @@ namespace SandboxFramework {
 		private:
 			Game* m_Game;
 
-			//OpenGL constants
-			GLint gl_MAXTEXNUM;
-
 			//OpenGL state management
 			Color glstate_ClearColor;
 			GLuint glstate_ActiveShaderProgram;
@@ -51,6 +48,7 @@ namespace SandboxFramework {
 			
 			GLint gl_getLocation(const Shader* shader, std::string uniformName);
 			void gl_setUniformInt(GLint location, int value);
+			void gl_setUniformIntV(GLint location, int* value, unsigned int count);
 			void gl_setUniformFloat(GLint location, float value);
 			void gl_setUniformVector2(GLint location, Math::Vector2 vector);
 			void gl_setUniformVector3(GLint location, Math::Vector3 vector);

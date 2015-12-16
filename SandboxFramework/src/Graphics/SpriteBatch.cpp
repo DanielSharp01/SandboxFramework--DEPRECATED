@@ -32,10 +32,10 @@ namespace SandboxFramework
 			ibo = new IBO(graphics, allIndex, SPRITE_BATCH_MAX_INDICES);
 			delete allIndex;
 
-			vao->BindVBOToLocation(vbo, 1, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
-			vao->BindVBOToLocation(vbo, 0, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
-			vao->BindVBOToLocation(vbo, 3, 2, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
-			vao->BindVBOToLocation(vbo, 2, 1, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
+			vao->BindVBOToLocation(vbo, 0, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
+			vao->BindVBOToLocation(vbo, 1, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
+			vao->BindVBOToLocation(vbo, 2, 2, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
+			vao->BindVBOToLocation(vbo, 3, 1, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
 		}
 
 		SpriteBatch::~SpriteBatch()
@@ -49,19 +49,20 @@ namespace SandboxFramework
 		{
 			m_Pointer = (BatchVertex*)vbo->Map();
 			m_SpriteCount = 0;
+			textures = Collections::ArrayList<GLuint>(SPRITE_BATCH_MAX_TEXTURES);
 		}
 
-		void SpriteBatch::Draw(Math::Vector2 position, Math::Vector2 size, Color color)
+		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color)
 		{
-			SpriteBatch::Draw(position, size, color, Math::Vector2(0, 0), 0, Math::Vector2(1, 1));
+			SpriteBatch::Draw(texture, position, size, color, Math::Vector2(0, 0), 0, Math::Vector2(1, 1));
 		}
 
-		void SpriteBatch::Draw(Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, float scale)
+		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, float scale)
 		{
-			SpriteBatch::Draw(position, size, color, origin, rotation, Math::Vector2(scale, scale));
+			SpriteBatch::Draw(texture, position, size, color, origin, rotation, Math::Vector2(scale, scale));
 		}
 
-		void SpriteBatch::Draw(Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
 		{
 			Math::Matrix model = Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
 									* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
@@ -75,28 +76,50 @@ namespace SandboxFramework
 
 			Math::Vector4 colour = color.ToVector4();
 
+			float texID = -1;
+
+			if (texture)
+			{
+				int i;
+				for (i = 0; i < textures.GetCount() && texture->m_ID != textures[i]; i++);
+
+				if (i < textures.GetCount()) texID = i;
+				else
+				{
+					if (textures.GetCount() == SPRITE_BATCH_MAX_TEXTURES)
+					{
+						End();
+						Begin();
+						textures.Clear();
+					}
+					textures.Add(texture->m_ID);
+					texture->Bind(textures.GetCount() - 1);
+					texID = textures.GetCount() - 1;
+				}
+			}
+
 			m_Pointer->Position = topLeft;
 			m_Pointer->Color = colour;
 			m_Pointer->UV = Math::Vector2(0, 1);
-			m_Pointer->TexID = 0;
+			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = topRight;
 			m_Pointer->Color = colour;
 			m_Pointer->UV = Math::Vector2(1, 1);
-			m_Pointer->TexID = 0;
+			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = bottomRight;
 			m_Pointer->Color = colour;
 			m_Pointer->UV = Math::Vector2(1, 0);
-			m_Pointer->TexID = 1;
+			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = bottomLeft;
 			m_Pointer->Color = colour;
 			m_Pointer->UV = Math::Vector2(0, 0);
-			m_Pointer->TexID = 1;
+			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_SpriteCount++;

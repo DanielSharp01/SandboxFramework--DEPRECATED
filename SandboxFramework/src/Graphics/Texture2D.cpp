@@ -10,6 +10,7 @@ namespace SandboxFramework
 			: m_Graphics(graphics), m_Width(width), m_Height(height)
 		{
 			m_ID = m_Graphics->gl_createTexture2D(data, width, height, imageFormat);
+			SetFilters(GL_NEAREST, GL_NEAREST);
 		}
 
 		Texture2D::~Texture2D()

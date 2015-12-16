@@ -22,6 +22,12 @@ namespace Collections {
 			delete m_Values;
 		}
 
+		void Clear()
+		{
+			m_Keys->Clear();
+			m_Values->Clear();
+		}
+
 		V Add(K key, V value)
 		{
 			m_Keys->Add(key);

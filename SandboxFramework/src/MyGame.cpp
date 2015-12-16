@@ -22,30 +22,35 @@ void MyGame::Initialize() { }
 Graphics::Shader* shader;
 Graphics::SpriteBatch* spriteBatch;
 Graphics::Color* colArray;
+Graphics::Texture2D** texArray;
+Graphics::Texture2D *texture, *texture2;
 
 void MyGame::LoadContent()
 {
-	shader = new Graphics::Shader(m_Graphics, "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.vt", "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.fg");
+	shader = new Graphics::Shader(m_Graphics, "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.vert", "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.frag");
 	shader->Bind();
 
-	Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/BoxTexture.jpg");
-	Graphics::Texture2D* texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGR);
+	Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/white.png");
+	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGRA);
 	delete reader;
-	texture->SetFilters(GL_LINEAR, GL_LINEAR);
-	texture->Bind(0);
-	shader->setUniformInt("texture", 0);
-	shader->setUniformColor("color", Graphics::Color(1, 1, 1, 1));
+	reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/red.png");
+	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGRA);
+	delete reader;
+
+	shader->setUniformDefaultIntV("textures", 32);
+	//shader->setUniformColor("tint", Graphics::Color(1, 1, 1, 1));
 	shader->setUniformMatrix("proj", Math::Matrix::Orthographic(0.0f, 16.0f, 9.0f, 0.0f, -1.0f, 1.0f));
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
 
 	colArray = new Graphics::Color[128 * 72];
-
+	texArray = new Graphics::Texture2D*[128 * 72];
 	for (int i = 0; i < 128 * 72; i++)
 	{
-		colArray[i] = Graphics::Color(1.0f, 1.0f, 1.0f, 1.0f);
-		//colArray[i] = Graphics::Color(Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), 1.0f);
+		//colArray[i] = Graphics::Color(1.0f, 1.0f, 1.0f, 1.0f);
+		colArray[i] = Graphics::Color(Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), 1.0f);
+		//texArray[i] = texture;
+		texArray[i] = Math::Random(0, 1) ? texture : texture2;
 	}
-
 }
 
 Input::KeyboardState lastState;
@@ -77,18 +82,22 @@ void MyGame::Draw()
 	float size = 0.125f;
 
 	spriteBatch->Begin();
-	/*for (float x = 0; x < 16.0f; x += 0.125f)
+	for (float x = 0; x < 16.0f; x += 0.125f)
 		for (float y = 0; y < 9.0f; y += 0.125f)
-		spriteBatch->Draw(Math::Vector2(x + size / 2, y + size / 2), Math::Vector2(size, size),
+		spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Math::Vector2(x + size / 2, y + size / 2), Math::Vector2(size, size),
 			colArray[(int)(y * 8) + (int)(x * 8) * 9],
-			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);*/
+			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
 
-	spriteBatch->Draw(Math::Vector2(2, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
+	/*spriteBatch->Draw(texture, Math::Vector2(10, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
+	spriteBatch->Draw(texture2, Math::Vector2(2, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));*/
 
 	spriteBatch->End();
 }
 
 void MyGame::UnloadContent()
 {
-
+	delete[] colArray;
+	delete[] texArray;
+	delete texture;
+	delete texture2;
 }

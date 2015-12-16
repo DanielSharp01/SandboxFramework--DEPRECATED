@@ -27,6 +27,8 @@ namespace SandboxFramework
 
 			GLint getLocation(std::string uniformName) const;
 			void setUniformInt(std::string name, int value);
+			void setUniformIntV(std::string name, int* value, unsigned int count);
+			void setUniformDefaultIntV(std::string name, unsigned int count);
 			void setUniformFloat(std::string name, float value);
 			void setUniformVector2(std::string name, Math::Vector2 vector);
 			void setUniformVector3(std::string name, Math::Vector3 vector);

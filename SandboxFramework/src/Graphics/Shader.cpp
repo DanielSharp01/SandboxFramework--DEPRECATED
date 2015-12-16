@@ -49,6 +49,19 @@ namespace SandboxFramework
 			m_Graphics->gl_setUniformInt(getLocation(name), value);
 		}
 
+		void Shader::setUniformIntV(std::string name, int* value, unsigned int count)
+		{
+			m_Graphics->gl_setUniformIntV(getLocation(name), value, count);
+		}
+
+		void Shader::setUniformDefaultIntV(std::string name, unsigned int count)
+		{
+			int* arr = new int[count];
+			for (int i = 0; i < count; i++) arr[i] = i;
+			setUniformIntV(name, arr, count);
+			delete arr;
+		}
+
 		void Shader::setUniformFloat(std::string name, float value)
 		{
 			m_Graphics->gl_setUniformFloat(getLocation(name), value);

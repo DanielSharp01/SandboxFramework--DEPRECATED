@@ -24,6 +24,19 @@ namespace Collections {
 			delete headTail;
 		}
 
+		void Clear() override
+		{
+			LinkedElement<T>* el = headTail->Next;
+			for (int i = 0; i < m_Count; i++)
+			{
+				LinkedElement<T>* del = el;
+				el = el->Next;
+				delete del;
+			}
+			headTail->Next = headTail;
+			headTail->Previous = headTail;
+		}
+
 		T Insert(int index, T element) override
 		{
 			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
@@ -46,8 +59,8 @@ namespace Collections {
 		LinkedElement<T>* getLinkedElement(int index)
 		{
 			LinkedElement<T>* el = headTail;
-			if (index < m_Count / 2) for (int i = 0; i <= index; i++) el = el->next;
-			else for (int i = 0; i <= m_Count - index; i++) el = el->previous;
+			if (index < m_Count / 2) for (int i = 0; i <= index; i++) el = el->Next;
+			else for (int i = 0; i <= m_Count - index; i++) el = el->Previous;
 			return el;
 		}
 

@@ -209,8 +209,8 @@
     <ClInclude Include="src\MyGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\simple.vt" />
-    <Text Include="src\simple.fg" />
+    <Text Include="src\simple.vert" />
+    <Text Include="src\simple.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

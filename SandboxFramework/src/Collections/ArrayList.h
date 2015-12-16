@@ -24,6 +24,11 @@ namespace Collections {
 			delete[] arr;
 		}
 
+		void Clear() override
+		{
+			arr = new T[m_Capacity];
+		}
+
 		T Insert(int index, T element) override
 		{
 			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
