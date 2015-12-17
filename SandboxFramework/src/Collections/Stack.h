@@ -9,11 +9,11 @@ namespace Collections
 	class Stack
 	{
 	private:
-		LinkedList<T> m_Data;
+		LinkedList<T>& m_Data;
 	public:
 		Stack()
 		{
-			m_Data = new LinkedList<T>();
+			m_Data = LinkedList<T>();
 		}
 
 		~Stack()

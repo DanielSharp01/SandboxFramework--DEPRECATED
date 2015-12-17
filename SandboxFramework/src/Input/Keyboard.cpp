@@ -1,13 +1,13 @@
 #include "Keyboard.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Input {
 
 		KeyboardState Keyboard::actual = KeyboardState();
 
 		void Keyboard::setState(int key, bool state)
 		{
-			Keyboard::actual.states[key] = state;
+			Keyboard::actual.m_States[key] = state;
 		}
 
 		void keyboardCallback(GLFWwindow* sender, int key, int scancode, int action, int mods)

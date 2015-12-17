@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Math
 	{

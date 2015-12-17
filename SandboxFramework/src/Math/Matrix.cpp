@@ -2,7 +2,7 @@
 
 #include "Functions.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Math
 	{

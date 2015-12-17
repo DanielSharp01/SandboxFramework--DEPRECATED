@@ -3,7 +3,7 @@
 #include "VAO.h"
 #include "VBO.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics {
 		VAO::VAO(GraphicsDevice* graphics)
 			: m_Graphics(graphics)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdexcept>
-#include <sstream>
+#include <string>
 
 namespace Exceptions {
 	class EmptyException : public std::runtime_error

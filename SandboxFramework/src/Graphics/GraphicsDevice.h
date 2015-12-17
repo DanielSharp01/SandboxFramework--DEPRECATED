@@ -5,7 +5,7 @@
 #include "Color.h"
 
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics
 	{
 		typedef unsigned char BYTE;

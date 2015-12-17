@@ -1,11 +1,9 @@
 #pragma once
 
-namespace SandboxFramework
+#include "../Math/Vector4.h"
+
+namespace Sand
 {
-	namespace Math
-	{
-		struct Vector4;
-	}
 	namespace Graphics
 	{
 		struct Color

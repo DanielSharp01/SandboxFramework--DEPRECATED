@@ -3,7 +3,7 @@
 #include "MouseState.h"
 #include <GLFW\glfw3.h>
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Input {
 		class Mouse
 		{

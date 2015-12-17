@@ -2,16 +2,16 @@
 
 #include "SpriteBatch.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{
 		SpriteBatch::SpriteBatch(GraphicsDevice* graphics)
 			: m_Graphics(graphics)
 		{
-			vao = new VAO(graphics);
+			m_Vao = new VAO(graphics);
 
-			vbo = new VBO(graphics, SPRITE_BATCH_MAX_VERTICES, SPRITE_BATCH_VERTEX_SIZE);
+			m_Vbo = new VBO(graphics, SPRITE_BATCH_MAX_VERTICES, SPRITE_BATCH_VERTEX_SIZE);
 			GLushort* allIndex = new GLushort[SPRITE_BATCH_MAX_INDICES];
 
 			int bitch = SPRITE_BATCH_MAX_SPRITES;
@@ -29,27 +29,30 @@ namespace SandboxFramework
 			}
 
 
-			ibo = new IBO(graphics, allIndex, SPRITE_BATCH_MAX_INDICES);
+			m_Ibo = new IBO(graphics, allIndex, SPRITE_BATCH_MAX_INDICES);
 			delete allIndex;
 
-			vao->BindVBOToLocation(vbo, 0, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
-			vao->BindVBOToLocation(vbo, 1, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
-			vao->BindVBOToLocation(vbo, 2, 2, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
-			vao->BindVBOToLocation(vbo, 3, 1, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
+			m_Vao->BindVBOToLocation(m_Vbo, 0, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
+			m_Vao->BindVBOToLocation(m_Vbo, 1, 4, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
+			m_Vao->BindVBOToLocation(m_Vbo, 2, 2, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
+			m_Vao->BindVBOToLocation(m_Vbo, 3, 1, GL_FLOAT, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
+			
+			m_Textures = new Collections::ArrayList<GLuint>(SPRITE_BATCH_MAX_TEXTURES);
 		}
 
 		SpriteBatch::~SpriteBatch()
 		{
-			delete vbo;
-			delete ibo;
-			delete vao;
+			delete m_Vbo;
+			delete m_Ibo;
+			delete m_Vao;
+			delete m_Textures;
 		}
 
 		void SpriteBatch::Begin()
 		{
-			m_Pointer = (BatchVertex*)vbo->Map();
+			m_Pointer = (BatchVertex*)m_Vbo->Map();
 			m_SpriteCount = 0;
-			textures = Collections::ArrayList<GLuint>(SPRITE_BATCH_MAX_TEXTURES);
+			m_Textures->Clear();
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color)
@@ -81,20 +84,20 @@ namespace SandboxFramework
 			if (texture)
 			{
 				int i;
-				for (i = 0; i < textures.GetCount() && texture->m_ID != textures[i]; i++);
+				for (i = 0; i < m_Textures->GetCount() && texture->m_ID != (*m_Textures)[i]; i++);
 
-				if (i < textures.GetCount()) texID = i;
+				if (i < m_Textures->GetCount()) texID = i;
 				else
 				{
-					if (textures.GetCount() == SPRITE_BATCH_MAX_TEXTURES)
+					if (m_Textures->GetCount() == SPRITE_BATCH_MAX_TEXTURES)
 					{
 						End();
 						Begin();
-						textures.Clear();
+						m_Textures->Clear();
 					}
-					textures.Add(texture->m_ID);
-					texture->Bind(textures.GetCount() - 1);
-					texID = textures.GetCount() - 1;
+					m_Textures->Add(texture->m_ID);
+					texture->BindToActive(m_Textures->GetCount() - 1);
+					texID = m_Textures->GetCount() - 1;
 				}
 			}
 
@@ -127,9 +130,9 @@ namespace SandboxFramework
 
 		void SpriteBatch::End()
 		{
-			vbo->Unmap();
-			vao->Bind();
-			ibo->Bind();
+			m_Vbo->Unmap();
+			m_Vao->Bind();
+			m_Ibo->Bind();
 
 			//std::cout << m_SpriteCount << std::endl;
 

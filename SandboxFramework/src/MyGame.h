@@ -2,7 +2,7 @@
 
 #include "Game.h"
 
-class MyGame : public SandboxFramework::Game
+class MyGame : public Sand::Game
 {
 public:
 	MyGame(std::string title);

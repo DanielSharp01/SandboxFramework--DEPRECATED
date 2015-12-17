@@ -2,7 +2,7 @@
 
 #include "GraphicsDevice.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{
@@ -25,7 +25,7 @@ namespace SandboxFramework
 
 			void SetFilters(GLint minFilter, GLint magFilter);
 			void Bind();
-			void Bind(GLuint slot);
+			void BindToActive(GLuint slot);
 			void Unbind();
 
 			inline GLuint GetWidth() { return m_Width; }

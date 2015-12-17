@@ -4,7 +4,7 @@
 #include "GraphicsDevice.h"
 #include "VBOLocation.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics {
 		class VBO;
 

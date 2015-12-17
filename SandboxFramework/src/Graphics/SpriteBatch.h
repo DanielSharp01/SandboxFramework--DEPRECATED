@@ -15,7 +15,7 @@
 #define SPRITE_BATCH_MAX_TEXTURES 32
 
 //TODO: Move shader inside
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{
@@ -31,12 +31,12 @@ namespace SandboxFramework
 		{
 		private:
 			GraphicsDevice* m_Graphics;
-			VAO* vao;
-			VBO* vbo;
-			IBO* ibo;
+			VAO* m_Vao;
+			VBO* m_Vbo;
+			IBO* m_Ibo;
 			BatchVertex* m_Pointer;
 			int m_SpriteCount;
-			Collections::ArrayList<GLuint> textures;
+			Collections::ArrayList<GLuint>* m_Textures;
 		public:
 			SpriteBatch(GraphicsDevice* graphics);
 			~SpriteBatch();

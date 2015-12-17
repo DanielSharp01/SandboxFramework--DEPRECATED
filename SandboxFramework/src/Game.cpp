@@ -3,7 +3,7 @@
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
 
-namespace SandboxFramework {
+namespace Sand {
 
 	Game::Game(std::string title)
 	{

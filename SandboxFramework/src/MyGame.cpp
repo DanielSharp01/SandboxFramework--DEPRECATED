@@ -9,9 +9,9 @@
 #include "Input/Mouse.h"
 #include "Math/Functions.h"
 #include "Graphics/Texture2D.h"
-#include "Content/ImageReader.h"
+#include "IO/ImageReader.h"
 
-using namespace SandboxFramework;
+using namespace Sand;
 
 MyGame::MyGame(std::string title)
 	: Game(title)
@@ -27,19 +27,19 @@ Graphics::Texture2D *texture, *texture2;
 
 void MyGame::LoadContent()
 {
-	shader = new Graphics::Shader(m_Graphics, "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.vert", "C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/src/simple.frag");
+	shader = new Graphics::Shader(m_Graphics, "Resources/Shaders/simple.vert", "Resources/Shaders/simple.frag");
 	shader->Bind();
 
-	Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/white.png");
+	IO::ImageReader* reader = new IO::ImageReader("Resources/Textures/white.png");
 	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGRA);
 	delete reader;
-	reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/red.png");
+	reader = new IO::ImageReader("Resources/Textures/red.png");
 	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGRA);
 	delete reader;
 
-	shader->setUniformDefaultIntV("textures", 32);
-	//shader->setUniformColor("tint", Graphics::Color(1, 1, 1, 1));
-	shader->setUniformMatrix("proj", Math::Matrix::Orthographic(0.0f, 16.0f, 9.0f, 0.0f, -1.0f, 1.0f));
+	shader->SetUniformDefaultIntV("textures", 32);
+	//shader->SetUniformColor("tint", Graphics::Color(1, 1, 1, 1));
+	shader->SetUniformMatrix("proj", Math::Matrix::Orthographic(0.0f, 16.0f, 9.0f, 0.0f, -1.0f, 1.0f));
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
 
 	colArray = new Graphics::Color[128 * 72];
@@ -48,8 +48,8 @@ void MyGame::LoadContent()
 	{
 		//colArray[i] = Graphics::Color(1.0f, 1.0f, 1.0f, 1.0f);
 		colArray[i] = Graphics::Color(Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), Math::RandomLinearInterpolation(0.0f, 1.0f), 1.0f);
-		//texArray[i] = texture;
-		texArray[i] = Math::Random(0, 1) ? texture : texture2;
+		texArray[i] = texture;
+		//texArray[i] = Math::Random(0, 1) ? texture : texture2;
 	}
 }
 
@@ -77,7 +77,7 @@ void MyGame::Draw()
 	y = y * 9.0f / m_Height;
 	
 	Math::Vector2 lightVector = Math::Vector2(x, y);
-	shader->setUniformVector2("light_pos", lightVector);
+	shader->SetUniformVector2("light_pos", lightVector);
 
 	float size = 0.125f;
 

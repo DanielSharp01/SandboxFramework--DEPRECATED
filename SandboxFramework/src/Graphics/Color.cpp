@@ -1,7 +1,6 @@
 #include "Color.h"
-#include "../Math/Vector4.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{

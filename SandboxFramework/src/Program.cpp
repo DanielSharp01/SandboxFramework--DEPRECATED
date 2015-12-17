@@ -8,16 +8,16 @@
 #include "Math/structs.h"
 #include "MyGame.h"
 #include <iostream>
-#include "Content/ImageReader.h"
+//#include "IO/ImageReader.h"
 
 int main()
 {
-	using namespace SandboxFramework;
+	using namespace Sand;
 	MyGame* game = new MyGame("SandboxFramework Window");
 	game->Run();
 	delete game;
 
-	/*Content::ImageReader* reader = new Content::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/BoxTexture.png");
+	/*IO::ImageReader* reader = new IO::ImageReader("C:/Users/Danie/Documents/Visual Studio 2015/Projects/SandboxFramework/SandboxFramework/BoxTexture.png");
 
 	
 	BYTE* bytes = reader->GetPixelData();
@@ -33,8 +33,8 @@ int main()
 		std::cout << std::endl;
 	}
 
-	delete reader;
+	delete reader;*/
 
-	std::cin.get();*/
+	//std::cin.get();
 	return 0;
 }

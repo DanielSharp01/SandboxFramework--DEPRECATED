@@ -1,7 +1,7 @@
 #include "Vector2.h"
 #include "Matrix.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Math
 	{

@@ -6,7 +6,7 @@
 #include "IBO.h"
 #include "Texture2D.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{

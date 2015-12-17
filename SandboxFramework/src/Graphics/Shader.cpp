@@ -1,23 +1,28 @@
 #include "Shader.h"
 
-namespace SandboxFramework
+#include "../IO/TextReader.h"
+
+namespace Sand
 {
 	namespace Graphics {
 		Shader::Shader(GraphicsDevice* graphics, std::string vertexPath, std::string fragmentPath)
-			: m_Graphics(graphics), m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
+			: m_Graphics(graphics)
 		{
-			locationCache = new Collections::Dictionary<std::string, GLint>();
-			compile(Content::FileReader(vertexPath, "t").ReadToEnd(), Content::FileReader(fragmentPath, "t").ReadToEnd());
+			m_LocationCache = new Collections::Dictionary<std::string, GLint>();
+			compile(IO::TextReader(vertexPath).ReadToEnd(), IO::TextReader(fragmentPath).ReadToEnd());
 		}
 
 		Shader::~Shader()
 		{
 			m_Graphics->gl_destroyShader(this);
-			delete locationCache;
+			delete m_LocationCache;
 		}
 
 		bool Shader::compile(std::string vertexSrc, std::string fragmentSrc)
 		{
+			m_VertexSrc = vertexSrc;
+			m_FragmentSrc = fragmentSrc;
+
 			m_Program = m_Graphics->gl_createShaderProgram(vertexSrc, fragmentSrc) != 0;
 			return m_Program != 0;
 		}
@@ -34,60 +39,60 @@ namespace SandboxFramework
 
 		GLint Shader::getLocation(std::string uniformName) const
 		{
-			if (locationCache->ContainsKey(uniformName))
+			if (m_LocationCache->ContainsKey(uniformName))
 			{
-				return (*locationCache)[uniformName];
+				return (*m_LocationCache)[uniformName];
 			}
 
-			locationCache->Add(uniformName, m_Graphics->gl_getLocation(this, uniformName));
+			m_LocationCache->Add(uniformName, m_Graphics->gl_getLocation(this, uniformName));
 
-			return (*locationCache)[uniformName];
+			return (*m_LocationCache)[uniformName];
 		}
 
-		void Shader::setUniformInt(std::string name, int value)
+		void Shader::SetUniformInt(std::string name, int value)
 		{
 			m_Graphics->gl_setUniformInt(getLocation(name), value);
 		}
 
-		void Shader::setUniformIntV(std::string name, int* value, unsigned int count)
+		void Shader::SetUniformIntV(std::string name, int* value, unsigned int count)
 		{
 			m_Graphics->gl_setUniformIntV(getLocation(name), value, count);
 		}
 
-		void Shader::setUniformDefaultIntV(std::string name, unsigned int count)
+		void Shader::SetUniformDefaultIntV(std::string name, unsigned int count)
 		{
 			int* arr = new int[count];
 			for (int i = 0; i < count; i++) arr[i] = i;
-			setUniformIntV(name, arr, count);
+			SetUniformIntV(name, arr, count);
 			delete arr;
 		}
 
-		void Shader::setUniformFloat(std::string name, float value)
+		void Shader::SetUniformFloat(std::string name, float value)
 		{
 			m_Graphics->gl_setUniformFloat(getLocation(name), value);
 		}
 
-		void Shader::setUniformVector2(std::string name, Math::Vector2 vector)
+		void Shader::SetUniformVector2(std::string name, Math::Vector2 vector)
 		{
 			m_Graphics->gl_setUniformVector2(getLocation(name), vector);
 		}
 
-		void Shader::setUniformVector3(std::string name, Math::Vector3 vector)
+		void Shader::SetUniformVector3(std::string name, Math::Vector3 vector)
 		{
 			m_Graphics->gl_setUniformVector3(getLocation(name), vector);
 		}
 
-		void Shader::setUniformVector4(std::string name, Math::Vector4 vector)
+		void Shader::SetUniformVector4(std::string name, Math::Vector4 vector)
 		{
 			m_Graphics->gl_setUniformVector4(getLocation(name), vector);
 		}
 
-		void Shader::setUniformColor(std::string name, Color color)
+		void Shader::SetUniformColor(std::string name, Color color)
 		{
 			m_Graphics->gl_setUniformVector4(getLocation(name), color.ToVector4());
 		}
 
-		void Shader::setUniformMatrix(std::string name, Math::Matrix matrix)
+		void Shader::SetUniformMatrix(std::string name, Math::Matrix matrix)
 		{
 			m_Graphics->gl_setUniformMatrix(getLocation(name), matrix);
 		}

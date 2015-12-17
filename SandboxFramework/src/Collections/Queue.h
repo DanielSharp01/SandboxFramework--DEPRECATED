@@ -9,11 +9,11 @@ namespace Collections
 	class Queue
 	{
 	private:
-		LinkedList<T>* m_Data;
+		LinkedList<T>& m_Data;
 	public:
 		Queue()
 		{
-			m_Data = new LinkedList<T>();
+			m_Data = LinkedList<T>();
 		}
 
 		~Queue()

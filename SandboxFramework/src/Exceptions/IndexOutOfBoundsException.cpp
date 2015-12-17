@@ -1,5 +1,7 @@
 #include "IndexOutOfBoundsException.h"
 
+#include <sstream>
+
 namespace Exceptions {
 	IndexOutOfBoundsException::IndexOutOfBoundsException()
 		: std::runtime_error("Runtime error")

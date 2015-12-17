@@ -2,7 +2,7 @@
 
 #include "GraphicsDevice.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics {
 
 		VBO::VBO(GraphicsDevice* graphics, GLvoid* vertices, GLsizei vertexSize, GLsizei count)

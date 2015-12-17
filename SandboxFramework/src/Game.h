@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 #include "Graphics/Color.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	
 	namespace Graphics
 	{
@@ -22,7 +22,7 @@ namespace SandboxFramework {
 		int m_Height;
 		std::string m_Title;
 
-		GLFWwindow *m_Window;
+		GLFWwindow* m_Window;
 		Graphics::GraphicsDevice* m_Graphics;
 	public:
 		Game(std::string title);
@@ -48,7 +48,7 @@ namespace SandboxFramework {
 
 		bool isClosing() const;
 
-		friend void resizeCallback(GLFWwindow *sender, int width, int height);
-		friend void frameResizeCallback(GLFWwindow *sender, int width, int height);
+		friend void resizeCallback(GLFWwindow* sender, int width, int height);
+		friend void frameResizeCallback(GLFWwindow* sender, int width, int height);
 	};
 }

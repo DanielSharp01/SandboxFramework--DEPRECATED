@@ -2,7 +2,7 @@
 
 typedef unsigned char BYTE;
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics
 	{
@@ -28,7 +28,7 @@ namespace SandboxFramework
 			m_Graphics->gl_bindTexture2D(this);
 		}
 
-		void Texture2D::Bind(GLuint slot)
+		void Texture2D::BindToActive(GLuint slot)
 		{
 			m_Graphics->gl_SetActiveTexture(slot);
 			m_Graphics->gl_bindTexture2D(this);

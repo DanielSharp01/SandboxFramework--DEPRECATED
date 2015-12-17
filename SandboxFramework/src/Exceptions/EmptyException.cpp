@@ -1,5 +1,7 @@
 #include "EmptyException.h"
 
+#include <sstream>
+
 namespace Exceptions {
 	EmptyException::EmptyException(std::string problem)
 		: m_Problem(problem), std::runtime_error("Runtime error") { }

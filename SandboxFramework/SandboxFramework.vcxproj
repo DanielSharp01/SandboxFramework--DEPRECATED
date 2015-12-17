@@ -99,6 +99,9 @@
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -109,6 +112,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -135,6 +141,9 @@
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -149,10 +158,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Content\FileReader.cpp" />
-    <ClCompile Include="src\Content\ImageReader.cpp" />
     <ClCompile Include="src\Exceptions\EmptyException.cpp" />
     <ClCompile Include="src\Exceptions\IndexOutOfBoundsException.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -166,6 +176,9 @@
     <ClCompile Include="src\Graphics\VBO.cpp" />
     <ClCompile Include="src\input\Keyboard.cpp" />
     <ClCompile Include="src\input\Mouse.cpp" />
+    <ClCompile Include="src\IO\FileReader.cpp" />
+    <ClCompile Include="src\IO\ImageReader.cpp" />
+    <ClCompile Include="src\IO\TextReader.cpp" />
     <ClCompile Include="src\Math\Functions.cpp" />
     <ClCompile Include="src\Math\Matrix.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
@@ -182,13 +195,11 @@
     <ClInclude Include="src\Collections\List.h" />
     <ClInclude Include="src\Collections\Queue.h" />
     <ClInclude Include="src\Collections\Stack.h" />
-    <ClInclude Include="src\Content\FileReader.h" />
-    <ClInclude Include="src\Content\ImageReader.h" />
     <ClInclude Include="src\Exceptions\EmptyException.h" />
     <ClInclude Include="src\Exceptions\IndexOutOfBoundsException.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\Color.h" />
+    <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\Graphics\SpriteBatch.h" />
@@ -200,6 +211,9 @@
     <ClInclude Include="src\input\KeyboardState.h" />
     <ClInclude Include="src\input\Mouse.h" />
     <ClInclude Include="src\input\MouseState.h" />
+    <ClInclude Include="src\IO\FileReader.h" />
+    <ClInclude Include="src\IO\ImageReader.h" />
+    <ClInclude Include="src\IO\TextReader.h" />
     <ClInclude Include="src\Math\Functions.h" />
     <ClInclude Include="src\Math\Matrix.h" />
     <ClInclude Include="src\Math\structs.h" />
@@ -209,8 +223,14 @@
     <ClInclude Include="src\MyGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\simple.vert" />
-    <Text Include="src\simple.frag" />
+    <None Include="Resources\Shaders\simple.frag" />
+    <None Include="Resources\Shaders\simple.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\BoxTexture.jpg" />
+    <Image Include="Resources\Textures\green.png" />
+    <Image Include="Resources\Textures\red.png" />
+    <Image Include="Resources\Textures\white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,7 +3,7 @@
 #include <iostream> //TODO: DELETE + ALSO COUT
 #include "GraphicsDevice.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics {
 		IBO::IBO(GraphicsDevice* graphics, GLushort* indices, GLsizei count)
 			: m_Graphics(graphics), m_Count(count)

@@ -8,33 +8,35 @@ namespace Collections {
 	class LinkedList : public List<T>
 	{
 	private:
-		LinkedElement<T>* headTail;
+		LinkedElement<T>* m_HeadTail;
 		int m_Count;
 	public:
 		LinkedList()
 		{
-			headTail = new LinkedElement<T>();
-			headTail->Next = headTail;
-			headTail->Previous = headTail;
+			m_HeadTail = new LinkedElement<T>();
+			m_HeadTail->Next = m_HeadTail;
+			m_HeadTail->Previous = m_HeadTail;
 			m_Count = 0;
 		}
 
 		~LinkedList()
 		{
-			delete headTail;
+			delete m_HeadTail;
 		}
 
 		void Clear() override
 		{
-			LinkedElement<T>* el = headTail->Next;
+			LinkedElement<T>* el = m_HeadTail->Next;
 			for (int i = 0; i < m_Count; i++)
 			{
 				LinkedElement<T>* del = el;
 				el = el->Next;
 				delete del;
 			}
-			headTail->Next = headTail;
-			headTail->Previous = headTail;
+			m_HeadTail->Next = m_HeadTail;
+			m_HeadTail->Previous = m_HeadTail;
+
+			m_Count = 0;
 		}
 
 		T Insert(int index, T element) override
@@ -58,7 +60,7 @@ namespace Collections {
 
 		LinkedElement<T>* getLinkedElement(int index)
 		{
-			LinkedElement<T>* el = headTail;
+			LinkedElement<T>* el = m_HeadTail;
 			if (index < m_Count / 2) for (int i = 0; i <= index; i++) el = el->Next;
 			else for (int i = 0; i <= m_Count - index; i++) el = el->Previous;
 			return el;

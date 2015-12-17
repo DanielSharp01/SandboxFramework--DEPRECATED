@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdexcept>
-#include <sstream>
+#include <string>
 
 namespace Exceptions {
 	class IndexOutOfBoundsException : public std::runtime_error

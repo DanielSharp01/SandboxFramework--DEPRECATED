@@ -3,9 +3,8 @@
 #include "GraphicsDevice.h"
 #include "../Math/structs.h"
 #include "../Collections/Dictionary.h"
-#include "../Content/FileReader.h"
 
-namespace SandboxFramework
+namespace Sand
 {
 	namespace Graphics {
 
@@ -13,10 +12,10 @@ namespace SandboxFramework
 		{
 			friend GraphicsDevice;
 		private:
-			std::string m_VertexPath, m_FragmentPath;
+			std::string m_VertexSrc, m_FragmentSrc;
 			GraphicsDevice* m_Graphics;
 			GLuint m_Program;
-			Collections::Dictionary<std::string, GLint>* locationCache;
+			Collections::Dictionary<std::string, GLint>* m_LocationCache;
 
 		public:
 			Shader(GraphicsDevice* graphics, std::string vertexPath, std::string fragmentPath);
@@ -25,17 +24,17 @@ namespace SandboxFramework
 			void Bind() const;
 			void Unbind() const;
 
-			GLint getLocation(std::string uniformName) const;
-			void setUniformInt(std::string name, int value);
-			void setUniformIntV(std::string name, int* value, unsigned int count);
-			void setUniformDefaultIntV(std::string name, unsigned int count);
-			void setUniformFloat(std::string name, float value);
-			void setUniformVector2(std::string name, Math::Vector2 vector);
-			void setUniformVector3(std::string name, Math::Vector3 vector);
-			void setUniformVector4(std::string name, Math::Vector4 vector);
-			void setUniformColor(std::string name, Color color);
-			void setUniformMatrix(std::string name, Math::Matrix matrix);
+			void SetUniformInt(std::string name, int value);
+			void SetUniformIntV(std::string name, int* value, unsigned int count);
+			void SetUniformDefaultIntV(std::string name, unsigned int count);
+			void SetUniformFloat(std::string name, float value);
+			void SetUniformVector2(std::string name, Math::Vector2 vector);
+			void SetUniformVector3(std::string name, Math::Vector3 vector);
+			void SetUniformVector4(std::string name, Math::Vector4 vector);
+			void SetUniformColor(std::string name, Color color);
+			void SetUniformMatrix(std::string name, Math::Matrix matrix);
 		private:
+			GLint getLocation(std::string uniformName) const;
 			bool compile(std::string vertexSrc, std::string fragmentSrc);
 		};
 	}

@@ -2,7 +2,7 @@
 
 #include "GraphicsDevice.h"
 
-namespace SandboxFramework {
+namespace Sand {
 	namespace Graphics {
 		class VBO
 		{
