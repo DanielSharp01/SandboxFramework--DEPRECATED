@@ -13,7 +13,7 @@
 int main()
 {
 	using namespace Sand;
-	MyGame* game = new MyGame("SandboxFramework Window");
+	MyGame* game = new MyGame();
 	game->Run();
 	delete game;
 

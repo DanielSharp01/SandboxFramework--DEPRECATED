@@ -188,6 +188,7 @@
     <ClCompile Include="src\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Chrono\TimerCounter.h" />
     <ClInclude Include="src\Collections\ArrayList.h" />
     <ClInclude Include="src\Collections\Dictionary.h" />
     <ClInclude Include="src\Collections\LinkedElement.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Math\Vector4.h" />
     <ClInclude Include="src\MyGame.h" />
+    <ClInclude Include="src\Chrono\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\simple.frag" />

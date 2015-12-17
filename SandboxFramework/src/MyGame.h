@@ -5,8 +5,10 @@
 class MyGame : public Sand::Game
 {
 public:
-	MyGame(std::string title);
+	MyGame(std::string title = "Test");
 protected:
+	std::string initialTitle;
+
 	void Initialize() override;
 	void LoadContent() override;
 	void Update() override;

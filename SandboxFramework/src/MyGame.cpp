@@ -10,11 +10,12 @@
 #include "Math/Functions.h"
 #include "Graphics/Texture2D.h"
 #include "IO/ImageReader.h"
+#include "Chrono/TimerCounter.h"
 
 using namespace Sand;
 
 MyGame::MyGame(std::string title)
-	: Game(title)
+	: Game(title), initialTitle(title)
 { }
 
 void MyGame::Initialize() { }
@@ -24,9 +25,11 @@ Graphics::SpriteBatch* spriteBatch;
 Graphics::Color* colArray;
 Graphics::Texture2D** texArray;
 Graphics::Texture2D *texture, *texture2;
+Chrono::TimerCounter* fpsTimer;
 
 void MyGame::LoadContent()
 {
+	fpsTimer = new Chrono::TimerCounter();
 	shader = new Graphics::Shader(m_Graphics, "Resources/Shaders/simple.vert", "Resources/Shaders/simple.frag");
 	shader->Bind();
 
@@ -51,6 +54,7 @@ void MyGame::LoadContent()
 		texArray[i] = texture;
 		//texArray[i] = Math::Random(0, 1) ? texture : texture2;
 	}
+	fpsTimer->Start();
 }
 
 Input::KeyboardState lastState;
@@ -92,6 +96,8 @@ void MyGame::Draw()
 	spriteBatch->Draw(texture2, Math::Vector2(2, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));*/
 
 	spriteBatch->End();
+	fpsTimer->AdvanceCounter();
+	SetTitle(initialTitle + " @ FPS " + std::to_string((int)fpsTimer->GetCountOver(1)));
 }
 
 void MyGame::UnloadContent()
@@ -100,4 +106,5 @@ void MyGame::UnloadContent()
 	delete[] texArray;
 	delete texture;
 	delete texture2;
+	delete fpsTimer;
 }

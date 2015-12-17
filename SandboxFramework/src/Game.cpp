@@ -39,7 +39,12 @@ namespace Sand {
 	void Game::SetSize(int width, int height)
 	{
 		glfwSetWindowSize(m_Window, width, height);
+	}
 
+	void Game::SetTitle(std::string title)
+	{
+		m_Title = title;
+		glfwSetWindowTitle(m_Window, title.c_str());
 	}
 
 	bool Game::init()

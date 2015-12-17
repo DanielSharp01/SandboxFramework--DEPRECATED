@@ -32,7 +32,9 @@ namespace Sand {
 
 		inline int GetWidth() const { return m_Width; }
 		inline int GetHeight() const { return m_Height; }
+
 		void SetSize(int width, int height);
+		void SetTitle(std::string title);
 	protected:
 		virtual void Initialize() = 0;
 		virtual void LoadContent() = 0;
