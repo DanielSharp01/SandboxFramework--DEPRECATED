@@ -44,6 +44,7 @@ void MyGame::LoadContent()
 	//shader->SetUniformColor("tint", Graphics::Color(1, 1, 1, 1));
 	shader->SetUniformMatrix("proj", Math::Matrix::Orthographic(0.0f, 16.0f, 9.0f, 0.0f, -1.0f, 1.0f));
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
+	spriteBatch->SetTextureDimensionDivisor(m_Width / 16.0f);
 
 	colArray = new Graphics::Color[128 * 72];
 	texArray = new Graphics::Texture2D*[128 * 72];
@@ -88,12 +89,11 @@ void MyGame::Draw()
 	spriteBatch->Begin();
 	for (float x = 0; x < 16.0f; x += 0.125f)
 		for (float y = 0; y < 9.0f; y += 0.125f)
-		spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Math::Vector2(x + size / 2, y + size / 2), Math::Vector2(size, size),
+		spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Graphics::Rectangle(0, 0, 0, 0), Graphics::Rectangle(x, y, size, size),
 			colArray[(int)(y * 8) + (int)(x * 8) * 9],
 			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
 
-	/*spriteBatch->Draw(texture, Math::Vector2(10, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
-	spriteBatch->Draw(texture2, Math::Vector2(2, 2), Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));*/
+	//spriteBatch->Draw(texture, Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
 
 	spriteBatch->End();
 	fpsTimer->AdvanceCounter();

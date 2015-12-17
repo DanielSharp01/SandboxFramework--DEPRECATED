@@ -55,6 +55,6 @@ void main(void) {
 		case 30: texColor = texture(textures[30], fs_in.UV); break;
 		case 31: texColor = texture(textures[31], fs_in.UV); break;
 	}
-
+	
 	gl_FragColor = texColor * fs_in.color * tint  * light;
 }

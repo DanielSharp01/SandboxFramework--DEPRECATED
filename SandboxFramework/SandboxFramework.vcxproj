@@ -169,6 +169,7 @@
     <ClCompile Include="src\Graphics\Color.cpp" />
     <ClCompile Include="src\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="src\Graphics\IBO.cpp" />
+    <ClCompile Include="src\Graphics\Rectangle.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\SpriteBatch.cpp" />
     <ClCompile Include="src\Graphics\Texture2D.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="src\Graphics\Color.h" />
     <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
+    <ClInclude Include="src\Graphics\Rectangle.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\Graphics\SpriteBatch.h" />
     <ClInclude Include="src\Graphics\Texture2D.h" />

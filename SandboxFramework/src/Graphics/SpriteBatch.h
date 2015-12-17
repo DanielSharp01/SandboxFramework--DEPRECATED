@@ -5,6 +5,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "IBO.h"
+#include "Rectangle.h"
 #include "../Math/structs.h"
 #include "../Collections/ArrayList.h"
 
@@ -37,17 +38,36 @@ namespace Sand
 			BatchVertex* m_Pointer;
 			int m_SpriteCount;
 			Collections::ArrayList<GLuint>* m_Textures;
+			float m_TexDivisor; //TODO: Remove and think of a better way (basically probably just set the viewport)
 		public:
 			SpriteBatch(GraphicsDevice* graphics);
 			~SpriteBatch();
 
+			void SetTextureDimensionDivisor(float divisor);
+
 			void Begin();
 
-			//TODO: Support only color (method you can pass NULL for no tex)
+			void Draw(Rectangle destination, Color color);
+			void Draw(Rectangle destination, Color color, Math::Vector2 origin, float rotation, float scale);
+			void Draw(Rectangle destination, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(Rectangle destination, Color color, Math::Matrix matrix);
 
-			void Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color);
-			void Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, float scale);
-			void Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(Rectangle area, Math::Vector2 position, Color color);
+			void Draw(Rectangle area, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale);
+			void Draw(Rectangle area, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(Rectangle area, Math::Vector2 position, Color color, Math::Matrix matrix);
+
+			void Draw(Texture2D* texture, Rectangle destination, Color color);
+			void Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color);
+			void Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Vector2 origin, float rotation, float scale);
+			void Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Matrix matrix);
+
+			void Draw(Texture2D* texture, Math::Vector2 position, Color color);
+			void Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color);
+			void Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale);
+			void Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Matrix matrix);
 
 			void End();
 		};

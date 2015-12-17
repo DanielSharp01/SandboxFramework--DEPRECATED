@@ -48,6 +48,11 @@ namespace Sand
 			delete m_Textures;
 		}
 
+		void SpriteBatch::SetTextureDimensionDivisor(float divisor)
+		{
+			m_TexDivisor = divisor;
+		}
+
 		void SpriteBatch::Begin()
 		{
 			m_Pointer = (BatchVertex*)m_Vbo->Map();
@@ -55,27 +60,126 @@ namespace Sand
 			m_Textures->Clear();
 		}
 
-		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color)
+		void SpriteBatch::Draw(Rectangle destination, Color color)
 		{
-			SpriteBatch::Draw(texture, position, size, color, Math::Vector2(0, 0), 0, Math::Vector2(1, 1));
+			Draw(NULL, Rectangle(0, 0, 0, 0), destination, color, Math::Matrix::Identity());
 		}
 
-		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, float scale)
+		void SpriteBatch::Draw(Rectangle destination, Color color, Math::Vector2 origin, float rotation, float scale)
 		{
-			SpriteBatch::Draw(texture, position, size, color, origin, rotation, Math::Vector2(scale, scale));
+			Draw(NULL, Rectangle(0, 0, 0, 0), destination, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
 		}
 
-		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Math::Vector2 size, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		void SpriteBatch::Draw(Rectangle destination, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
 		{
-			Math::Matrix model = Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
-									* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
-									* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
-									* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f));
+			Draw(NULL, Rectangle(0, 0, 0, 0), destination, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
 
-			Math::Vector4 topLeft = Math::Vector4(0.0f, 0.0f, 0.0f, 1.0f).Transform(model);
-			Math::Vector4 topRight = Math::Vector4(size.X, 0.0f, 0.0f, 1.0f).Transform(model);
-			Math::Vector4 bottomRight = Math::Vector4(size.X, size.Y, 0.0f, 1.0f).Transform(model);
-			Math::Vector4 bottomLeft = Math::Vector4(0.0f, size.Y, 0.0f, 1.0f).Transform(model);
+		void SpriteBatch::Draw(Rectangle destination, Color color, Math::Matrix matrix)
+		{
+			Draw(NULL, Rectangle(0, 0, 0, 0), destination, color, matrix);
+		}
+
+		void SpriteBatch::Draw(Rectangle area, Math::Vector2 position, Color color)
+		{
+			Draw(NULL, Rectangle(0, 0, 0, 0), area, color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Rectangle area, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale)
+		{
+			Draw(NULL, Rectangle(0, 0, 0, 0), area, color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Rectangle area, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		{
+			Draw(NULL, Rectangle(0, 0, 0, 0), area, color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Rectangle area, Math::Vector2 position, Color color, Math::Matrix matrix)
+		{
+			Draw(NULL, Rectangle(0, 0, 0, 0), area, color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)) * matrix);
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle destination, Color color)
+		{
+			Draw(texture, Rectangle(0, 0, 0, 0), destination, color, Math::Matrix::Identity());
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color)
+		{
+			Draw(texture, source, destination, color, Math::Matrix::Identity());
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Vector2 origin, float rotation, float scale)
+		{
+			Draw(texture, source, destination, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		{
+			Draw(texture, source, destination, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Color color)
+		{
+			Draw(texture, Rectangle(0, 0, 0, 0), Rectangle(0, 0, texture->GetWidth() / m_TexDivisor, texture->GetHeight() / m_TexDivisor), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color)
+		{
+			Draw(texture, source, Rectangle(0, 0, texture->GetWidth() / m_TexDivisor, texture->GetHeight() / m_TexDivisor), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale)
+		{
+			Draw(texture, Rectangle(0, 0, 0, 0), Rectangle(0, 0, texture->GetWidth() / m_TexDivisor, texture->GetHeight() / m_TexDivisor), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		{
+			Draw(texture, Rectangle(0, 0, 0, 0), Rectangle(0, 0, texture->GetWidth() / m_TexDivisor, texture->GetHeight() / m_TexDivisor), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Math::Vector2 position, Color color, Math::Matrix matrix)
+		{
+			Draw(texture, Rectangle(0, 0, 0, 0), Rectangle(0, 0, texture->GetWidth() / m_TexDivisor, texture->GetHeight() / m_TexDivisor), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)) * matrix);
+		}
+
+		void SpriteBatch::Draw(Texture2D* texture, Rectangle source, Rectangle destination, Color color, Math::Matrix matrix)
+		{
+			destination.Transform(matrix);
+
+			if (source.GetArea() == 0)
+			{
+				source = Rectangle(0, 0, 1, 1);
+			}
+			else
+			{
+				//TODO: Move this operation inside rectangle
+				source.TopLeft /= Math::Vector2(texture->GetWidth() ,texture->GetHeight());
+				source.TopRight /= Math::Vector2(texture->GetWidth(), texture->GetHeight());
+				source.BottomLeft /= Math::Vector2(texture->GetWidth(), texture->GetHeight());
+				source.BottomRight /= Math::Vector2(texture->GetWidth(), texture->GetHeight());
+			}
 
 			Math::Vector4 colour = color.ToVector4();
 
@@ -101,27 +205,27 @@ namespace Sand
 				}
 			}
 
-			m_Pointer->Position = topLeft;
+			m_Pointer->Position = Math::Vector4(destination.TopLeft.X, destination.TopLeft.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = Math::Vector2(0, 1);
+			m_Pointer->UV = source.BottomLeft;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
-			m_Pointer->Position = topRight;
+			m_Pointer->Position = Math::Vector4(destination.TopRight.X, destination.TopRight.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = Math::Vector2(1, 1);
+			m_Pointer->UV = source.BottomRight;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
-			m_Pointer->Position = bottomRight;
+			m_Pointer->Position = Math::Vector4(destination.BottomRight.X, destination.BottomRight.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = Math::Vector2(1, 0);
+			m_Pointer->UV = source.TopRight;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
-			m_Pointer->Position = bottomLeft;
+			m_Pointer->Position = Math::Vector4(destination.BottomLeft.X, destination.BottomLeft.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = Math::Vector2(0, 0);
+			m_Pointer->UV = source.TopLeft;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
