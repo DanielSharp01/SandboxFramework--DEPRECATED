@@ -6,6 +6,7 @@
 #endif
 
 #include "Math/structs.h"
+#include "Math/Rectangle.h"
 #include "MyGame.h"
 #include <iostream>
 //#include "IO/ImageReader.h"
@@ -35,6 +36,6 @@ int main()
 
 	delete reader;*/
 
-	//std::cin.get();
+	std::cin.get();
 	return 0;
 }

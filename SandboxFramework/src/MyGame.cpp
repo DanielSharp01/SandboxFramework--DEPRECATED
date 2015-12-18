@@ -26,6 +26,7 @@ Graphics::Color* colArray;
 Graphics::Texture2D** texArray;
 Graphics::Texture2D *texture, *texture2;
 Chrono::TimerCounter* fpsTimer;
+Math::Rectangle rect;
 
 void MyGame::LoadContent()
 {
@@ -46,6 +47,7 @@ void MyGame::LoadContent()
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
 	spriteBatch->SetTextureDimensionDivisor(m_Width / 16.0f);
 
+	rect = Math::Rectangle(0, 0, 1, 1);
 	colArray = new Graphics::Color[128 * 72];
 	texArray = new Graphics::Texture2D*[128 * 72];
 	for (int i = 0; i < 128 * 72; i++)
@@ -56,6 +58,8 @@ void MyGame::LoadContent()
 		//texArray[i] = Math::Random(0, 1) ? texture : texture2;
 	}
 	fpsTimer->Start();
+
+	rect.Rotate(50);
 }
 
 Input::KeyboardState lastState;
@@ -76,23 +80,25 @@ void MyGame::Update()
 void MyGame::Draw()
 {
 	m_Graphics->Clear(Graphics::Color(0.0f, 0.0f, 0.0f, 1));
-	float x = lastMState.GetPosition().X;
-	float y = lastMState.GetPosition().Y;
-	x = x * 16.0f / m_Width;
-	y = y * 9.0f / m_Height;
+	float mx = lastMState.GetPosition().X;
+	float my = lastMState.GetPosition().Y;
+	mx = mx * 16.0f / m_Width;
+	my = my * 9.0f / m_Height;
 	
-	Math::Vector2 lightVector = Math::Vector2(x, y);
+	Math::Vector2 lightVector = Math::Vector2(mx, my);
 	shader->SetUniformVector2("light_pos", lightVector);
 
 	float size = 0.125f;
 
 	spriteBatch->Begin();
-	for (float x = 0; x < 16.0f; x += 0.125f)
-		for (float y = 0; y < 9.0f; y += 0.125f)
-		spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Graphics::Rectangle(0, 0, 0, 0), Graphics::Rectangle(x, y, size, size),
-			colArray[(int)(y * 8) + (int)(x * 8) * 9],
-			Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
-
+	for (float x = 0; x < 16.0f; x += size)
+		for (float y = 0; y < 9.0f; y += size)
+		{
+			rect = Math::Rectangle(x - size / 2, y - size / 2, size, size);
+			spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Math::Rectangle(0, 0, 0, 0), Math::Rectangle(x, y, size, size),
+				rect.Contains(Math::Vector2(mx, my)) ? Graphics::Color(0, 1, 0, 1) : Graphics::Color(1, 0, 0, 1),
+				Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
+		}
 	//spriteBatch->Draw(texture, Math::Vector2(2, 2), Graphics::Color(1, 1, 1, 1));
 
 	spriteBatch->End();

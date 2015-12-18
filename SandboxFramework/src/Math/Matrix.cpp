@@ -70,6 +70,136 @@ namespace Sand
 			return *this;
 		}
 
+		Matrix& Matrix::Inverse()
+		{
+			float inv[16], det;
+			int i;
+
+			inv[0] = Elements[5] * Elements[10] * Elements[15] -
+				Elements[5] * Elements[11] * Elements[14] -
+				Elements[9] * Elements[6] * Elements[15] +
+				Elements[9] * Elements[7] * Elements[14] +
+				Elements[13] * Elements[6] * Elements[11] -
+				Elements[13] * Elements[7] * Elements[10];
+
+			inv[4] = -Elements[4] * Elements[10] * Elements[15] +
+				Elements[4] * Elements[11] * Elements[14] +
+				Elements[8] * Elements[6] * Elements[15] -
+				Elements[8] * Elements[7] * Elements[14] -
+				Elements[12] * Elements[6] * Elements[11] +
+				Elements[12] * Elements[7] * Elements[10];
+
+			inv[8] = Elements[4] * Elements[9] * Elements[15] -
+				Elements[4] * Elements[11] * Elements[13] -
+				Elements[8] * Elements[5] * Elements[15] +
+				Elements[8] * Elements[7] * Elements[13] +
+				Elements[12] * Elements[5] * Elements[11] -
+				Elements[12] * Elements[7] * Elements[9];
+
+			inv[12] = -Elements[4] * Elements[9] * Elements[14] +
+				Elements[4] * Elements[10] * Elements[13] +
+				Elements[8] * Elements[5] * Elements[14] -
+				Elements[8] * Elements[6] * Elements[13] -
+				Elements[12] * Elements[5] * Elements[10] +
+				Elements[12] * Elements[6] * Elements[9];
+
+			inv[1] = -Elements[1] * Elements[10] * Elements[15] +
+				Elements[1] * Elements[11] * Elements[14] +
+				Elements[9] * Elements[2] * Elements[15] -
+				Elements[9] * Elements[3] * Elements[14] -
+				Elements[13] * Elements[2] * Elements[11] +
+				Elements[13] * Elements[3] * Elements[10];
+
+			inv[5] = Elements[0] * Elements[10] * Elements[15] -
+				Elements[0] * Elements[11] * Elements[14] -
+				Elements[8] * Elements[2] * Elements[15] +
+				Elements[8] * Elements[3] * Elements[14] +
+				Elements[12] * Elements[2] * Elements[11] -
+				Elements[12] * Elements[3] * Elements[10];
+
+			inv[9] = -Elements[0] * Elements[9] * Elements[15] +
+				Elements[0] * Elements[11] * Elements[13] +
+				Elements[8] * Elements[1] * Elements[15] -
+				Elements[8] * Elements[3] * Elements[13] -
+				Elements[12] * Elements[1] * Elements[11] +
+				Elements[12] * Elements[3] * Elements[9];
+
+			inv[13] = Elements[0] * Elements[9] * Elements[14] -
+				Elements[0] * Elements[10] * Elements[13] -
+				Elements[8] * Elements[1] * Elements[14] +
+				Elements[8] * Elements[2] * Elements[13] +
+				Elements[12] * Elements[1] * Elements[10] -
+				Elements[12] * Elements[2] * Elements[9];
+
+			inv[2] = Elements[1] * Elements[6] * Elements[15] -
+				Elements[1] * Elements[7] * Elements[14] -
+				Elements[5] * Elements[2] * Elements[15] +
+				Elements[5] * Elements[3] * Elements[14] +
+				Elements[13] * Elements[2] * Elements[7] -
+				Elements[13] * Elements[3] * Elements[6];
+
+			inv[6] = -Elements[0] * Elements[6] * Elements[15] +
+				Elements[0] * Elements[7] * Elements[14] +
+				Elements[4] * Elements[2] * Elements[15] -
+				Elements[4] * Elements[3] * Elements[14] -
+				Elements[12] * Elements[2] * Elements[7] +
+				Elements[12] * Elements[3] * Elements[6];
+
+			inv[10] = Elements[0] * Elements[5] * Elements[15] -
+				Elements[0] * Elements[7] * Elements[13] -
+				Elements[4] * Elements[1] * Elements[15] +
+				Elements[4] * Elements[3] * Elements[13] +
+				Elements[12] * Elements[1] * Elements[7] -
+				Elements[12] * Elements[3] * Elements[5];
+
+			inv[14] = -Elements[0] * Elements[5] * Elements[14] +
+				Elements[0] * Elements[6] * Elements[13] +
+				Elements[4] * Elements[1] * Elements[14] -
+				Elements[4] * Elements[2] * Elements[13] -
+				Elements[12] * Elements[1] * Elements[6] +
+				Elements[12] * Elements[2] * Elements[5];
+
+			inv[3] = -Elements[1] * Elements[6] * Elements[11] +
+				Elements[1] * Elements[7] * Elements[10] +
+				Elements[5] * Elements[2] * Elements[11] -
+				Elements[5] * Elements[3] * Elements[10] -
+				Elements[9] * Elements[2] * Elements[7] +
+				Elements[9] * Elements[3] * Elements[6];
+
+			inv[7] = Elements[0] * Elements[6] * Elements[11] -
+				Elements[0] * Elements[7] * Elements[10] -
+				Elements[4] * Elements[2] * Elements[11] +
+				Elements[4] * Elements[3] * Elements[10] +
+				Elements[8] * Elements[2] * Elements[7] -
+				Elements[8] * Elements[3] * Elements[6];
+
+			inv[11] = -Elements[0] * Elements[5] * Elements[11] +
+				Elements[0] * Elements[7] * Elements[9] +
+				Elements[4] * Elements[1] * Elements[11] -
+				Elements[4] * Elements[3] * Elements[9] -
+				Elements[8] * Elements[1] * Elements[7] +
+				Elements[8] * Elements[3] * Elements[5];
+
+			inv[15] = Elements[0] * Elements[5] * Elements[10] -
+				Elements[0] * Elements[6] * Elements[9] -
+				Elements[4] * Elements[1] * Elements[10] +
+				Elements[4] * Elements[2] * Elements[9] +
+				Elements[8] * Elements[1] * Elements[6] -
+				Elements[8] * Elements[2] * Elements[5];
+
+			det = Elements[0] * inv[0] + Elements[1] * inv[4] + Elements[2] * inv[8] + Elements[3] * inv[12];
+
+			if (det == 0) return *this;
+
+			det = 1.0 / det;
+
+			float invOut[16];
+			for (i = 0; i < 16; i++)
+				Elements[i] = inv[i] * det;
+
+			return *this;
+		}
+
 		bool Matrix::Equals(const Matrix& b) const
 		{
 			for (int i = 0; i < 4 * 4; i++)
@@ -120,135 +250,9 @@ namespace Sand
 			return stream;
 		}
 
-		bool Matrix::Inverse(const Matrix & a, Matrix& out)
+		Matrix Matrix::Inverse(Matrix a)
 		{
-			float inv[16], det;
-			int i;
-
-			inv[0] = a.Elements[5] * a.Elements[10] * a.Elements[15] -
-				a.Elements[5] * a.Elements[11] * a.Elements[14] -
-				a.Elements[9] * a.Elements[6] * a.Elements[15] +
-				a.Elements[9] * a.Elements[7] * a.Elements[14] +
-				a.Elements[13] * a.Elements[6] * a.Elements[11] -
-				a.Elements[13] * a.Elements[7] * a.Elements[10];
-
-			inv[4] = -a.Elements[4] * a.Elements[10] * a.Elements[15] +
-				a.Elements[4] * a.Elements[11] * a.Elements[14] +
-				a.Elements[8] * a.Elements[6] * a.Elements[15] -
-				a.Elements[8] * a.Elements[7] * a.Elements[14] -
-				a.Elements[12] * a.Elements[6] * a.Elements[11] +
-				a.Elements[12] * a.Elements[7] * a.Elements[10];
-
-			inv[8] = a.Elements[4] * a.Elements[9] * a.Elements[15] -
-				a.Elements[4] * a.Elements[11] * a.Elements[13] -
-				a.Elements[8] * a.Elements[5] * a.Elements[15] +
-				a.Elements[8] * a.Elements[7] * a.Elements[13] +
-				a.Elements[12] * a.Elements[5] * a.Elements[11] -
-				a.Elements[12] * a.Elements[7] * a.Elements[9];
-
-			inv[12] = -a.Elements[4] * a.Elements[9] * a.Elements[14] +
-				a.Elements[4] * a.Elements[10] * a.Elements[13] +
-				a.Elements[8] * a.Elements[5] * a.Elements[14] -
-				a.Elements[8] * a.Elements[6] * a.Elements[13] -
-				a.Elements[12] * a.Elements[5] * a.Elements[10] +
-				a.Elements[12] * a.Elements[6] * a.Elements[9];
-
-			inv[1] = -a.Elements[1] * a.Elements[10] * a.Elements[15] +
-				a.Elements[1] * a.Elements[11] * a.Elements[14] +
-				a.Elements[9] * a.Elements[2] * a.Elements[15] -
-				a.Elements[9] * a.Elements[3] * a.Elements[14] -
-				a.Elements[13] * a.Elements[2] * a.Elements[11] +
-				a.Elements[13] * a.Elements[3] * a.Elements[10];
-
-			inv[5] = a.Elements[0] * a.Elements[10] * a.Elements[15] -
-				a.Elements[0] * a.Elements[11] * a.Elements[14] -
-				a.Elements[8] * a.Elements[2] * a.Elements[15] +
-				a.Elements[8] * a.Elements[3] * a.Elements[14] +
-				a.Elements[12] * a.Elements[2] * a.Elements[11] -
-				a.Elements[12] * a.Elements[3] * a.Elements[10];
-
-			inv[9] = -a.Elements[0] * a.Elements[9] * a.Elements[15] +
-				a.Elements[0] * a.Elements[11] * a.Elements[13] +
-				a.Elements[8] * a.Elements[1] * a.Elements[15] -
-				a.Elements[8] * a.Elements[3] * a.Elements[13] -
-				a.Elements[12] * a.Elements[1] * a.Elements[11] +
-				a.Elements[12] * a.Elements[3] * a.Elements[9];
-
-			inv[13] = a.Elements[0] * a.Elements[9] * a.Elements[14] -
-				a.Elements[0] * a.Elements[10] * a.Elements[13] -
-				a.Elements[8] * a.Elements[1] * a.Elements[14] +
-				a.Elements[8] * a.Elements[2] * a.Elements[13] +
-				a.Elements[12] * a.Elements[1] * a.Elements[10] -
-				a.Elements[12] * a.Elements[2] * a.Elements[9];
-
-			inv[2] = a.Elements[1] * a.Elements[6] * a.Elements[15] -
-				a.Elements[1] * a.Elements[7] * a.Elements[14] -
-				a.Elements[5] * a.Elements[2] * a.Elements[15] +
-				a.Elements[5] * a.Elements[3] * a.Elements[14] +
-				a.Elements[13] * a.Elements[2] * a.Elements[7] -
-				a.Elements[13] * a.Elements[3] * a.Elements[6];
-
-			inv[6] = -a.Elements[0] * a.Elements[6] * a.Elements[15] +
-				a.Elements[0] * a.Elements[7] * a.Elements[14] +
-				a.Elements[4] * a.Elements[2] * a.Elements[15] -
-				a.Elements[4] * a.Elements[3] * a.Elements[14] -
-				a.Elements[12] * a.Elements[2] * a.Elements[7] +
-				a.Elements[12] * a.Elements[3] * a.Elements[6];
-
-			inv[10] = a.Elements[0] * a.Elements[5] * a.Elements[15] -
-				a.Elements[0] * a.Elements[7] * a.Elements[13] -
-				a.Elements[4] * a.Elements[1] * a.Elements[15] +
-				a.Elements[4] * a.Elements[3] * a.Elements[13] +
-				a.Elements[12] * a.Elements[1] * a.Elements[7] -
-				a.Elements[12] * a.Elements[3] * a.Elements[5];
-
-			inv[14] = -a.Elements[0] * a.Elements[5] * a.Elements[14] +
-				a.Elements[0] * a.Elements[6] * a.Elements[13] +
-				a.Elements[4] * a.Elements[1] * a.Elements[14] -
-				a.Elements[4] * a.Elements[2] * a.Elements[13] -
-				a.Elements[12] * a.Elements[1] * a.Elements[6] +
-				a.Elements[12] * a.Elements[2] * a.Elements[5];
-
-			inv[3] = -a.Elements[1] * a.Elements[6] * a.Elements[11] +
-				a.Elements[1] * a.Elements[7] * a.Elements[10] +
-				a.Elements[5] * a.Elements[2] * a.Elements[11] -
-				a.Elements[5] * a.Elements[3] * a.Elements[10] -
-				a.Elements[9] * a.Elements[2] * a.Elements[7] +
-				a.Elements[9] * a.Elements[3] * a.Elements[6];
-
-			inv[7] = a.Elements[0] * a.Elements[6] * a.Elements[11] -
-				a.Elements[0] * a.Elements[7] * a.Elements[10] -
-				a.Elements[4] * a.Elements[2] * a.Elements[11] +
-				a.Elements[4] * a.Elements[3] * a.Elements[10] +
-				a.Elements[8] * a.Elements[2] * a.Elements[7] -
-				a.Elements[8] * a.Elements[3] * a.Elements[6];
-
-			inv[11] = -a.Elements[0] * a.Elements[5] * a.Elements[11] +
-				a.Elements[0] * a.Elements[7] * a.Elements[9] +
-				a.Elements[4] * a.Elements[1] * a.Elements[11] -
-				a.Elements[4] * a.Elements[3] * a.Elements[9] -
-				a.Elements[8] * a.Elements[1] * a.Elements[7] +
-				a.Elements[8] * a.Elements[3] * a.Elements[5];
-
-			inv[15] = a.Elements[0] * a.Elements[5] * a.Elements[10] -
-				a.Elements[0] * a.Elements[6] * a.Elements[9] -
-				a.Elements[4] * a.Elements[1] * a.Elements[10] +
-				a.Elements[4] * a.Elements[2] * a.Elements[9] +
-				a.Elements[8] * a.Elements[1] * a.Elements[6] -
-				a.Elements[8] * a.Elements[2] * a.Elements[5];
-
-			det = a.Elements[0] * inv[0] + a.Elements[1] * inv[4] + a.Elements[2] * inv[8] + a.Elements[3] * inv[12];
-
-			if (det == 0) return false;
-
-			det = 1.0 / det;
-
-			float invOut[16];
-			for (i = 0; i < 16; i++)
-				invOut[i] = inv[i] * det;
-
-			out = Matrix(invOut);
-			return true;
+			return a.Inverse();
 		}
 
 		Matrix Matrix::Identity()

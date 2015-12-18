@@ -74,12 +74,20 @@
     <IncludePath>$(SolutionDir)Dependencies\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\libs\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <CustomBuildAfterTargets>Run</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Dependencies\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\libs\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
+    <CustomBuildAfterTargets>Run</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildAfterTargets>Run</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CustomBuildAfterTargets>Run</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,6 +110,9 @@
     <PostBuildEvent>
       <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -115,6 +126,9 @@
     <PostBuildEvent>
       <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -144,6 +158,9 @@
     <PostBuildEvent>
       <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -161,6 +178,9 @@
     <PostBuildEvent>
       <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy  /e /y /i /r "$(ProjectDir)Resources" "$(OutDir)Resources"</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Exceptions\EmptyException.cpp" />
@@ -169,7 +189,7 @@
     <ClCompile Include="src\Graphics\Color.cpp" />
     <ClCompile Include="src\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="src\Graphics\IBO.cpp" />
-    <ClCompile Include="src\Graphics\Rectangle.cpp" />
+    <ClCompile Include="src\Math\Rectangle.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\SpriteBatch.cpp" />
     <ClCompile Include="src\Graphics\Texture2D.cpp" />
@@ -203,7 +223,7 @@
     <ClInclude Include="src\Graphics\Color.h" />
     <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
-    <ClInclude Include="src\Graphics\Rectangle.h" />
+    <ClInclude Include="src\Math\Rectangle.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\Graphics\SpriteBatch.h" />
     <ClInclude Include="src\Graphics\Texture2D.h" />

@@ -60,7 +60,7 @@ namespace Sand
 			return *this;
 		}
 
-		float Vector3::Dot(const Vector3& b)
+		float Vector3::Dot(const Vector3& b) const
 		{
 			return (X * b.X) + (Y * b.Y) + (Z * b.Z);
 		}
@@ -82,6 +82,36 @@ namespace Sand
 			return a.Cross(b);
 		}
 
+		float Vector3::LengthSquared() const
+		{
+			return X * X + Y * Y + Z * Z;
+		}
+
+		float Vector3::Length() const
+		{
+			return sqrt(LengthSquared());
+		}
+
+		float Vector3::Distance(const Vector3& b) const
+		{
+			return Vector3(X - b.X, Y - b.Y, Z - b.Z).Length();
+		}
+
+		float Vector3::Angle(const Vector3& b) const
+		{
+			return asin(Dot(b) / (Length() + b.Length()));
+		}
+
+		float Vector3::Distance(Vector3 a, const Vector3& b)
+		{
+			return Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z).Length();
+		}
+
+		float Vector3::Angle(Vector3 a, const Vector3& b)
+		{
+			return asin(a.Dot(b) / (a.Length() + b.Length()));
+		}
+
 		Vector3& Vector3::Transform(const Matrix& b)
 		{
 			float x = X * b.Elements[0 + 0 * 4] + Y * b.Elements[0 + 1 * 4] + Z * b.Elements[0 + 2 * 4] + 1 * b.Elements[0 + 3 * 4];
@@ -99,9 +129,29 @@ namespace Sand
 			return a.Transform(b);
 		}
 
+		Vector3& Vector3::Normalize()
+		{
+			float l = Length();
+			X /= l;
+			Y /= l;
+			Z /= l;
+
+			return *this;
+		}
+
+		Vector3 Vector3::Normalize(Vector3 a)
+		{
+			return a.Normalize();
+		}
+
 		bool Vector3::Equals(const Vector3& b) const
 		{
 			return X == b.X && Y == b.Y && Z == b.Z;
+		}
+
+		Vector3 Vector3::operator-() const
+		{
+			return Vector3(-X, -Y, -Z);
 		}
 
 		Vector3& Vector3::operator+=(const Vector3& b)

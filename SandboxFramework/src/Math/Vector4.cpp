@@ -68,7 +68,7 @@ namespace Sand
 		}
 
 		//3D dot product
-		float Vector4::Dot(const Vector4& b)
+		float Vector4::Dot(const Vector4& b) const
 		{
 			return (X * b.X) + (Y * b.Y) + (Z * b.Z);
 		}
@@ -92,6 +92,36 @@ namespace Sand
 			return a.Cross(b);
 		}
 
+		float Vector4::LengthSquared() const
+		{
+			return X * X + Y * Y + Z * Z;
+		}
+
+		float Vector4::Length() const
+		{
+			return sqrt(LengthSquared());
+		}
+
+		float Vector4::Distance(const Vector4& b) const
+		{
+			return Vector4(X - b.X, Y - b.Y, Z - b.Z, 1).Length();
+		}
+
+		float Vector4::Angle(const Vector4& b) const
+		{
+			return asin(Dot(b) / (Length() + b.Length()));
+		}
+
+		float Vector4::Distance(Vector4 a, const Vector4& b)
+		{
+			return Vector4(a.X - b.X, a.Y - b.Y, a.Z - b.Z, 1).Length();
+		}
+
+		float Vector4::Angle(Vector4 a, const Vector4& b)
+		{
+			return asin(a.Dot(b) / (a.Length() + b.Length()));
+		}
+
 		Vector4& Vector4::Transform(const Matrix& b)
 		{
 			float x = X * b.Elements[0 + 0 * 4] + Y * b.Elements[0 + 1 * 4] + Z * b.Elements[0 + 2 * 4] + W * b.Elements[0 + 3 * 4];
@@ -111,9 +141,29 @@ namespace Sand
 			return a.Transform(b);
 		}
 
+		Vector4& Vector4::Normalize()
+		{
+			float l = Length();
+			X /= l;
+			Y /= l;
+			Z /= l;
+
+			return *this;
+		}
+
+		Vector4 Vector4::Normalize(Vector4 a)
+		{
+			return a.Normalize();
+		}
+
 		bool Vector4::Equals(const Vector4& b) const
 		{
 			return X == b.X && Y == b.Y && Z == b.Z && W == b.W;
+		}
+
+		Vector4 Vector4::operator-() const
+		{
+			return Vector4(-X, -Y, -Z, 1);
 		}
 
 		Vector4& Vector4::operator+=(const Vector4& b)

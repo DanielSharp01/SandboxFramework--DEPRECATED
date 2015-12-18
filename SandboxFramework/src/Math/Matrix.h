@@ -22,6 +22,7 @@ namespace Sand
 			Matrix& Multiply(float b);
 			Matrix& Multiply(const Matrix& b);
 
+			Matrix& Inverse();
 			bool Equals(const Matrix& b) const;
 
 			Matrix& operator*=(float b);
@@ -35,7 +36,7 @@ namespace Sand
 
 			friend std::ostream& operator<<(std::ostream& stream, const Matrix& b);
 
-			static bool Inverse(const Matrix& a, Matrix& out);
+			static Matrix Inverse(Matrix a);
 			static Matrix Identity();
 
 			static Matrix Orthographic(float left, float right, float bottom, float top, float near, float far);

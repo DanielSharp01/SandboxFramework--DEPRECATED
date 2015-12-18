@@ -21,15 +21,26 @@ namespace Sand
 			Vector4& Multiply(const Vector4& b);
 			Vector4& Divide(float b);
 			Vector4& Divide(const Vector4& b);
-			float Dot(const Vector4& b);
+			float Dot(const Vector4& b) const;
 
 			Vector4& Cross(const Vector4& b);
 			static Vector4 Cross(Vector4 a, const Vector4& b);
 
+			float LengthSquared() const;
+			float Length() const;
+			float Distance(const Vector4& b) const;
+			float Angle(const Vector4& b) const;
+
+			static float Distance(Vector4 a, const Vector4& b);
+			static float Angle(Vector4 a, const Vector4& b);
+
 			Vector4& Transform(const Matrix& b);
 			static Vector4 Transform(Vector4 a, const Matrix& b);
+			Vector4& Normalize();
+			static Vector4 Normalize(Vector4 a);
 			bool Equals(const Vector4& b) const;
 
+			Vector4 operator-() const;
 			Vector4& operator+=(const Vector4& b);
 			Vector4& operator-=(const Vector4& b);
 			Vector4& operator*=(float b);
