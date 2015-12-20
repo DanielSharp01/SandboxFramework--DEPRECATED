@@ -9,8 +9,9 @@ namespace Sand
 	//TODO: Implement this more like vector same conventions, operators
 	namespace Math
 	{
-		struct Rectangle
+		class Rectangle
 		{
+		public:
 			Math::Vector2 TopLeft;
 			Math::Vector2 TopRight;
 			Math::Vector2 BottomLeft;
@@ -36,8 +37,12 @@ namespace Sand
 
 			bool Contains(const Vector2& b) const;
 			bool Contains(const Rectangle& b) const;
+			bool Intersects(const Rectangle& b, bool canContain = true, bool canBeContained = true) const;
 
-			bool Intersects(const Rectangle& b) const;
+		private:
+			bool contains(const Vector2& b, const Math::Vector2& width, const Math::Vector2& height, const Math::Matrix& inverse) const;
+			bool contains(const Rectangle& b, const Math::Vector2& width, const Math::Vector2& height, const Math::Matrix& inverse) const;
+			Matrix calculateInverse(const Math::Vector2& width, const Math::Vector2& height) const;
 		};
 	}
 }

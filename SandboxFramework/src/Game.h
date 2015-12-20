@@ -50,6 +50,8 @@ namespace Sand {
 
 		bool isClosing() const;
 
+		void setGraphicsDeviceViewport(int width, int height);
+
 		friend void resizeCallback(GLFWwindow* sender, int width, int height);
 		friend void frameResizeCallback(GLFWwindow* sender, int width, int height);
 	};

@@ -5,11 +5,11 @@
 namespace Sand
 {
 	namespace Graphics {
-		Shader::Shader(GraphicsDevice* graphics, std::string vertexPath, std::string fragmentPath)
+		Shader::Shader(GraphicsDevice* graphics, std::string vertexSrc, std::string fragmentSrc)
 			: m_Graphics(graphics)
 		{
 			m_LocationCache = new Collections::Dictionary<std::string, GLint>();
-			compile(IO::TextReader(vertexPath).ReadToEnd(), IO::TextReader(fragmentPath).ReadToEnd());
+			compile(vertexSrc, fragmentSrc); 
 		}
 
 		Shader::~Shader()
@@ -51,16 +51,19 @@ namespace Sand
 
 		void Shader::SetUniformInt(std::string name, int value)
 		{
+			Bind();
 			m_Graphics->gl_setUniformInt(getLocation(name), value);
 		}
 
 		void Shader::SetUniformIntV(std::string name, int* value, unsigned int count)
 		{
+			Bind();
 			m_Graphics->gl_setUniformIntV(getLocation(name), value, count);
 		}
 
 		void Shader::SetUniformDefaultIntV(std::string name, unsigned int count)
 		{
+			Bind();
 			int* arr = new int[count];
 			for (int i = 0; i < count; i++) arr[i] = i;
 			SetUniformIntV(name, arr, count);
@@ -69,31 +72,37 @@ namespace Sand
 
 		void Shader::SetUniformFloat(std::string name, float value)
 		{
+			Bind();
 			m_Graphics->gl_setUniformFloat(getLocation(name), value);
 		}
 
 		void Shader::SetUniformVector2(std::string name, Math::Vector2 vector)
 		{
+			Bind();
 			m_Graphics->gl_setUniformVector2(getLocation(name), vector);
 		}
 
 		void Shader::SetUniformVector3(std::string name, Math::Vector3 vector)
 		{
+			Bind();
 			m_Graphics->gl_setUniformVector3(getLocation(name), vector);
 		}
 
 		void Shader::SetUniformVector4(std::string name, Math::Vector4 vector)
 		{
+			Bind();
 			m_Graphics->gl_setUniformVector4(getLocation(name), vector);
 		}
 
 		void Shader::SetUniformColor(std::string name, Color color)
 		{
+			Bind();
 			m_Graphics->gl_setUniformVector4(getLocation(name), color.ToVector4());
 		}
 
 		void Shader::SetUniformMatrix(std::string name, Math::Matrix matrix)
 		{
+			Bind();
 			m_Graphics->gl_setUniformMatrix(getLocation(name), matrix);
 		}
 	}

@@ -95,7 +95,8 @@ namespace Sand
 
 		float Vector2::Angle(const Vector2& b) const
 		{
-			return asin(Dot(b) / (Length() + b.Length()));
+			Vector2 diff = b - *this;
+			return atan2(diff.Y, diff.X);
 		}
 
 		float Vector2::Distance(Vector2 a, const Vector2& b)
@@ -105,7 +106,7 @@ namespace Sand
 
 		float Vector2::Angle(Vector2 a, const Vector2& b)
 		{
-			return asin(a.Dot(b) / (a.Length() + b.Length()));
+			return asin(a.Dot(b) / (a.Length() * b.Length()));
 		}
 
 		Vector2& Vector2::Normalize()

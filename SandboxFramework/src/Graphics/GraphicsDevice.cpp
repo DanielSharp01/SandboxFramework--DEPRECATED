@@ -13,6 +13,15 @@ namespace Sand
 		GraphicsDevice::GraphicsDevice(Game* game)
 		{
 			m_Game = game;
+			m_Viewport = Viewport(m_Game->GetWidth(), m_Game->GetHeight(), -1.0f, 1.0f);
+
+			//TODO: Have this be settable
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_ALPHA_TEST);
+			glDepthFunc(GL_LEQUAL);
+			glAlphaFunc(GL_GEQUAL, 0.1f);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		GraphicsDevice::~GraphicsDevice()
@@ -38,6 +47,13 @@ namespace Sand
 			vao->Bind();
 			ibo->Bind();
 			glDrawElements(GL_TRIANGLES, ibo->m_Count, GL_UNSIGNED_SHORT, NULL);
+		}
+
+		void GraphicsDevice::setViewportSize(unsigned int width, unsigned int height)
+		{
+			m_Viewport.m_Width = width;
+			m_Viewport.m_Height = height;
+			glViewport(0, 0, width, height);
 		}
 
 		GLuint GraphicsDevice::gl_createShaderProgram(std::string vertexSrc, std::string fragmentSrc)
@@ -126,6 +142,7 @@ namespace Sand
 
 		GLint GraphicsDevice::gl_getLocation(const Shader* shader, std::string uniformName)
 		{
+			gl_bindShader(shader);
 			return glGetUniformLocation(shader->m_Program, uniformName.c_str());
 		}
 

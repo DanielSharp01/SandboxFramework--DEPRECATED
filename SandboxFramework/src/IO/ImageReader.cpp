@@ -5,9 +5,6 @@ namespace IO
 	ImageReader::ImageReader(std::string path)
 	{
 		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-		BYTE* bits;
-		unsigned int width, height;
-
 		fif = FreeImage_GetFileType(path.c_str(), 0);
 		if (fif == FIF_UNKNOWN) fif = FreeImage_GetFIFFromFilename(path.c_str());
 		if (fif == FIF_UNKNOWN) return;

@@ -11,14 +11,14 @@ namespace Sand
 		class Shader
 		{
 			friend GraphicsDevice;
-		private:
+		protected:
 			std::string m_VertexSrc, m_FragmentSrc;
 			GraphicsDevice* m_Graphics;
 			GLuint m_Program;
 			Collections::Dictionary<std::string, GLint>* m_LocationCache;
 
 		public:
-			Shader(GraphicsDevice* graphics, std::string vertexPath, std::string fragmentPath);
+			Shader(GraphicsDevice* graphics, std::string vertexSrc, std::string fragmentSrc);
 			~Shader();
 
 			void Bind() const;

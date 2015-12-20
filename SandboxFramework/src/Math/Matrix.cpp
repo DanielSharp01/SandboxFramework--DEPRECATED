@@ -191,9 +191,8 @@ namespace Sand
 
 			if (det == 0) return *this;
 
-			det = 1.0 / det;
+			det = 1.0f / det;
 
-			float invOut[16];
 			for (i = 0; i < 16; i++)
 				Elements[i] = inv[i] * det;
 

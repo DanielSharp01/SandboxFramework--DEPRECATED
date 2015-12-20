@@ -36,6 +36,6 @@ int main()
 
 	delete reader;*/
 
-	std::cin.get();
+	//std::cin.get();
 	return 0;
 }

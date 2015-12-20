@@ -3,9 +3,11 @@
 #include "../Game.h"
 #include "../Math/structs.h"
 #include "Color.h"
+#include "Viewport.h"
 
 
 namespace Sand {
+	class Game;
 	namespace Graphics
 	{
 		typedef unsigned char BYTE;
@@ -17,6 +19,7 @@ namespace Sand {
 
 		class GraphicsDevice
 		{
+			friend Game;
 			friend Shader;
 			friend VAO;
 			friend VBO;
@@ -29,8 +32,13 @@ namespace Sand {
 			void Clear(Color color);
 			void Draw(int indexCount);
 			void Draw(VAO* vao, IBO* ibo);
+
+			inline Viewport& GetViewport() { return m_Viewport; }
 		private:
 			Game* m_Game;
+			Viewport m_Viewport;
+
+			void setViewportSize(unsigned int width, unsigned int height);
 
 			//OpenGL state management
 			Color glstate_ClearColor;

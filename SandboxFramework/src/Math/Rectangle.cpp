@@ -87,38 +87,56 @@ namespace Sand
 
 		bool Rectangle::Contains(const Vector2& b) const
 		{
-			Vector2 p = TopLeft;
-			//TODO: Maybe abstract out (performance)
 			Vector2 w = GetWidth();
 			Vector2 h = GetHeight();
 
-			Matrix matrix;
-			matrix.Columns[0] = Vector4(w.X, w.Y, 0, 0);
-			matrix.Columns[1] = Vector4(h.X, h.Y, 0, 0);
-			matrix.Columns[2] = Vector4(0, 0, 1, 0);
-			matrix.Columns[3] = Vector4(p.X, p.Y, 0, 1);
-			matrix.Inverse();
-
-			Vector2 point = Vector2::Transform(b, matrix);
-
-			return (point.X >= 0 && point.X <= 1) && (point.Y >= 0 && point.Y <= 1);
+			return contains(b, w, h, calculateInverse(w, h));
 		}
 
 		bool Rectangle::Contains(const Rectangle& b) const
 		{
-			return Contains(b.TopLeft) && Contains(b.TopRight) && Contains(b.BottomLeft) && Contains(b.BottomRight);
-		}
-
-		//Line segment intersection
-		bool Rectangle::Intersects(const Rectangle& b) const
-		{
-			if (Contains(b)) return true;
-
 			Vector2 w = GetWidth();
 			Vector2 h = GetHeight();
+			Matrix inverse = calculateInverse(w, h);
+			
+			return contains(b, w, h, inverse);
+		}
+
+		bool Rectangle::contains(const Vector2& b, const Math::Vector2& width, const Math::Vector2& height, const Math::Matrix& inverse) const
+		{
+			Vector2 point = Vector2::Transform(b, inverse);
+			return (point.X >= 0 && point.X <= 1) && (point.Y >= 0 && point.Y <= 1);
+		}
+
+		bool Rectangle::contains(const Rectangle& b, const Math::Vector2& width, const Math::Vector2& height, const Math::Matrix& inverse) const
+		{
+			return contains(b.TopLeft, width, height, inverse) && contains(b.TopRight, width, height, inverse) && contains(b.BottomLeft, width, height, inverse) && contains(b.BottomRight, width, height, inverse);
+		}
+
+		Matrix Rectangle::calculateInverse(const Math::Vector2& width, const Math::Vector2& height) const
+		{
+			Matrix matrix;
+			matrix.Columns[0] = Vector4(width.X, width.Y, 0, 0);
+			matrix.Columns[1] = Vector4(height.X, height.Y, 0, 0);
+			matrix.Columns[2] = Vector4(0, 0, 1, 0);
+			matrix.Columns[3] = Vector4(TopLeft.X, TopLeft.Y, 0, 1);
+			matrix.Inverse();
+
+			return matrix;
+		}
+
+		bool Rectangle::Intersects(const Rectangle& b, bool canContain, bool canBeContained) const
+		{
+			Vector2 w = GetWidth();
+			Vector2 h = GetHeight();
+			Matrix inverse = calculateInverse(w, h);
 			Vector2 bw = b.GetWidth();
 			Vector2 bh = b.GetHeight();
+			Matrix binverse = b.calculateInverse(bw, bh);
 
+			if (canBeContained && contains(b, w, h, inverse)) return true;
+			if (canContain && b.contains(*this, bw, bh, binverse)) return true;
+			
 			if (Vector2::IntersectAsSegment(TopLeft, w, b.TopLeft, bw)
 				|| Vector2::IntersectAsSegment(TopLeft, w, b.TopRight, bh)
 				|| Vector2::IntersectAsSegment(TopLeft, w, b.TopLeft, bh)

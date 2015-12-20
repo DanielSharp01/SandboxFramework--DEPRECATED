@@ -108,6 +108,11 @@ namespace Sand {
 		return glfwWindowShouldClose(m_Window) == 1;
 	}
 
+	void Game::setGraphicsDeviceViewport(int width, int height)
+	{
+		m_Graphics->setViewportSize(width, height);
+	}
+
 	void resizeCallback(GLFWwindow *sender, int width, int height)
 	{
 		Game* win = (Game*)glfwGetWindowUserPointer(sender);
@@ -117,6 +122,8 @@ namespace Sand {
 
 	void frameResizeCallback(GLFWwindow *sender, int width, int height)
 	{
+		Game* win = (Game*)glfwGetWindowUserPointer(sender);
+		win->setGraphicsDeviceViewport(width, height);
 		glViewport(0, 0, width, height);
 	}
 }
