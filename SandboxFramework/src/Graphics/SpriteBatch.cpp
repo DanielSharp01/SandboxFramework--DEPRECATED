@@ -131,33 +131,38 @@ namespace Sand
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Vector2 position, Color color)
 		{
-			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth() / texDivisor(), texture->GetHeight() / texDivisor()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)));
+			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Scale(Math::Vector3(1 / texDivisor(), 1 / texDivisor(), 1.0f)));
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color)
 		{
-			Draw(texture, source, Math::Rectangle(0, 0, texture->GetWidth() / texDivisor(), texture->GetHeight() / texDivisor()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)));
+			Draw(texture, source, Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* Math::Matrix::Scale(Math::Vector3(1 / texDivisor(), 1 / texDivisor(), 1.0f)));
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale)
 		{
-			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth() / texDivisor(), texture->GetHeight() / texDivisor()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
 				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
 				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Scale(Math::Vector3(1 / texDivisor(), 1 / texDivisor(), 1.0f))
 				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
 		{
-			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth() / texDivisor(), texture->GetHeight() / texDivisor()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
 				* Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
 				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Scale(Math::Vector3(1 / texDivisor(), 1 / texDivisor(), 1.0f))
 				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Matrix matrix)
 		{
-			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth() / texDivisor(), texture->GetHeight() / texDivisor()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)) * matrix);
+			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f))
+				* matrix * Math::Matrix::Scale(Math::Vector3(1 / texDivisor(), 1 / texDivisor(), 1.0f)));
 		}
 
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Rectangle destination, Color color, Math::Matrix matrix)

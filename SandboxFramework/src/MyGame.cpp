@@ -21,19 +21,19 @@ MyGame::MyGame(std::string title)
 
 void MyGame::Initialize() { }
 
-Graphics::Shader* shader;
+Graphics::Shader *shader, *renderShader;
 Graphics::SpriteBatch* spriteBatch;
 Graphics::Color* colArray;
 Graphics::Texture2D** texArray;
-Graphics::Texture2D *texture, *texture2;
+Graphics::Texture2D *texture, *texture2, *renderTarget, *renderTarget2;
 Chrono::TimerCounter* fpsTimer;
 
 void MyGame::LoadContent()
 {
 	m_Graphics->GetViewport().SetProjected(0, 16, 0, 9);
-	m_Graphics->SetBlendState(Graphics::BlendState::Alpha);
 	fpsTimer = new Chrono::TimerCounter();
 	shader = new Graphics::Shader(m_Graphics, IO::TextReader("Resources/Shaders/simple.vert").ReadToEnd(), IO::TextReader("Resources/Shaders/simple.frag").ReadToEnd());
+	renderShader = new Graphics::Shader(m_Graphics, IO::TextReader("Resources/Shaders/simple.vert").ReadToEnd(), IO::TextReader("Resources/Shaders/simpleLightless.frag").ReadToEnd());
 
 	IO::ImageReader* reader = new IO::ImageReader("Resources/Textures/BoxTexture.jpg");
 	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(true), reader->GetWidth(), reader->GetHeight(), Graphics::ImageFormat::BGR);
@@ -41,6 +41,9 @@ void MyGame::LoadContent()
 	reader = new IO::ImageReader("Resources/Textures/add.png");
 	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(true), reader->GetWidth(), reader->GetHeight(), Graphics::ImageFormat::BGR);
 	delete reader;
+	
+	renderTarget = new Graphics::Texture2D(m_Graphics, 800, 480);
+	renderTarget2 = new Graphics::Texture2D(m_Graphics, 800, 480);
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
 
 	colArray = new Graphics::Color[128 * 72];
@@ -58,85 +61,11 @@ void MyGame::LoadContent()
 Input::KeyboardState lastState;
 Input::MouseState lastMState;
 
-Math::Vector2 posA(2, 2);
-Math::Vector2 posB(5, 5);
-Math::Vector2 sizeA(1, 1);
-Math::Vector2 sizeB(1, 1);
-float rotA = 0;
-float rotB = 0;
-char rect = 'A';
-char value = '\0';
-bool zb = false;
-
 void MyGame::Update()
 {
 	using namespace Input;
 	KeyboardState currentState = Keyboard::GetState();
 	Input::MouseState currentMState = Mouse::GetState();
-	
-	
-	if (currentState.IsKeyDown(GLFW_KEY_A) && lastState.IsKeyUp(GLFW_KEY_A))
-	{
-		rect = 'A';
-	}
-	else if (currentState.IsKeyDown(GLFW_KEY_B) && lastState.IsKeyUp(GLFW_KEY_B))
-	{
-		rect = 'B';
-	}
-	
-	if (currentState.IsKeyDown(GLFW_KEY_P) && lastState.IsKeyUp(GLFW_KEY_P))
-	{
-		value = (value == 'P') ? '\0' : 'P';
-	}
-	else if (currentState.IsKeyDown(GLFW_KEY_S) && lastState.IsKeyUp(GLFW_KEY_S))
-	{
-		value = (value == 'S') ? '\0' : 'S';
-	}
-	else if (currentState.IsKeyDown(GLFW_KEY_R) && lastState.IsKeyUp(GLFW_KEY_R))
-	{
-		value = (value == 'R') ? '\0' : 'R';
-	}
-
-	if (currentMState.IsButtonDown(GLFW_MOUSE_BUTTON_1) && lastMState.IsButtonUp(GLFW_MOUSE_BUTTON_1)) value = '\0';
-
-	float mx = currentMState.GetPosition().X;
-	float my = currentMState.GetPosition().Y;
-	mx = mx * 16.0f / m_Graphics->GetViewport().GetWidth();
-	my = my * 9.0f / m_Graphics->GetViewport().GetHeight();
-	Math::Vector2 mouseVector = Math::Vector2(mx, my);
-
-	if (rect == 'A')
-	{
-		zb = false;
-		if (value == 'P')
-		{
-			posA = mouseVector;
-		}
-		else if (value == 'S')
-		{
-			sizeA = (mouseVector - posA) * 2;
-		}
-		else if (value == 'R')
-		{
-			rotA = Math::Radian2Degree(posA.Angle(mouseVector)) + 90;
-		}
-	}
-	else if (rect == 'B')
-	{
-		zb = true;
-		if (value == 'P')
-		{
-			posB = mouseVector;
-		}
-		else if (value == 'S')
-		{
-			sizeB = (mouseVector - posB) * 2;
-		}
-		else if (value == 'R')
-		{
-			rotB = Math::Radian2Degree(posB.Angle(mouseVector)) + 90;
-		}
-	}
 
 	lastState = currentState;
 	lastMState = currentMState;
@@ -144,6 +73,7 @@ void MyGame::Update()
 
 void MyGame::Draw()
 {
+	m_Graphics->SetBlendState(Graphics::BlendState::Alpha);
 	m_Graphics->Clear(Graphics::Color(0.0f, 0.0f, 0.0f, 1));
 	Math::Vector2 mouse = lastMState.GetPosition() / Math::Vector2(m_Graphics->GetViewport().GetWidth(), m_Graphics->GetViewport().GetHeight());
 	mouse *= Math::Vector2(m_Graphics->GetViewport().GetProjectedWidth(), m_Graphics->GetViewport().GetProjectedHeight());
@@ -152,25 +82,11 @@ void MyGame::Draw()
 	shader->SetUniformVector2("light_pos", lightVector);
 
 	float size = 0.125f;
-
-	Math::Rectangle rectA(posA.X - sizeA.X / 2, posA.Y - sizeA.Y / 2, sizeA.X, sizeA.Y);
-	rectA.Rotate(rotA);
-
-	Math::Rectangle rectB(posB.X - sizeB.X / 2, posB.Y - sizeB.Y / 2, sizeB.X, sizeB.Y);
-	rectB.Rotate(rotB);
-
-	/*bool containedA = rectB.Contains(rectA);
-	bool containedB = rectA.Contains(rectB);
-	//bool intersects = containedA || containedB || rectA.Intersects(rectB);
-	bool intersects = rectA.Intersects(rectB);
-	//Graphics::Color colA = containedA ? Graphics::Color(0.0f, 1.0f, 0.0f, 1) : (intersects ? Graphics::Color(1.0f, 0.0f, 0.0f, 1) : (rect == 'A' ? Graphics::Color(0.5f, 0.5f, 1.0f, 1) : Graphics::Color(1.0f, 1.0f, 1.0f, 1)));
-	//Graphics::Color colB = containedB ? Graphics::Color(0.0f, 1.0f, 0.0f, 1) : (intersects ? Graphics::Color(1.0f, 0.0f, 0.0f, 1) : (rect == 'B' ? Graphics::Color(0.5f, 0.5f, 1.0f, 1) : Graphics::Color(1.0f, 1.0f, 1.0f, 1)));
-	Graphics::Color colA = intersects ? Graphics::Color(1.0f, 0.0f, 0.0f, 1) : (rect == 'A' ? Graphics::Color(0.5f, 0.5f, 1.0f, 1) : Graphics::Color(1, 1, 1, 1));
-	Graphics::Color colB = intersects ? Graphics::Color(1.0f, 0.0f, 0.0f, 1) : (rect == 'B' ? Graphics::Color(0.5f, 0.5f, 1.0f, 1) : Graphics::Color(1, 1, 1, 1));*/
-
+	
+	Graphics::Texture2D** arr = new Graphics::Texture2D*[2]{ renderTarget, renderTarget2 };
+	m_Graphics->SetRenderTargets(arr, 2);
+	m_Graphics->GetViewport().SetProjected(0, 16, 0, 9);
 	spriteBatch->Begin(shader);
-	
-	
 
 	for (float x = 0; x < m_Graphics->GetViewport().GetProjectedWidth(); x += size)
 		for (float y = 0; y < m_Graphics->GetViewport().GetProjectedHeight(); y += size)
@@ -182,30 +98,31 @@ void MyGame::Draw()
 
 		}
 
-	//TODO: Resolve matrix issue (origin should be unscaled coordinate)
-	spriteBatch->Draw(texture2, Math::Rectangle(), Math::Vector2(5, 4), Graphics::Color(1, 1, 1, 0) * 0.5f);
+	spriteBatch->End();
 	
-	/*if (zb)
-	{
-		spriteBatch->Draw(texture2, rectA, colA);
-		spriteBatch->Draw(texture2, rectB, colB);
-	}
-	else
-	{
-		spriteBatch->Draw(texture2, rectB, colB);
-		spriteBatch->Draw(texture2, rectA, colA);
-	}*/
+	m_Graphics->SetRenderTarget(NULL);
+
+	spriteBatch->Begin(shader);
+
+	spriteBatch->Draw(renderTarget2, Math::Rectangle(), Math::Vector2(0, 0), Graphics::Color(1, 1, 1, 1));
 
 	spriteBatch->End();
+
+	delete arr;
+
 	fpsTimer->AdvanceCounter();
 	SetTitle(initialTitle + " @ FPS " + std::to_string((int)fpsTimer->GetCountOver(1)));
 }
 
 void MyGame::UnloadContent()
 {
+	delete shader;
+	delete renderShader;
 	delete[] colArray;
 	delete[] texArray;
 	delete texture;
 	delete texture2;
+	delete renderTarget;
+	delete renderTarget2;
 	delete fpsTimer;
 }

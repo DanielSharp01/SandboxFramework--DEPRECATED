@@ -12,6 +12,9 @@ in DATA
 	float texID;
 } fs_in;
 
+layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 color2;
+
 void main(void) {
 	float light = 1.0 / length(fs_in.position.xy - light_pos);
 	//light = 1;
@@ -57,6 +60,7 @@ void main(void) {
 			case 31: texColor = texture(textures[31], fs_in.UV); break;
 		}
 	}
-
-	gl_FragColor = texColor * fs_in.color * light;
+	texColor = texColor * fs_in.color;
+	color = vec4(texColor.r * light, texColor.g * light, texColor.b * light, texColor.a);
+	color2 = vec4(color.r, 0, 0, color.a);
 }

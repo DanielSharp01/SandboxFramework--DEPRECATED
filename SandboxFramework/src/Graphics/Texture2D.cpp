@@ -6,6 +6,13 @@ namespace Sand
 {
 	namespace Graphics
 	{
+		Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height, ImageFormat imageFormat)
+			: m_Graphics(graphics), m_Width(width), m_Height(height)
+		{
+			m_ID = m_Graphics->gl_createTexture2D(NULL, width, height, imageFormat);
+			SetFilters(TextureFilter::Nearest, TextureFilter::Nearest);
+		}
+
 		Texture2D::Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat imageFormat)
 			: m_Graphics(graphics), m_Width(width), m_Height(height)
 		{

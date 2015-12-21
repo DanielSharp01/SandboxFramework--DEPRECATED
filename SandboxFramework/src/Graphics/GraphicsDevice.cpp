@@ -18,6 +18,7 @@ namespace Sand
 			glEnable(GL_BLEND);
 			SetDepthTestMode(DepthTestMode::None);
 			SetBlendState(BlendState::Opaque);
+			glGenFramebuffers(1, &frameBuffer);
 		}
 
 		GraphicsDevice::~GraphicsDevice()
@@ -43,6 +44,47 @@ namespace Sand
 			vao->Bind();
 			ibo->Bind();
 			glDrawElements(GL_TRIANGLES, ibo->m_Count, GL_UNSIGNED_SHORT, NULL);
+		}
+
+		void GraphicsDevice::SetRenderTarget(Texture2D* texture)
+		{
+			if (texture == NULL)
+			{
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				m_Viewport = m_SavedViewport;
+				glViewport(0, 0, m_Viewport.m_Width, m_Viewport.m_Height);
+			}
+			else
+			{
+				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->m_ID, 0);
+				GLenum buff[1] = { GL_COLOR_ATTACHMENT0 };
+				glDrawBuffers(1, buff);
+				m_SavedViewport = m_Viewport;
+				m_Viewport = Viewport(texture->m_Width, texture->m_Height, m_SavedViewport.m_Near, m_SavedViewport.m_Far);
+				glViewport(0, 0, m_Viewport.m_Width, m_Viewport.m_Height);
+			}
+		}
+
+		void GraphicsDevice::SetRenderTargets(Texture2D** textures, unsigned int count)
+		{
+			if (count == 0) return;
+
+			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+			for (int i = 0; i < count; i++)
+			{
+				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, textures[i]->m_ID, 0);
+			}
+
+			GLenum* buff = new GLenum[count];
+			for (int i = 0; i < count; i++)
+			{
+				buff[i] = GL_COLOR_ATTACHMENT0 + i;
+			}
+			glDrawBuffers(count, buff);
+			m_SavedViewport = m_Viewport;
+			m_Viewport = Viewport(textures[0]->m_Width, textures[0]->m_Height, m_SavedViewport.m_Near, m_SavedViewport.m_Far);
+			glViewport(0, 0, m_Viewport.m_Width, m_Viewport.m_Height);
 		}
 
 		void GraphicsDevice::SetDepthTestMode(DepthTestMode mode)
@@ -170,7 +212,7 @@ namespace Sand
 
 			glDeleteShader(vs);
 			glDeleteShader(fs);
-
+			
 			return program;
 		}
 

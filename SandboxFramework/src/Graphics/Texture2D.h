@@ -22,6 +22,7 @@ namespace Sand
 			GLuint m_Height;
 		public:
 
+			Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height, ImageFormat imageFormat = ImageFormat::RGBA);
 			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat imageFormat = ImageFormat::RGBA);
 			~Texture2D();
 

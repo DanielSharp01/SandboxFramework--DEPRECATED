@@ -284,35 +284,39 @@
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\BoxTexture.jpg">
+    <None Include="Resources\Shaders\simpleLightless.frag">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\green.png">
+    <None Include="Resources\Shaders\Textures\BoxTexture.jpg">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\outline.png">
+    <None Include="Resources\Shaders\Textures\green.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\red.png">
+    <None Include="Resources\Shaders\Textures\outline.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\texa.png">
+    <None Include="Resources\Shaders\Textures\red.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\texb.png">
+    <None Include="Resources\Shaders\Textures\texa.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\white.png">
+    <None Include="Resources\Shaders\Textures\texb.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Textures\add.png">
+    <None Include="Resources\Shaders\Textures\white.png">
+      <DeploymentContent>false</DeploymentContent>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Textures\add.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

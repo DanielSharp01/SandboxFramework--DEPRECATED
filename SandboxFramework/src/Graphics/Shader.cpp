@@ -23,7 +23,7 @@ namespace Sand
 			m_VertexSrc = vertexSrc;
 			m_FragmentSrc = fragmentSrc;
 
-			m_Program = m_Graphics->gl_createShaderProgram(vertexSrc, fragmentSrc) != 0;
+			m_Program = m_Graphics->gl_createShaderProgram(vertexSrc, fragmentSrc);
 			return m_Program != 0;
 		}
 

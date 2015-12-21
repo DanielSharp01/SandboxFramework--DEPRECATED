@@ -38,6 +38,9 @@ namespace Sand {
 			void Draw(int indexCount);
 			void Draw(VAO* vao, IBO* ibo);
 
+			void SetRenderTarget(Texture2D* texture);
+			void SetRenderTargets(Texture2D** textures, unsigned int count);
+
 			void SetBlendFactor(Color color);
 			inline Color GetBlendFactor() { return glstate_ConstantColor; }
 
@@ -54,8 +57,11 @@ namespace Sand {
 		private:
 			Game* m_Game;
 			Viewport m_Viewport;
+			Viewport m_SavedViewport;
 
 			void setViewportSize(unsigned int width, unsigned int height);
+
+			GLuint frameBuffer;
 
 			//OpenGL state management
 			Color glstate_ClearColor;
