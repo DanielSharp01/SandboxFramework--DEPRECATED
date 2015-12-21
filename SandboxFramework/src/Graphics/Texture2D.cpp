@@ -6,11 +6,11 @@ namespace Sand
 {
 	namespace Graphics
 	{
-		Texture2D::Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, GLenum imageFormat)
+		Texture2D::Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat imageFormat)
 			: m_Graphics(graphics), m_Width(width), m_Height(height)
 		{
 			m_ID = m_Graphics->gl_createTexture2D(data, width, height, imageFormat);
-			SetFilters(GL_NEAREST, GL_NEAREST);
+			SetFilters(TextureFilter::Nearest, TextureFilter::Nearest);
 		}
 
 		Texture2D::~Texture2D()
@@ -18,7 +18,7 @@ namespace Sand
 			m_Graphics->gl_destroyTexture2D(this);
 		}
 
-		void Texture2D::SetFilters(GLint minFilter, GLint magFilter)
+		void Texture2D::SetFilters(TextureFilter minFilter, TextureFilter magFilter)
 		{
 			m_Graphics->gl_setTextureFilters(this, minFilter, magFilter);
 		}

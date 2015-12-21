@@ -106,7 +106,7 @@ namespace Sand
 
 		float Vector2::Angle(Vector2 a, const Vector2& b)
 		{
-			return asin(a.Dot(b) / (a.Length() * b.Length()));
+			return a.Angle(b);
 		}
 
 		Vector2& Vector2::Normalize()

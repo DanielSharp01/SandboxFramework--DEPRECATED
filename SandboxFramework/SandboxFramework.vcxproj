@@ -206,6 +206,7 @@
     <ClCompile Include="src\Exceptions\EmptyException.cpp" />
     <ClCompile Include="src\Exceptions\IndexOutOfBoundsException.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Color.cpp" />
     <ClCompile Include="src\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="src\Graphics\IBO.cpp" />
@@ -241,9 +242,14 @@
     <ClInclude Include="src\Exceptions\EmptyException.h" />
     <ClInclude Include="src\Exceptions\IndexOutOfBoundsException.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Graphics\Blend.h" />
+    <ClInclude Include="src\Graphics\BlendState.h" />
     <ClInclude Include="src\Graphics\Color.h" />
+    <ClInclude Include="src\Graphics\DepthTestMode.h" />
+    <ClInclude Include="src\Graphics\GLType.h" />
     <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
+    <ClInclude Include="src\Graphics\ImageFormat.h" />
     <ClInclude Include="src\Graphics\Viewport.h" />
     <ClInclude Include="src\Math\Rectangle.h" />
     <ClInclude Include="src\graphics\Shader.h" />
@@ -267,6 +273,7 @@
     <ClInclude Include="src\Math\Vector4.h" />
     <ClInclude Include="src\MyGame.h" />
     <ClInclude Include="src\Chrono\Timer.h" />
+    <ClInclude Include="src\Graphics\TextureFilter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\simple.frag">
@@ -302,6 +309,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Textures\white.png">
+      <DeploymentContent>false</DeploymentContent>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Textures\add.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

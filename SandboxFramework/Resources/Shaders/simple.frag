@@ -1,6 +1,5 @@
 #version 430 core
 
-uniform vec4 tint = vec4(1, 1, 1, 1);
 uniform vec2 light_pos;
 
 uniform sampler2D textures[32];
@@ -15,6 +14,7 @@ in DATA
 
 void main(void) {
 	float light = 1.0 / length(fs_in.position.xy - light_pos);
+	//light = 1;
 	vec4 texColor = vec4(1, 1, 1, 1);
 
 	if (fs_in.texID < 0) texColor = vec4(1, 1, 1, 1);
@@ -58,5 +58,5 @@ void main(void) {
 		}
 	}
 
-	gl_FragColor = texColor * fs_in.color * tint * light;
+	gl_FragColor = texColor * fs_in.color * light;
 }

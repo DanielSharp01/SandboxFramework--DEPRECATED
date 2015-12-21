@@ -24,10 +24,11 @@ namespace IO
 		FreeImage_Unload(dib);
 	}
 
-	BYTE* ImageReader::GetPixelData()
+	BYTE* ImageReader::GetPixelData(bool premultiplied)
 	{
 		if (!m_Success) return NULL;
-
+		
+		if (premultiplied) FreeImage_PreMultiplyWithAlpha(dib);
 		return FreeImage_GetBits(dib);
 	}
 	unsigned int ImageReader::GetWidth()

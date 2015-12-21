@@ -14,7 +14,7 @@ namespace IO
 		ImageReader(std::string path);
 		~ImageReader();
 
-		BYTE* GetPixelData();
+		BYTE* GetPixelData(bool premultiplied);
 		unsigned int GetWidth();
 		unsigned int GetHeight();
 	};

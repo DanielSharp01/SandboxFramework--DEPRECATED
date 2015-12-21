@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GraphicsDevice.h"
+#include "TextureFilter.h"
+#include "ImageFormat.h"
 
 namespace Sand
 {
@@ -20,10 +22,10 @@ namespace Sand
 			GLuint m_Height;
 		public:
 
-			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, GLenum imageFormat = GL_RGBA);
+			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat imageFormat = ImageFormat::RGBA);
 			~Texture2D();
 
-			void SetFilters(GLint minFilter, GLint magFilter);
+			void SetFilters(TextureFilter minFilter, TextureFilter magFilter);
 			void Bind();
 			void BindToActive(GLuint slot);
 			void Unbind();

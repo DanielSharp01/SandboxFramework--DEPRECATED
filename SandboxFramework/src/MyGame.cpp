@@ -31,14 +31,15 @@ Chrono::TimerCounter* fpsTimer;
 void MyGame::LoadContent()
 {
 	m_Graphics->GetViewport().SetProjected(0, 16, 0, 9);
+	m_Graphics->SetBlendState(Graphics::BlendState::Alpha);
 	fpsTimer = new Chrono::TimerCounter();
 	shader = new Graphics::Shader(m_Graphics, IO::TextReader("Resources/Shaders/simple.vert").ReadToEnd(), IO::TextReader("Resources/Shaders/simple.frag").ReadToEnd());
 
 	IO::ImageReader* reader = new IO::ImageReader("Resources/Textures/BoxTexture.jpg");
-	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGR);
+	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(true), reader->GetWidth(), reader->GetHeight(), Graphics::ImageFormat::BGR);
 	delete reader;
-	reader = new IO::ImageReader("Resources/Textures/outline.png");
-	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(), reader->GetWidth(), reader->GetHeight(), GL_BGRA);
+	reader = new IO::ImageReader("Resources/Textures/add.png");
+	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(true), reader->GetWidth(), reader->GetHeight(), Graphics::ImageFormat::BGR);
 	delete reader;
 	spriteBatch = new Graphics::SpriteBatch(m_Graphics);
 
@@ -170,7 +171,7 @@ void MyGame::Draw()
 	spriteBatch->Begin(shader);
 	
 	
-	spriteBatch->Draw(texture2, Math::Vector2(2, 2), Graphics::Color(0, 0, 1, 1), 0.1f);
+
 	for (float x = 0; x < m_Graphics->GetViewport().GetProjectedWidth(); x += size)
 		for (float y = 0; y < m_Graphics->GetViewport().GetProjectedHeight(); y += size)
 		{
@@ -178,7 +179,11 @@ void MyGame::Draw()
 			spriteBatch->Draw(texArray[(int)(y * 8) + (int)(x * 8) * 9], Math::Rectangle(0, 0, 0, 0), Math::Rectangle(x, y, size, size),
 				colArray[(int)(y * 8) + (int)(x * 8) * 9],
 				Math::Vector2(size / 2, size / 2), 0.0f, 1.0f);
+
 		}
+
+	//TODO: Resolve matrix issue (origin should be unscaled coordinate)
+	spriteBatch->Draw(texture2, Math::Rectangle(), Math::Vector2(5, 4), Graphics::Color(1, 1, 1, 0) * 0.5f);
 	
 	/*if (zb)
 	{

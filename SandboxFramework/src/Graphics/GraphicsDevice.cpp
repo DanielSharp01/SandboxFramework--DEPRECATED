@@ -15,13 +15,9 @@ namespace Sand
 			m_Game = game;
 			m_Viewport = Viewport(m_Game->GetWidth(), m_Game->GetHeight(), -1.0f, 1.0f);
 
-			//TODO: Have this be settable
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_ALPHA_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glAlphaFunc(GL_GEQUAL, 0.1f);
 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			SetDepthTestMode(DepthTestMode::None);
+			SetBlendState(BlendState::Opaque);
 		}
 
 		GraphicsDevice::~GraphicsDevice()
@@ -47,6 +43,74 @@ namespace Sand
 			vao->Bind();
 			ibo->Bind();
 			glDrawElements(GL_TRIANGLES, ibo->m_Count, GL_UNSIGNED_SHORT, NULL);
+		}
+
+		void GraphicsDevice::SetDepthTestMode(DepthTestMode mode)
+		{
+			if (glstate_DepthTestMode != mode)
+			{
+				if (mode == DepthTestMode::None)
+				{
+					glDisable(GL_DEPTH_TEST);
+				}
+				else if (mode == DepthTestMode::BackToFront)
+				{
+					glEnable(GL_DEPTH_TEST);
+					glDepthFunc(GL_LEQUAL);
+				}
+				else if (mode == DepthTestMode::FrontToBack)
+				{
+					glEnable(GL_DEPTH_TEST);
+					glDepthFunc(GL_GEQUAL);
+				}
+				else if (mode == DepthTestMode::AlphaBackToFront)
+				{
+					glEnable(GL_ALPHA_TEST);
+					glEnable(GL_DEPTH_TEST);
+					glDepthFunc(GL_LEQUAL);
+				}
+				else if (mode == DepthTestMode::AlphaFrontToBack)
+				{
+					glEnable(GL_ALPHA_TEST);
+					glEnable(GL_DEPTH_TEST);
+					glDepthFunc(GL_GEQUAL);
+				}
+
+				glstate_DepthTestMode = mode;
+			}
+		}
+
+		void GraphicsDevice::SetAlphaTestTreshold(float treshold)
+		{
+			glAlphaFunc(GL_GEQUAL, treshold);
+		}
+
+		void GraphicsDevice::SetBlendFactor(Color color)
+		{
+			if (glstate_ConstantColor != color)
+			{
+				glBlendColor(color.R, color.G, color.B, color.A);
+				glstate_ConstantColor = color;
+			}
+		}
+
+		void GraphicsDevice::SetBlendState(BlendState state)
+		{
+			if (glstate_BlendState != state)
+			{
+				glBlendFunc(state.Source, state.Destination);
+				glstate_BlendState = state;
+			}
+		}
+
+		void GraphicsDevice::SetBlendState(Blend source, Blend destination)
+		{
+			BlendState state(source, destination);
+			if (glstate_BlendState != state)
+			{
+				glBlendFunc(state.Source, state.Destination);
+				glstate_BlendState = state;
+			}
 		}
 
 		void GraphicsDevice::setViewportSize(unsigned int width, unsigned int height)
@@ -218,7 +282,7 @@ namespace Sand
 			glDeleteVertexArrays(1, &vao->m_ID);
 		}
 
-		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, GLint location, GLenum componentType, GLsizei componentCount, GLsizei stride, const GLvoid* offset)
+		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, GLint location, GLType componentType, GLsizei componentCount, GLsizei stride, const GLvoid* offset)
 		{
 			vbo->Bind();
 			glEnableVertexAttribArray(location);
@@ -326,7 +390,7 @@ namespace Sand
 			glDeleteBuffers(1, &ibo->m_ID);
 		}
 
-		GLuint GraphicsDevice::gl_createTexture2D(BYTE* data, GLsizei width, GLsizei height, GLenum imageFormat)
+		GLuint GraphicsDevice::gl_createTexture2D(BYTE* data, GLsizei width, GLsizei height, ImageFormat imageFormat)
 		{
 			GLuint ret;
 			glGenTextures(1, &ret);
@@ -336,7 +400,7 @@ namespace Sand
 			return ret;
 		}
 
-		void GraphicsDevice::gl_setTextureFilters(const Texture2D* texture, GLint minFilter, GLint magFilter)
+		void GraphicsDevice::gl_setTextureFilters(const Texture2D* texture, TextureFilter minFilter, TextureFilter magFilter)
 		{
 			gl_bindTexture2D(texture);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
