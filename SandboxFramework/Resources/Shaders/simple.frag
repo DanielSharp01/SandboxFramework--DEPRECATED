@@ -1,5 +1,6 @@
 #version 430 core
 
+uniform float light_rad;
 uniform vec2 light_pos;
 
 uniform sampler2D textures[32];
@@ -13,10 +14,9 @@ in DATA
 } fs_in;
 
 layout(location = 0) out vec4 color;
-layout(location = 1) out vec4 color2;
 
 void main(void) {
-	float light = 1.0 / length(fs_in.position.xy - light_pos);
+	float light = light_rad / length(fs_in.position.xy - light_pos);
 	//light = 1;
 	vec4 texColor = vec4(1, 1, 1, 1);
 
@@ -62,5 +62,4 @@ void main(void) {
 	}
 	texColor = texColor * fs_in.color;
 	color = vec4(texColor.r * light, texColor.g * light, texColor.b * light, texColor.a);
-	color2 = vec4(color.r, 0, 0, color.a);
 }

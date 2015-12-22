@@ -115,6 +115,8 @@ namespace Sand {
 			void gl_bindTexture2D(const Texture2D* texture);
 			void gl_unbindTexture2D(const Texture2D* texture);
 			void gl_destroyTexture2D(Texture2D* texture);
+			void gl_refreshPixelData(Texture2D* texture);
+			void gl_setSubTexture2D(Texture2D* texture, BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height);
 		};
 	}
 }

@@ -20,19 +20,26 @@ namespace Sand
 			GLuint m_ID;
 			GLuint m_Width;
 			GLuint m_Height;
+			BYTE* m_Data;
+			bool m_Refreshable;
 		public:
 
-			Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height, ImageFormat imageFormat = ImageFormat::RGBA);
-			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat imageFormat = ImageFormat::RGBA);
+			Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height);
+			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat format = ImageFormat::RGBA);
 			~Texture2D();
 
 			void SetFilters(TextureFilter minFilter, TextureFilter magFilter);
 			void Bind();
 			void BindToActive(GLuint slot);
 			void Unbind();
+			void RefreshPixels();
+			void SetData(BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height);
 
+			inline BYTE* GetData() { return m_Data; }
 			inline GLuint GetWidth() { return m_Width; }
 			inline GLuint GetHeight() { return m_Height; }
+		private:
+			BYTE* convertToImageFormat(BYTE* data, unsigned int width, unsigned int height, ImageFormat format);
 		};
 	}
 }

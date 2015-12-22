@@ -288,35 +288,35 @@
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\BoxTexture.jpg">
+    <None Include="Resources\Textures\BoxTexture.jpg">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\green.png">
+    <None Include="Resources\Textures\green.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\outline.png">
+    <None Include="Resources\Textures\outline.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\red.png">
+    <None Include="Resources\Textures\red.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\texa.png">
+    <None Include="Resources\Textures\texa.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\texb.png">
+    <None Include="Resources\Textures\texb.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\white.png">
+    <None Include="Resources\Textures\white.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Textures\add.png">
+    <None Include="Resources\Textures\add.png">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

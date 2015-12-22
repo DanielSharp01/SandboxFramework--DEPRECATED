@@ -15,6 +15,7 @@ namespace IO
 		~ImageReader();
 
 		BYTE* GetPixelData(bool premultiplied);
+		BYTE* ConvertToRGBA(BYTE* data);
 		unsigned int GetWidth();
 		unsigned int GetHeight();
 	};

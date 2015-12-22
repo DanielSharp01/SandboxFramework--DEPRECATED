@@ -11,14 +11,13 @@
   * <del>SpriteBatch</del>
   * <del>Texture</del>
   * <del>Batched Textures</del>
-  * SpriteFont Support
+  * <del>Blending (Alpha, Additive)<del>
+  * <del>Dynamic Textures (Get, Set)</del>
+  * <del>RenderTargets read/write<del>
   * SpriteFont Rendering
+  * SpriteFont Support
   * Font Support
   * Font Rendering
-  * Blending (Alpha, Additive)
-  * RenderTargets read/write
-  * FrameBuffer read
-  * Dynamic Texture BYTE array
 3. Audio
   * SoundEffect
   * Music

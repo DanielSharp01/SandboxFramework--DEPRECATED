@@ -29,13 +29,41 @@ namespace IO
 		if (!m_Success) return NULL;
 		
 		if (premultiplied) FreeImage_PreMultiplyWithAlpha(dib);
-		return FreeImage_GetBits(dib);
+		dib = FreeImage_ConvertTo32Bits(dib);
+		return ConvertToRGBA(FreeImage_GetBits(dib));
 	}
+
+	BYTE* ImageReader::ConvertToRGBA(BYTE* data)
+	{
+		unsigned int w = GetWidth();
+		unsigned int h = GetHeight();
+		unsigned int p = FreeImage_GetPitch(dib);
+		unsigned int bpp = FreeImage_GetBPP(dib);
+		BYTE* newData = new BYTE[w * h * 4];
+		int i = 0;
+		for (int y = 0; y < h; y++) {
+			BYTE *pixel = (BYTE*)data;
+			for (int x = 0; x < w; x++) {
+				newData[i * 4 + 0] = pixel[FI_RGBA_RED];
+				newData[i * 4 + 1] = pixel[FI_RGBA_GREEN];
+				newData[i * 4 + 2] = pixel[FI_RGBA_BLUE];
+				newData[i * 4 + 3] = pixel[FI_RGBA_ALPHA]; //TODO: This might still have some problems
+				pixel += 4;
+				i++;
+			}
+
+			data += p;
+		}
+
+		return newData;
+	}
+
 	unsigned int ImageReader::GetWidth()
 	{
 		if (!m_Success) return 0;
 		return FreeImage_GetWidth(dib);
 	}
+
 	unsigned int ImageReader::GetHeight()
 	{
 		if (!m_Success) return 0;

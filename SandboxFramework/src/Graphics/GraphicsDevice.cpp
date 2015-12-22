@@ -58,6 +58,7 @@ namespace Sand
 			{
 				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->m_ID, 0);
+				texture->m_Refreshable = true;
 				GLenum buff[1] = { GL_COLOR_ATTACHMENT0 };
 				glDrawBuffers(1, buff);
 				m_SavedViewport = m_Viewport;
@@ -74,6 +75,7 @@ namespace Sand
 			for (int i = 0; i < count; i++)
 			{
 				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, textures[i]->m_ID, 0);
+				textures[i]->m_Refreshable = true;
 			}
 
 			GLenum* buff = new GLenum[count];
@@ -483,6 +485,25 @@ namespace Sand
 		{
 			gl_unbindTexture2D(texture);
 			glDeleteTextures(1, &texture->m_ID);
+		}
+
+		void GraphicsDevice::gl_refreshPixelData(Texture2D* texture)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->m_ID, 0);
+			glViewport(0, 0, texture->m_Width, texture->m_Height);
+			glReadBuffer(GL_COLOR_ATTACHMENT0);
+			BYTE* data = new BYTE[texture->m_Width * texture->m_Height * 4];
+			glReadPixels(0, 0, texture->m_Width, texture->m_Height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			texture->m_Data = data;
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glViewport(0, 0, m_Viewport.m_Width, m_Viewport.m_Height);
+		}
+
+		void GraphicsDevice::gl_setSubTexture2D(Texture2D* texture, BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height)
+		{
+			gl_bindTexture2D(texture);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}
 	}
 }

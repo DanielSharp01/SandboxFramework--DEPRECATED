@@ -11,6 +11,7 @@ in DATA
 } fs_in;
 
 layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 color2;
 
 void main(void) {
 	vec4 texColor = vec4(1, 1, 1, 1);
@@ -57,4 +58,5 @@ void main(void) {
 	}
 
 	color = texColor * fs_in.color;
+	color2 = vec4(color.r, 0, 0, color.a);
 }
