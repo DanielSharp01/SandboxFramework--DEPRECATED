@@ -1,6 +1,7 @@
 #include "Shader.h"
 
-#include "../IO/TextReader.h"
+#include "../IO/FileStream.h"
+#include "../IO/StreamReader.h"
 
 namespace Sand
 {
@@ -16,6 +17,14 @@ namespace Sand
 		{
 			m_Graphics->gl_destroyShader(this);
 			delete m_LocationCache;
+		}
+
+		Shader* Shader::Load(Game* game, std::string vertPath, std::string fragPath)
+		{
+			IO::StreamReader readerVert(new IO::
+				FileStream(vertPath, IO::FileAccess::ReadText, IO::FileOpenMode::Open));
+			IO::StreamReader readerFrag(new IO::FileStream(fragPath, IO::FileAccess::ReadText, IO::FileOpenMode::Open));
+			return new Shader(game->GetGraphics(), readerVert.ReadToEnd(), readerFrag.ReadToEnd());
 		}
 
 		bool Shader::compile(std::string vertexSrc, std::string fragmentSrc)

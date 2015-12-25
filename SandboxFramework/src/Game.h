@@ -7,6 +7,8 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include "Graphics/Color.h"
+#include <ft2build.h>
+#include <freetype/freetype.h>
 
 namespace Sand {
 	
@@ -24,12 +26,15 @@ namespace Sand {
 
 		GLFWwindow* m_Window;
 		Graphics::GraphicsDevice* m_Graphics;
+		FT_Library m_FreeType;
 	public:
 		Game(std::string title);
 		~Game();
 
 		void Run();
 
+		inline Graphics::GraphicsDevice* GetGraphics() const { return m_Graphics; }
+		inline FT_Library GetFreeType() const { return m_FreeType; }
 		inline int GetWidth() const { return m_Width; }
 		inline int GetHeight() const { return m_Height; }
 

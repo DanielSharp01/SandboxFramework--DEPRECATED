@@ -11,7 +11,7 @@
 #include "Graphics/Texture2D.h"
 #include "IO/ImageReader.h"
 #include "Chrono/TimerCounter.h"
-#include "IO/TextReader.h"
+#include "Graphics/SpriteFont.h"
 
 using namespace Sand;
 
@@ -24,6 +24,7 @@ void MyGame::Initialize() { }
 Graphics::Shader *shader, *renderShader;
 Graphics::SpriteBatch* spriteBatch;
 Graphics::Color* colArray;
+Graphics::SpriteFont *spriteFont, *spriteFont2;
 Graphics::Texture2D** texArray;
 Graphics::Texture2D *texture, *texture2, *renderTarget, *renderTarget2;
 Chrono::TimerCounter* fpsTimer;
@@ -31,15 +32,16 @@ Chrono::TimerCounter* fpsTimer;
 void MyGame::LoadContent()
 {
 	fpsTimer = new Chrono::TimerCounter();
-	shader = new Graphics::Shader(m_Graphics, IO::TextReader("Resources/Shaders/simple.vert").ReadToEnd(), IO::TextReader("Resources/Shaders/simple.frag").ReadToEnd());
-	renderShader = new Graphics::Shader(m_Graphics, IO::TextReader("Resources/Shaders/simple.vert").ReadToEnd(), IO::TextReader("Resources/Shaders/simpleLightless.frag").ReadToEnd());
+	shader = Graphics::Shader::Load(this, "Resources/Shaders/simple.vert", "Resources/Shaders/simple.frag");
+	renderShader = Graphics::Shader::Load(this, "Resources/Shaders/simple.vert", "Resources/Shaders/simpleLightless.frag");
 
-	IO::ImageReader* reader = new IO::ImageReader("Resources/Textures/BoxTexture.jpg");
-	texture = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(true), reader->GetWidth(), reader->GetHeight());
-	delete reader;
-	reader = new IO::ImageReader("Resources/Textures/add.png");
-	texture2 = new Graphics::Texture2D(m_Graphics, reader->GetPixelData(false), reader->GetWidth(), reader->GetHeight());
-	delete reader;
+	texture = Graphics::Texture2D::Load(this, "Resources/Textures/BoxTexture.jpg");
+	texture2 = Graphics::Texture2D::Load(this, "Resources/Textures/add.png");
+	spriteFont = Graphics::SpriteFont::CreateFromFont(this, "Resources/Fonts/arial.ttf", 28, 32, 128);
+	spriteFont->Save("Resources/Fonts/test.xml");
+	spriteFont2 = Graphics::SpriteFont::Load(this, "Resources/Fonts/test.xml");
+
+	//texture2->SaveAsPNG("C:/Users/Danie/Desktop/random.jpg");
 	
 	renderTarget = new Graphics::Texture2D(m_Graphics, 800, 480);
 	renderTarget2 = new Graphics::Texture2D(m_Graphics, 800, 480);
@@ -109,16 +111,19 @@ void MyGame::Draw()
 	}
 	renderTarget2->SetData(white, 750, 430, 50, 50);
 	delete white;
-
+	
 	spriteBatch->Begin(shader);
 	spriteBatch->Draw(renderTarget2, Math::Rectangle(), Math::Rectangle(0, 0, 800, 480), Graphics::Color(1, 1, 1, 1));
-	//spriteBatch->Draw(texture2, Math::Rectangle(), Math::Rectangle(5, 5, 2, 2), Graphics::Color(1, 1, 1, 1));
 	spriteBatch->End();
 	
-	//delete arr;
-
 	fpsTimer->AdvanceCounter();
-	SetTitle(initialTitle + " @ FPS " + std::to_string((int)fpsTimer->GetCountOver(1)));
+	int fps = (int)fpsTimer->GetCountOver(1);
+	spriteBatch->Begin(renderShader);
+	//spriteBatch->Draw(spriteFont->GetTexture(), Math::Rectangle(), Math::Vector2(0, 0), Graphics::Color(1, 1, 1, 1));
+	spriteBatch->Draw(spriteFont, "This is a text:\nIn a new line!", Math::Vector2(50, 50), Graphics::Color(1, 0, 0, 1));
+	spriteBatch->Draw(spriteFont2, "This is a text:\nIn a new line!", Math::Vector2(50, 150), Graphics::Color(0, 1, 0, 1));
+	spriteBatch->End();
+	delete arr;
 }
 
 void MyGame::UnloadContent()
@@ -129,6 +134,7 @@ void MyGame::UnloadContent()
 	delete[] texArray;
 	delete texture;
 	delete texture2;
+	delete spriteFont;
 	delete renderTarget;
 	delete renderTarget2;
 	delete fpsTimer;

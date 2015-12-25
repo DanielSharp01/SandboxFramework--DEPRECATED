@@ -3,6 +3,7 @@
 #include "GraphicsDevice.h"
 #include "Shader.h"
 #include "Texture2D.h"
+#include "SpriteFont.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "IBO.h"
@@ -68,6 +69,11 @@ namespace Sand
 			void Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale);
 			void Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
 			void Draw(Texture2D* texture, Math::Rectangle source, Math::Vector2 position, Color color, Math::Matrix matrix);
+
+			void Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color);
+			void Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale);
+			void Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale);
+			void Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Matrix matrix);
 
 			void End();
 		private:

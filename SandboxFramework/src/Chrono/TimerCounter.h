@@ -24,12 +24,12 @@ namespace Chrono
 		double GetCountOver(double second)
 		{
 			double total = Get();		
-			double cos = (double)m_Counter / (total - lastCheck) / second;
+			double cntOSecond = (double)m_Counter / (total - lastCheck) / second;
 			
 			lastCheck = total;
 			m_Counter = 0;
 
-			return cos;
+			return cntOSecond;
 		}
 	};
 }

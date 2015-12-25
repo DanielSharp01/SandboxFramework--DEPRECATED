@@ -21,6 +21,8 @@ namespace Sand
 			Shader(GraphicsDevice* graphics, std::string vertexSrc, std::string fragmentSrc);
 			~Shader();
 
+			static Shader* Load(Game* game, std::string vertPath, std::string fragPath);
+
 			void Bind() const;
 			void Unbind() const;
 

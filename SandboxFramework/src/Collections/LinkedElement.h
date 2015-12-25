@@ -29,7 +29,7 @@ namespace Collections {
 		void linkBefore(LinkedElement<T>* next)
 		{
 			Previous = next->Previous;
-			Previous->next = this;
+			Previous->Next = this;
 			next->Previous = this;
 			Next = next;
 		}

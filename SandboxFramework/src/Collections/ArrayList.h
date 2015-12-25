@@ -1,5 +1,4 @@
 #pragma once
-
 #include "List.h"
 
 namespace Collections {
@@ -10,10 +9,11 @@ namespace Collections {
 		T* m_Arr;
 		int m_Count;
 		int m_Capacity;
+		int m_InitialCapacity;
 		float m_ReservedCapacity;
 	public:
 		ArrayList(int capacity = 4, float reservedCapacity = 0.5f)
-			: m_Capacity(capacity), m_ReservedCapacity(reservedCapacity)
+			: m_InitialCapacity(capacity), m_Capacity(capacity), m_ReservedCapacity(reservedCapacity)
 		{
 			m_Arr = new T[capacity];
 			m_Count = 0;
@@ -26,7 +26,8 @@ namespace Collections {
 
 		void Clear() override
 		{
-			m_Arr = new T[m_Capacity];
+			delete[] m_Arr;
+			m_Arr = new T[m_InitialCapacity];
 			m_Count = 0;
 		}
 
@@ -90,9 +91,10 @@ namespace Collections {
 	private:
 		void reallocate()
 		{
-			T* newArr = new T[(unsigned int)((float)m_Capacity * (1.0f + m_ReservedCapacity))];
-			memcpy(newArr, &m_Arr[0], m_Count * sizeof(T));
-			delete m_Arr;
+			m_Capacity = (unsigned int)((float)m_Capacity * (1.0f + m_ReservedCapacity));
+			T* newArr = new T[m_Capacity];
+			std::copy(m_Arr, m_Arr + m_Count, newArr);
+			delete[] m_Arr;
 			m_Arr = newArr;
 		}
 	};

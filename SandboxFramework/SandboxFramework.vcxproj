@@ -103,10 +103,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <FloatingPointModel>Precise</FloatingPointModel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;opengl32.lib;glfw3.lib;glew32s.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;opengl32.lib;glfw3.lib;glew32s.lib;FreeImage.lib;freetype262MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>
       </SubSystem>
       <EntryPointSymbol>
@@ -130,6 +131,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -155,12 +157,13 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;opengl32.lib;glfw3.lib;glew32s.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;opengl32.lib;glfw3.lib;glew32s.lib;FreeImage.lib;freetype262MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>
       </SubSystem>
       <EntryPointSymbol>
@@ -186,6 +189,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -210,7 +214,12 @@
     <ClCompile Include="src\Graphics\Color.cpp" />
     <ClCompile Include="src\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="src\Graphics\IBO.cpp" />
+    <ClCompile Include="src\Graphics\SpriteFont.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
+    <ClCompile Include="src\IO\ImageWriter.cpp" />
+    <ClCompile Include="src\Utils\Parser.cpp" />
+    <ClCompile Include="src\Utils\StringBuffer.cpp" />
+    <ClCompile Include="src\Utils\StringParser.cpp" />
     <ClCompile Include="src\Math\Rectangle.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\SpriteBatch.cpp" />
@@ -219,9 +228,7 @@
     <ClCompile Include="src\Graphics\VBO.cpp" />
     <ClCompile Include="src\input\Keyboard.cpp" />
     <ClCompile Include="src\input\Mouse.cpp" />
-    <ClCompile Include="src\IO\FileReader.cpp" />
     <ClCompile Include="src\IO\ImageReader.cpp" />
-    <ClCompile Include="src\IO\TextReader.cpp" />
     <ClCompile Include="src\Math\Functions.cpp" />
     <ClCompile Include="src\Math\Matrix.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
@@ -229,6 +236,8 @@
     <ClCompile Include="src\Math\Vector4.cpp" />
     <ClCompile Include="src\MyGame.cpp" />
     <ClCompile Include="src\Program.cpp" />
+    <ClCompile Include="src\XML\XDocument.cpp" />
+    <ClCompile Include="src\XML\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chrono\TimerCounter.h" />
@@ -250,7 +259,17 @@
     <ClInclude Include="src\graphics\GraphicsDevice.h" />
     <ClInclude Include="src\Graphics\IBO.h" />
     <ClInclude Include="src\Graphics\ImageFormat.h" />
+    <ClInclude Include="src\Graphics\SpriteFont.h" />
     <ClInclude Include="src\Graphics\Viewport.h" />
+    <ClInclude Include="src\IO\ConsoleStream.h" />
+    <ClInclude Include="src\IO\FileStream.h" />
+    <ClInclude Include="src\IO\ImageWriter.h" />
+    <ClInclude Include="src\IO\Stream.h" />
+    <ClInclude Include="src\IO\StreamReader.h" />
+    <ClInclude Include="src\IO\StreamWriter.h" />
+    <ClInclude Include="src\Utils\Parser.h" />
+    <ClInclude Include="src\Utils\StringBuffer.h" />
+    <ClInclude Include="src\Utils\StringParser.h" />
     <ClInclude Include="src\Math\Rectangle.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\Graphics\SpriteBatch.h" />
@@ -262,9 +281,7 @@
     <ClInclude Include="src\input\KeyboardState.h" />
     <ClInclude Include="src\input\Mouse.h" />
     <ClInclude Include="src\input\MouseState.h" />
-    <ClInclude Include="src\IO\FileReader.h" />
     <ClInclude Include="src\IO\ImageReader.h" />
-    <ClInclude Include="src\IO\TextReader.h" />
     <ClInclude Include="src\Math\Functions.h" />
     <ClInclude Include="src\Math\Matrix.h" />
     <ClInclude Include="src\Math\structs.h" />
@@ -274,6 +291,12 @@
     <ClInclude Include="src\MyGame.h" />
     <ClInclude Include="src\Chrono\Timer.h" />
     <ClInclude Include="src\Graphics\TextureFilter.h" />
+    <ClInclude Include="src\XML\XAttribute.h" />
+    <ClInclude Include="src\XML\XDocument.h" />
+    <ClInclude Include="src\XML\XElement.h" />
+    <ClInclude Include="src\XML\XMLParser.h" />
+    <ClInclude Include="src\XML\XNode.h" />
+    <ClInclude Include="src\XML\XTextElement.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\simple.frag">
@@ -317,6 +340,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Textures\add.png">
+      <DeploymentContent>false</DeploymentContent>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Fonts\arial.ttf">
       <DeploymentContent>false</DeploymentContent>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -51,14 +51,15 @@ namespace Collections {
 		T RemoveAt(int index) override
 		{
 			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
-			getLinkedElement(index)->linkOut();
+			LinkedElement<T>* linkedElement = getLinkedElement(index);
+			linkedElement->linkOut();
 			T removed = *(linkedElement->Value);
 			delete linkedElement;
 			m_Count--;
 			return removed;
 		}
 
-		LinkedElement<T>* getLinkedElement(int index)
+		LinkedElement<T>* getLinkedElement(int index) const
 		{
 			LinkedElement<T>* el = m_HeadTail;
 			if (index < m_Count / 2) for (int i = 0; i <= index; i++) el = el->Next;
@@ -75,7 +76,7 @@ namespace Collections {
 		void Set(int index, T value) override
 		{
 			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
-			getLinkedElement(index)->Value = value;
+			getLinkedElement(index)->Value = new T(value);
 		}
 
 		T& operator[](int index) override

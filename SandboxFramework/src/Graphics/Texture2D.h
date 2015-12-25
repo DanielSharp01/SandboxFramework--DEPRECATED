@@ -24,9 +24,16 @@ namespace Sand
 			bool m_Refreshable;
 		public:
 
-			Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height);
+			Texture2D() = default;
+			Texture2D(GraphicsDevice* graphics, int width, int height);
 			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat format = ImageFormat::RGBA);
 			~Texture2D();
+
+			static Texture2D* CreateFromImage(GraphicsDevice* graphics, std::string path, bool premultiplied, ImageFormat format = ImageFormat::RGBA);
+			static Texture2D* Texture2D::Load(Game* game, std::string path);
+			void SaveAsJPG(std::string filename);
+
+			void SaveAsPNG(std::string filename);
 
 			void SetFilters(TextureFilter minFilter, TextureFilter magFilter);
 			void Bind();

@@ -1,6 +1,7 @@
 #include "Texture2D.h"
 
-#include <iomanip>
+#include "../IO/ImageReader.h"
+#include "../IO/ImageWriter.h"
 
 typedef unsigned char BYTE;
 
@@ -33,6 +34,27 @@ namespace Sand
 		{
 			m_Graphics->gl_destroyTexture2D(this);
 			delete m_Data;
+		}
+
+		Texture2D* Texture2D::CreateFromImage(GraphicsDevice* graphics, std::string path, bool premultiplied, ImageFormat format)
+		{
+			IO::ImageReader reader(path);
+			return new Texture2D(graphics, reader.GetPixelData(premultiplied), reader.GetWidth(), reader.GetHeight(), format);
+		}
+
+		Texture2D* Texture2D::Load(Game* game, std::string path)
+		{
+			return Texture2D::CreateFromImage(game->GetGraphics(), path, true);
+		}
+
+		void Texture2D::SaveAsJPG(std::string filename)
+		{
+			IO::ImageWriter(filename, m_Data, m_Width, m_Height, 24);
+		}
+
+		void Texture2D::SaveAsPNG(std::string filename)
+		{
+			IO::ImageWriter(filename, m_Data, m_Width, m_Height, 32);
 		}
 
 		void Texture2D::SetFilters(TextureFilter minFilter, TextureFilter magFilter)

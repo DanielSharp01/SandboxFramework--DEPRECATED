@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SpriteBatch.h"
 
 namespace Sand
@@ -160,6 +158,48 @@ namespace Sand
 			Draw(texture, Math::Rectangle(0, 0, 0, 0), Math::Rectangle(0, 0, texture->GetWidth(), texture->GetHeight()), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)) * matrix);
 		}
 
+		void SpriteBatch::Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color)
+		{
+			Draw(spriteFont, text, position, color, Math::Matrix::Identity());
+		}
+
+		void SpriteBatch::Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, float scale)
+		{
+			Draw(spriteFont, text, position, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale, scale, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Vector2 origin, float rotation, Math::Vector2 scale)
+		{
+			Draw(spriteFont, text, position, color, Math::Matrix::Rotation(rotation, Math::Vector3(0, 0, 1))
+				* Math::Matrix::Scale(Math::Vector3(scale.X, scale.Y, 1.0f))
+				* Math::Matrix::Translation(Math::Vector3(-origin.X, -origin.Y, 0.0f)));
+		}
+
+		void SpriteBatch::Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Matrix matrix)
+		{
+			Math::Vector2 pos(0, 0);
+			char last = '\0';
+			for (int i = 0; i < text.length(); i++)
+			{
+				char c = text[i];
+				if (c != '\n')
+				{
+					Math::Vector2 offs = spriteFont->GetOffset(last, c);
+					Draw(spriteFont->GetTexture(), spriteFont->GetSource(c), spriteFont->GetDestination(c), color, Math::Matrix::Translation(Math::Vector3(position.X, position.Y, 0.0f)) * matrix * Math::Matrix::Translation(Math::Vector3(pos.X + offs.X, pos.Y + offs.Y, 0.0f)));
+					pos.X += spriteFont->GetAdvanceX(c);
+				}
+				else
+				{
+					pos.X = 0;
+					pos.Y += spriteFont->GetLineHeight();
+				}
+
+				last = c;
+			}
+		}
+
 		void SpriteBatch::Draw(Texture2D* texture, Math::Rectangle source, Math::Rectangle destination, Color color, Math::Matrix matrix)
 		{
 			destination.Transform(matrix);
@@ -176,6 +216,11 @@ namespace Sand
 				source.BottomLeft /= Math::Vector2(texture->GetWidth(), texture->GetHeight());
 				source.BottomRight /= Math::Vector2(texture->GetWidth(), texture->GetHeight());
 			}
+
+			source.TopLeft.Y = 1 - source.TopLeft.Y;
+			source.TopRight.Y = 1 - source.TopRight.Y;
+			source.BottomLeft.Y = 1 - source.BottomLeft.Y;
+			source.BottomRight.Y = 1 - source.BottomRight.Y;
 
 			Math::Vector4 colour = color.ToVector4();
 
@@ -203,25 +248,25 @@ namespace Sand
 
 			m_Pointer->Position = Math::Vector4(destination.TopLeft.X, destination.TopLeft.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = source.BottomLeft;
+			m_Pointer->UV = source.TopLeft;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = Math::Vector4(destination.TopRight.X, destination.TopRight.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = source.BottomRight;
+			m_Pointer->UV = source.TopRight;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = Math::Vector4(destination.BottomRight.X, destination.BottomRight.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = source.TopRight;
+			m_Pointer->UV = source.BottomRight;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 
 			m_Pointer->Position = Math::Vector4(destination.BottomLeft.X, destination.BottomLeft.Y, 0, 1);
 			m_Pointer->Color = colour;
-			m_Pointer->UV = source.TopLeft;
+			m_Pointer->UV = source.BottomLeft;
 			m_Pointer->TexID = texID;
 			m_Pointer++;
 

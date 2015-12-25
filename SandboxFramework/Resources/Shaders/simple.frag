@@ -62,4 +62,5 @@ void main(void) {
 	}
 	texColor = texColor * fs_in.color;
 	color = vec4(texColor.r * light, texColor.g * light, texColor.b * light, texColor.a);
+	//color = vec4(fs_in.UV.x, 0, fs_in.UV.y, 1);
 }
