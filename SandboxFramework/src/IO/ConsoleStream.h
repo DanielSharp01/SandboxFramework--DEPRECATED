@@ -9,16 +9,16 @@ namespace IO
 	class ConsoleStream : public Stream
 	{
 	public:
-		void Write(char* data, unsigned long length) override;
+		void Write(const void* data, int count, int elementSize) override;
 		void Write(std::string data) override;
 		char Peek() override;
 		char Read() override;
 
-		void Read(char* outData, unsigned long count) override;
-		std::string Read(unsigned long length) override;
-		void Seek(unsigned long position) override;
-		void SeekCurrent(unsigned long position) override;
-		void SeekEnd(unsigned long position) override;
+		void Read(void* outData, int count, int elementSize) override;
+		std::string Read(int length) override;
+		void Seek(int position) override;
+		void SeekCurrent(int position) override;
+		void SeekEnd(int position) override;
 		void Flush() override;
 		void Close() override;
 

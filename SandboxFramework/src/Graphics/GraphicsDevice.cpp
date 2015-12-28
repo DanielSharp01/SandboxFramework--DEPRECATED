@@ -15,6 +15,12 @@ namespace Sand
 			m_Game = game;
 			m_Viewport = Viewport(m_Game->GetWidth(), m_Game->GetHeight(), -1.0f, 1.0f);
 
+			if (glewInit() != GLEW_OK)
+			{
+				std::cout << "Failed to initialize GLEW!" << std::endl;
+				return;
+			}
+
 			glEnable(GL_BLEND);
 			SetDepthTestMode(DepthTestMode::None);
 			SetBlendState(BlendState::Opaque);

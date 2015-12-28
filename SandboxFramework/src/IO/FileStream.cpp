@@ -19,11 +19,11 @@ namespace IO
 		fseek(m_File, 0, SEEK_SET);
 	}
 
-	void FileStream::Write(char* data, unsigned long length)
+	void FileStream::Write(const void* data, int count, int elementSize)
 	{
-		fwrite(data, sizeof(char), length, m_File);
-		m_Length += length;
-		m_Position += length;
+		fwrite(data, elementSize, count, m_File);
+		m_Length += count;
+		m_Position += count;
 	}
 
 	void FileStream::Write(std::string data)
@@ -51,13 +51,13 @@ namespace IO
 		return (char)c;
 	}
 
-	void FileStream::Read(char* outData, unsigned long count)
+	void FileStream::Read(void* outData, int count, int elementSize)
 	{
-		fread(outData, sizeof(char), count, m_File);
+		fread(outData, elementSize, count, m_File);
 		m_Position += count;
 	}
 
-	std::string FileStream::Read(unsigned long length)
+	std::string FileStream::Read(int length)
 	{
 		char* outData = new char[length + 1];
 		fread(outData, sizeof(char), length, m_File);
@@ -66,17 +66,17 @@ namespace IO
 		return std::string(outData);
 	}
 
-	void FileStream::Seek(unsigned long position)
+	void FileStream::Seek(int position)
 	{
 		fseek(m_File, position, SEEK_SET);
 	}
 
-	void FileStream::SeekCurrent(unsigned long position)
+	void FileStream::SeekCurrent(int position)
 	{
 		fseek(m_File, position, SEEK_CUR);
 	}
 
-	void FileStream::SeekEnd(unsigned long position)
+	void FileStream::SeekEnd(int position)
 	{
 		fseek(m_File, position, SEEK_END);
 	}

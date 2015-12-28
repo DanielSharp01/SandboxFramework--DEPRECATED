@@ -21,9 +21,9 @@ namespace IO
 		return m_Stream->Read();
 	}
 
-	void StreamReader::Read(char* buffer, unsigned long count)
+	void StreamReader::Read(void* buffer, int count, int elementSize)
 	{
-		m_Stream->Read(buffer, count);
+		m_Stream->Read(buffer, count, elementSize);
 	}
 
 	std::string StreamReader::ReadLine()

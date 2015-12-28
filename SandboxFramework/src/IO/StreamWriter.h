@@ -13,7 +13,7 @@ namespace IO
 		~StreamWriter();
 
 		void Write(char character);
-		void Write(char* buffer, unsigned long count);
+		void Write(const void* buffer, int count, int elementSize);
 		void Write(std::string str);
 		void WriteLine(std::string line);
 

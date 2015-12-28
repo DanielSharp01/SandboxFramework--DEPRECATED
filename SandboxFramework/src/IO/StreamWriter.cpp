@@ -13,12 +13,12 @@ namespace IO
 
 	void StreamWriter::Write(char character)
 	{
-		m_Stream->Write(&character, 1);
+		m_Stream->Write(&character, 1, sizeof(char));
 	}
 
-	void StreamWriter::Write(char* buffer, unsigned long count)
+	void StreamWriter::Write(const void* buffer, int count, int elementSize)
 	{
-		m_Stream->Write(buffer, count);
+		m_Stream->Write(buffer, count, elementSize);
 	}
 
 	void StreamWriter::Write(std::string str)

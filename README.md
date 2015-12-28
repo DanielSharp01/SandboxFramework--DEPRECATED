@@ -1,10 +1,20 @@
 # SandboxEngine
 ======
+### These namespaces are not directly part of the SandboxFramework (but are used in it):
+#### They might migrate to another repo called SharpFramework
+1. Collections
+2. Chrono
+3. StringUtils
+4. IO
+5. XML
+6. Debug
+### The file test.wav was not included in the repo
 ## Features (work in progress):
 1. Input
   * <del>Keyboard</del>
   * <del>Mouse</del>
-2. Graphics (still need to maintain and optimize)
+  * Press (last up & current down)/Release(last down & current up)
+2. Graphics
   * <del>GraphicsDevice</del>
   * <del>Shaders</del>
   * <del>VAO, VBO, IBO</del>
@@ -12,15 +22,27 @@
   * <del>Texture</del>
   * <del>Batched Textures</del>
   * <del>Blending (Alpha, Additive)<del>
-  * <del>Dynamic Textures (Get, Set)</del>
+  * <del>Bitmaps</del>
+  * <del>Dynamic Textures (Get/Set Bitmap)</del>
   * <del>RenderTargets read/write<del>
   * <del>SpriteFont Rendering
   * <del>SpriteFont Support</del>
   * <del>Font Support</del>
   * <del>Font Rendering</del>
 3. Audio
-  * SoundEffect
-  * Music
-  * Play/Pause/Stop/Loop
-  * Seek/GetPos/GetLength
-  * 3D (used for 2D) sound
+  * <del>AudioDevice</del>
+  * <del>Sound (AudioBuffer)</del>
+  * AudioSource (AudioPlayer):
+    * <del>Play/Pause/Resume/Stop</del>
+    * <del>PlaybackState</del>
+    * <del>Seeking & Getting position/duration</del>
+    * <del>Volume/Pitch control</del>
+    * <del>Looping</del>
+    * Position/Velocity control (for listeners)
+  * Listeners (3D sound)
+  * Global Sound Pause/Resume/Stop
+  * FileFormats
+    * <del>wav</del>
+    * mp3
+    * ogg
+    * aac

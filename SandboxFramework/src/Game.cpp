@@ -77,12 +77,6 @@ namespace Sand {
 		glfwSetScrollCallback(m_Window, Input::mouseScrollCallback);
 		glfwSetKeyCallback(m_Window, Input::keyboardCallback);
 
-		if (glewInit() != GLEW_OK)
-		{
-			std::cout << "Failed to initialize GLEW!" << std::endl;
-			return false;
-		}
-
 		m_Graphics = new Graphics::GraphicsDevice(this);
 
 		return true;

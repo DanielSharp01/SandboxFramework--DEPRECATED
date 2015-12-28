@@ -14,7 +14,7 @@ namespace IO
 
 		char Peek();
 		char Read();
-		void Read(char* buffer, unsigned long count);
+		void Read(void* buffer, int count, int elementSize);
 		std::string ReadLine();
 		std::string ReadToEnd();
 

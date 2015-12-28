@@ -3,9 +3,9 @@
 
 namespace IO
 {
-	void ConsoleStream::Write(char* data, unsigned long length)
+	void ConsoleStream::Write(const void* data, int count, int elementSize)
 	{
-		fwrite(data, sizeof(char), length, stdout);
+		fwrite(data, elementSize, count, stdout);
 	}
 
 	void ConsoleStream::Write(std::string data)
@@ -29,12 +29,12 @@ namespace IO
 		return (char)c;
 	}
 
-	void ConsoleStream::Read(char* outData, unsigned long count)
+	void ConsoleStream::Read(void* outData, int count, int elementSize)
 	{
-		fread(outData, sizeof(char), count, stdin);
+		fread(outData, elementSize, count, stdin);
 	}
 
-	std::string ConsoleStream::Read(unsigned long length)
+	std::string ConsoleStream::Read(int length)
 	{
 		char* outData = new char[length + 1];
 		fread(outData, sizeof(char), length, stdin);
@@ -42,17 +42,17 @@ namespace IO
 		return std::string(outData);
 	}
 
-	void ConsoleStream::Seek(unsigned long position)
+	void ConsoleStream::Seek(int position)
 	{
 		throw IOException("Trying to seek console stream.");
 	}
 
-	void ConsoleStream::SeekCurrent(unsigned long position)
+	void ConsoleStream::SeekCurrent(int position)
 	{
 		throw IOException("Trying to seek console stream.");
 	}
 
-	void ConsoleStream::SeekEnd(unsigned long position)
+	void ConsoleStream::SeekEnd(int position)
 	{
 		throw IOException("Trying to seek console stream.");
 	}
