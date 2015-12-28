@@ -4,13 +4,13 @@
 
 struct VBOLocation
 {
-	GLint Location;
-	GLsizei Stride;
-	GLsizei Offset;
+	int Location;
+	int Stride;
+	int Offset;
 
 	VBOLocation() = default;
 
-	VBOLocation(GLint location, GLsizei stride = 0, GLsizei offset = 0)
+	VBOLocation(int location, int stride = 0, int offset = 0)
 		: Location(location), Stride(stride), Offset(offset)
 	{ }
 };

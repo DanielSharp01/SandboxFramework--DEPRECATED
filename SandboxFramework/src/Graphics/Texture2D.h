@@ -2,51 +2,45 @@
 
 #include "GraphicsDevice.h"
 #include "TextureFilter.h"
-#include "ImageFormat.h"
+#include "Bitmap.h"
 
 namespace Sand
 {
 	namespace Graphics
 	{
 		class SpriteBatch;
-		//TODO: Changable BYTE data
-		//TODO: Savable to PNG, JPG
+
 		class Texture2D
 		{
 			friend GraphicsDevice;
 			friend SpriteBatch;
 		private:
 			GraphicsDevice* m_Graphics;
-			GLuint m_ID;
-			GLuint m_Width;
-			GLuint m_Height;
-			BYTE* m_Data;
-			bool m_Refreshable;
+			unsigned int m_ID;
+			unsigned short m_Width;
+			unsigned short m_Height;
 		public:
 
 			Texture2D() = default;
 			Texture2D(GraphicsDevice* graphics, int width, int height);
-			Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat format = ImageFormat::RGBA);
+			Texture2D(GraphicsDevice* graphics, Bitmap* data);
 			~Texture2D();
 
-			static Texture2D* CreateFromImage(GraphicsDevice* graphics, std::string path, bool premultiplied, ImageFormat format = ImageFormat::RGBA);
+			static Texture2D* CreateFromBitmap(GraphicsDevice* graphics, Bitmap* bitmap);
 			static Texture2D* Texture2D::Load(Game* game, std::string path);
-			void SaveAsJPG(std::string filename);
-
-			void SaveAsPNG(std::string filename);
+			void SaveAsJPG(std::string path);
+			void SaveAsPNG(std::string path);
 
 			void SetFilters(TextureFilter minFilter, TextureFilter magFilter);
 			void Bind();
-			void BindToActive(GLuint slot);
+			void BindToActive(unsigned short slot);
 			void Unbind();
-			void RefreshPixels();
-			void SetData(BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height);
 
-			inline BYTE* GetData() { return m_Data; }
-			inline GLuint GetWidth() { return m_Width; }
-			inline GLuint GetHeight() { return m_Height; }
-		private:
-			BYTE* convertToImageFormat(BYTE* data, unsigned int width, unsigned int height, ImageFormat format);
+			void SetData(Bitmap* bitmap);
+			void SetSubData(Bitmap* bitmap, unsigned short x, unsigned short y);
+			Bitmap* GetBitmap();
+			inline unsigned short GetWidth() { return m_Width; }
+			inline unsigned short GetHeight() { return m_Height; }
 		};
 	}
 }

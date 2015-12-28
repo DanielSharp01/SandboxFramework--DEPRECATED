@@ -1,11 +1,9 @@
 #include "IBO.h"
-
-#include <iostream> //TODO: DELETE + ALSO COUT
 #include "GraphicsDevice.h"
 
 namespace Sand {
 	namespace Graphics {
-		IBO::IBO(GraphicsDevice* graphics, GLushort* indices, GLsizei count)
+		IBO::IBO(GraphicsDevice* graphics, GLushort* indices, int count)
 			: m_Graphics(graphics), m_Count(count)
 		{
 			m_ID = m_Graphics->gl_createIBO(indices, m_Count);

@@ -30,7 +30,7 @@ namespace StringUtils
 		inline std::string GetAll() { return m_Data; }
 		std::string GetFrom(int length = -1);
 		std::string GetTo(int length = -1);
-		std::string GetToFrom(unsigned int start);
+		std::string GetToFrom(unsigned int start, bool excludeCurrent = false);
 
 		void Add(std::string data);
 

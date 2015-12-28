@@ -37,7 +37,7 @@ namespace Collections {
 		V RemoveAt(K key)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			if (index == -1) throw IndexOutOfBoundsException(index);
 			m_Keys->RemoveAt(index);
 			return m_Values->RemoveAt(index);
 		}
@@ -45,28 +45,28 @@ namespace Collections {
 		V Get(K key) const
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			if (index == -1) throw IndexOutOfBoundsException(index);
 			return (*m_Values)[index];
 		}
 
 		void Set(K key, V value)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			if (index == -1) throw IndexOutOfBoundsException(index);
 			return (*m_Values)[index] = value;
 		}
 
 		V& operator[] (K key)
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			if (index == -1) throw IndexOutOfBoundsException(index);
 			return (*m_Values)[index];
 		}
 
 		const V& operator[] (K key) const
 		{
 			int index = findKeyIndex(key);
-			if (index == -1) throw Exceptions::IndexOutOfBoundsException();
+			if (index == -1) throw IndexOutOfBoundsException(index);
 			return (*m_Values)[index];
 		}
 

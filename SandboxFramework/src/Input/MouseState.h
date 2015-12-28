@@ -1,8 +1,9 @@
 #pragma once
 
+#include "MouseButtons.h"
 #include "../Math/Vector2.h"
 
-#define MAX_BUTTONS 16
+#define MAX_BUTTONS GLFW_MOUSE_BUTTON_LAST
 
 namespace Sand {
 	namespace Input {
@@ -15,10 +16,8 @@ namespace Sand {
 			Math::Vector2 m_Position;
 			Math::Vector2 m_Scroll;
 		public:
-			inline bool IsButtonDown(int key) { return m_States[key]; }
-			inline bool IsButtonUp(int key) { return !m_States[key]; }
-
-			//TODO: Implement convenient mouse buttons
+			inline bool IsButtonDown(MouseButtons key) { return m_States[key]; }
+			inline bool IsButtonUp(MouseButtons key) { return !m_States[key]; }
 
 			inline Math::Vector2 GetPosition() { return m_Position; }
 			inline Math::Vector2 GetScroll() { return m_Scroll; }

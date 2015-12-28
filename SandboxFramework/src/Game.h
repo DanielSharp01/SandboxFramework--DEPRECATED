@@ -9,6 +9,8 @@
 #include "Graphics/Color.h"
 #include <ft2build.h>
 #include <freetype/freetype.h>
+//#define FREEIMAGE_LIB //TODO: Build static FreeImage.lib
+#include <FreeImage/FreeImage.h>
 
 namespace Sand {
 	

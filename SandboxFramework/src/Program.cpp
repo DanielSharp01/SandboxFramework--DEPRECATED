@@ -1,5 +1,3 @@
-//TODO: FreeImage as static library
-
 #define DEBUG_CONSOLE 1
 
 #if DEBUG_CONSOLE != 1
@@ -14,8 +12,7 @@ int main()
 	MyGame* game = new MyGame();
 	game->Run();
 	delete game;
-
+	
 	std::cin.get();
-
 	return 0;
 }

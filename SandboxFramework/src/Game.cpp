@@ -27,9 +27,11 @@ namespace Sand {
 			return;
 		}
 		Initialize();
+		FreeImage_Initialise();
 		FT_Init_FreeType(&m_FreeType);
 		LoadContent();
 		FT_Done_FreeType(m_FreeType);
+		FreeImage_DeInitialise();
 
 		while (!isClosing())
 		{

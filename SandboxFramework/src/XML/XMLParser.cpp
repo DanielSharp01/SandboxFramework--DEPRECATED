@@ -27,12 +27,11 @@ namespace XML
 		StepUntil(CharType::Whitespace);
 		if (!m_Buffer->HasEnded())
 		{
-			SignError("And XML document can only have one Root node at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("And XML document can only have one Root node");
 			rError = true;
 		}
 
-		ret->Errors = errors;
-
+		if (rError) throw m_Exception;
 		return ret;
 	}
 
@@ -62,8 +61,7 @@ namespace XML
 
 			if (!canBeXML)
 			{
-				std::string error = "<?xml ?> element must be at the start of file at position " + std::to_string(m_Buffer->GetPosition());
-				SignError(error);
+				SignError("<?xml ?> element must be at the start of file");
 				rError = true;
 			}
 			Step();
@@ -75,27 +73,23 @@ namespace XML
 			{
 				std::string error = "Did not expect \"";
 				error += Get();
-				error += "\" at position " + std::to_string(m_Buffer->GetPosition());
+				error += "\"";
 				SignError(error);
 				return NULL;
 			}
 			else //if (GetType() == CharType::Whitespace)
 			{
-				std::string error = "Did not expect WHITESPACE at position " + std::to_string(m_Buffer->GetPosition());
-				SignError(error);
+				SignError("Did not expect WHITESPACE");
 				return NULL;
 			}
 		}
 		StartTempBuffer();
 		while ((GetType() == CharType::Letter || Get() == '_' || GetType() == CharType::Digit) && !HasEnded()) Step();
-		Step(-1);
 		ret->Name = RetrieveTempString();
-		Step();
 
 		if (ret->Name != "xml" && xmlDescriptor)
 		{
-			std::string error = "\"<?xml\" expected" + std::to_string(m_Buffer->GetPosition());
-			SignError(error);
+			SignError("\"<?xml\" expected");
 			rError = true;
 		}
 
@@ -109,16 +103,16 @@ namespace XML
 				Step();
 				if (HasEnded())
 				{
-					SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+					SignError("\">\" expected");
 					return NULL;
 				}
 				else if (Get() != '>')
 				{
 					std::string error = "Did not expect \"";
 					error += Get();
-					error += "\" at position " + std::to_string(m_Buffer->GetPosition());
+					error += "\"";
 					SignError(error);
-					SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+					SignError("\">\" expected");
 					return NULL;
 				}
 			}
@@ -132,20 +126,17 @@ namespace XML
 				{
 					if (attr->Name == "version" && attr->Value != "1.0")
 					{
-						std::string error = "<?xml version attribute expects value \"1.0\"" + std::to_string(m_Buffer->GetPosition());
-						SignError(error);
+						SignError("<?xml version attribute expects value \"1.0\"");
 						rError = true;
 					}
 					else if (attr->Name == "standalone" && attr->Value != "no" && attr->Value != "yes")
 					{
-						std::string error = "<?xml standalone attribute expects either value \"yes\" or \"no\"" + std::to_string(m_Buffer->GetPosition());
-						SignError(error);
+						SignError("<?xml standalone attribute expects either value \"yes\" or \"no\"");
 						rError = true;
 					}
 					else if (attr->Name != "version" && attr->Name != "encoding" && attr->Name != "standalone")
 					{
-						std::string error = "invalid <?xml attribute \"" + attr->Name + "\"" + std::to_string(m_Buffer->GetPosition());
-						SignError(error);
+						SignError("Invalid <?xml attribute \"" + attr->Name + "\"");
 						rError = true;
 					}
 				}
@@ -154,7 +145,7 @@ namespace XML
 			{
 				std::string error = "Did not expect \"";
 				error += Get();
-				error += "\" at position " + std::to_string(m_Buffer->GetPosition());
+				error += "\"";
 				SignError(error);
 				Step();
 				rError = true;
@@ -164,19 +155,19 @@ namespace XML
 
 		if (HasEnded())
 		{
-			SignError("Tag was not closed " + std::to_string(m_Buffer->GetPosition()));
-			if (xmlDescriptor) SignError("\"?>\" expected at " + std::to_string(m_Buffer->GetPosition()));
-			else SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("Tag was not closed");
+			if (xmlDescriptor) SignError("\"?>\" expected");
+			else SignError("\">\" expected");
 			return NULL;
 		}
 		else if (Get() == '<')
 		{
-			if (xmlDescriptor) SignError("\"?>\" expected at " + std::to_string(m_Buffer->GetPosition()));
-			else SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+			if (xmlDescriptor) SignError("\"?>\" expected");
+			else SignError("\">\" expected");
 		}
 		else if (Get() == '>' && xmlDescriptor)
 		{
-			SignError("\"?\" expected at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("\"?\" expected");
 			return NULL;
 		}
 		else if (Get() == '?' && xmlDescriptor)
@@ -184,13 +175,13 @@ namespace XML
 			Step();
 			if (HasEnded())
 			{
-				SignError("Tag was not closed " + std::to_string(m_Buffer->GetPosition()));
-				SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+				SignError("Tag was not closed");
+				SignError("\">\" expected");
 				return NULL;
 			}
 			else if (Get() != '>')
 			{
-				SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+				SignError("\">\" expected");
 				return NULL;
 			}
 			else
@@ -218,32 +209,30 @@ namespace XML
 
 		if (HasEnded())
 		{
-			SignError("Expected </" + ret->Name + "> at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("Expected </" + ret->Name + ">");
 			return NULL;
 		}
 
 		Step(2);
 		StartTempBuffer();
 		while ((GetType() == CharType::Letter || Get() == '_' || GetType() == CharType::Digit) && !HasEnded()) Step();
-		Step(-1);
 		std::string name = RetrieveTempString();
-		Step(1);
 
 		if (name != ret->Name)
 		{
-			SignError("Expected end tag </" + ret->Name + "> at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("Expected end tag </" + ret->Name + ">");
 			rError = true;
 		}
 
 		if (HasEnded())
 		{
-			SignError("Tag was not closed " + std::to_string(m_Buffer->GetPosition()));
-			SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("Tag was not closed");
+			SignError("\">\" expected");
 			return NULL;
 		}
 		else if (Get() == '<')
 		{
-			SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+			SignError("\">\" expected");
 			return NULL;
 		}
 		else if (Get() != '>')
@@ -252,7 +241,7 @@ namespace XML
 			{
 				std::string error = "Did not expect \"";
 				error += Get();
-				error += "\" at position " + std::to_string(m_Buffer->GetPosition());
+				error += "\"";
 				SignError(error);
 				Step();
 				rError = true;
@@ -260,13 +249,13 @@ namespace XML
 
 			if (HasEnded())
 			{
-				SignError("Tag was not closed " + std::to_string(m_Buffer->GetPosition()));
-				SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+				SignError("Tag was not closed");
+				SignError("\">\" expected");
 				return NULL;
 			}
 			else if (Get() == '<')
 			{
-				SignError("\">\" expected at " + std::to_string(m_Buffer->GetPosition()));
+				SignError("\">\" expected");
 				return NULL;
 			}
 			else Step();
@@ -303,7 +292,7 @@ namespace XML
 				}
 				else
 				{
-					SignError("Undefined &code skipping & symbol at " + std::to_string(m_Buffer->GetPosition()));
+					SignError("Undefined &code skipping & symbol");
 				}
 			}
 			else
@@ -325,16 +314,13 @@ namespace XML
 		{
 			StartTempBuffer();
 			while ((GetType() == CharType::Letter || Get() == '_' || Get() == ':' || GetType() == CharType::Digit) && !m_Buffer->HasEnded()) Step();
-			Step(-1);
 			ret->Name = RetrieveTempString();
-			Step(1);
 			StepUntil(CharType::Whitespace);
 		}
 
 		if (HasEnded())
 		{
-			std::string error = "Missing attribute value at position " + std::to_string(m_Buffer->GetPosition());
-			SignError(error);
+			SignError("Missing attribute value");
 			return NULL;
 		}
 
@@ -342,8 +328,7 @@ namespace XML
 		{
 			if (ret->Name == "")
 			{
-				std::string error = "Missing attribute name at position " + std::to_string(m_Buffer->GetPosition());
-				SignError(error);
+				SignError("Missing attribute name");
 				Step();
 				rError = true;
 			}
@@ -353,7 +338,7 @@ namespace XML
 		{
 			std::string error = "Unexpected symbol \"";
 			error += Get();
-			error += "\" at position " + std::to_string(m_Buffer->GetPosition());
+			error += "\"";
 			SignError(error);
 			Step();
 			return NULL;
@@ -362,8 +347,7 @@ namespace XML
 		StepUntil(CharType::Whitespace);
 		if (HasEnded())
 		{
-			std::string error = "Missing attribute value at position " + std::to_string(m_Buffer->GetPosition());
-			SignError(error);
+			SignError("Missing attribute value");
 			return NULL;
 		}
 
@@ -379,21 +363,18 @@ namespace XML
 			{
 				std::string error = "Expected ";
 				error += quote;
-				error += " at position" + std::to_string(m_Buffer->GetPosition());
 				SignError(error);
 				return NULL;
 			}
 			else
 			{
-				Step(-1);
 				ret->Value = RetrieveTempString();
-				Step(2);
+				Step();
 			}
 		}
 		else
 		{
-			std::string error = "Missing attribute value at position " + std::to_string(m_Buffer->GetPosition());
-			SignError(error);
+			SignError("Missing attribute value");
 			Step();
 			rError = true;
 		}

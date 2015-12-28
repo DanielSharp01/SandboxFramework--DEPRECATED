@@ -1,10 +1,5 @@
 #include "Texture2D.h"
 
-#include "../IO/ImageReader.h"
-#include "../IO/ImageWriter.h"
-
-typedef unsigned char BYTE;
-
 namespace Sand
 {
 	namespace Graphics
@@ -12,49 +7,47 @@ namespace Sand
 		Texture2D::Texture2D(GraphicsDevice* graphics, int width, int height)
 			: m_Graphics(graphics), m_Width(width), m_Height(height)
 		{
-			m_Data = new BYTE[width * height * 4];
-			memset(m_Data, 0, sizeof(m_Data));
-
 			m_ID = m_Graphics->gl_createTexture2D(NULL, width, height, ImageFormat::RGBA);
 			SetFilters(TextureFilter::Nearest, TextureFilter::Nearest);
-			m_Refreshable = false;
 		}
 
-		Texture2D::Texture2D(GraphicsDevice* graphics, BYTE* data, int width, int height, ImageFormat format)
-			: m_Graphics(graphics), m_Width(width), m_Height(height)
+		Texture2D::Texture2D(GraphicsDevice* graphics, Bitmap* bitmap)
+			: m_Graphics(graphics), m_Width(bitmap->GetWidth()), m_Height(bitmap->GetHeight())
 		{
-			m_Data = data;
-			m_ID = m_Graphics->gl_createTexture2D(convertToImageFormat(m_Data, width, height, format), width, height, format);
-
+			m_ID = m_Graphics->gl_createTexture2D(bitmap->GetBytes(), bitmap->GetWidth(), bitmap->GetHeight(), bitmap->GetFormat());
 			SetFilters(TextureFilter::Nearest, TextureFilter::Nearest);
-			m_Refreshable = false;
 		}
 
 		Texture2D::~Texture2D()
 		{
 			m_Graphics->gl_destroyTexture2D(this);
-			delete m_Data;
 		}
 
-		Texture2D* Texture2D::CreateFromImage(GraphicsDevice* graphics, std::string path, bool premultiplied, ImageFormat format)
+		Texture2D* Texture2D::CreateFromBitmap(GraphicsDevice* graphics, Bitmap* bitmap)
 		{
-			IO::ImageReader reader(path);
-			return new Texture2D(graphics, reader.GetPixelData(premultiplied), reader.GetWidth(), reader.GetHeight(), format);
+			return new Texture2D(graphics, bitmap);
 		}
 
 		Texture2D* Texture2D::Load(Game* game, std::string path)
 		{
-			return Texture2D::CreateFromImage(game->GetGraphics(), path, true);
+			Bitmap* bmp = Bitmap::Load(path, true);
+			Texture2D* ret = Texture2D::CreateFromBitmap(game->GetGraphics(), bmp);
+			delete bmp;
+			return ret;
 		}
 
-		void Texture2D::SaveAsJPG(std::string filename)
+		void Texture2D::SaveAsJPG(std::string path)
 		{
-			IO::ImageWriter(filename, m_Data, m_Width, m_Height, 24);
+			Bitmap* bmp = GetBitmap();
+			bmp->SaveAsJPG(path);
+			delete bmp;
 		}
 
-		void Texture2D::SaveAsPNG(std::string filename)
+		void Texture2D::SaveAsPNG(std::string path)
 		{
-			IO::ImageWriter(filename, m_Data, m_Width, m_Height, 32);
+			Bitmap* bmp = GetBitmap();
+			bmp->SaveAsPNG(path);
+			delete bmp;
 		}
 
 		void Texture2D::SetFilters(TextureFilter minFilter, TextureFilter magFilter)
@@ -67,7 +60,7 @@ namespace Sand
 			m_Graphics->gl_bindTexture2D(this);
 		}
 
-		void Texture2D::BindToActive(GLuint slot)
+		void Texture2D::BindToActive(unsigned short slot)
 		{
 			m_Graphics->gl_SetActiveTexture(slot);
 			m_Graphics->gl_bindTexture2D(this);
@@ -78,88 +71,20 @@ namespace Sand
 			m_Graphics->gl_unbindTexture2D(this);
 		}
 
-		void Texture2D::RefreshPixels()
+		Bitmap* Texture2D::GetBitmap()
 		{
-			if (!m_Refreshable) return;
-			m_Graphics->gl_refreshPixelData(this);
+			return m_Graphics->gl_getTexture2DAsBitmap(this);
 		}
 
-		void Texture2D::SetData(BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height)
+		void Texture2D::SetData(Bitmap* bitmap)
 		{
-			y = m_Height - y - height;
-			m_Graphics->gl_setSubTexture2D(this, data, x, y, width, height);
+			m_Graphics->gl_setTexture2D(this, bitmap->GetBytes(), bitmap->GetWidth(), bitmap->GetHeight(), bitmap->GetFormat());
 		}
 
-		BYTE* Texture2D::convertToImageFormat(BYTE* data, unsigned int width, unsigned int height, ImageFormat format)
+		void Texture2D::SetSubData(Bitmap* bitmap, unsigned short x, unsigned short y)
 		{
-			BYTE* newData = data;
-			if (format == ImageFormat::Red)
-			{
-				newData = new BYTE[width * height];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i] = data[i * 4 + 0];
-				}
-			}
-			else if (format == ImageFormat::Green)
-			{
-				newData = new BYTE[width * height];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i] = data[i * 4 + 1];
-				}
-			}
-			else if (format == ImageFormat::Blue)
-			{
-				newData = new BYTE[width * height];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i] = data[i * 4 + 2];
-				}
-			}
-			else if (format == ImageFormat::RG)
-			{
-				newData = new BYTE[width * height * 2];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i * 2 + 0] = data[i * 4 + 0];
-					newData[i * 2 + 1] = data[i * 4 + 1];
-				}
-			}
-			else if (format == ImageFormat::RGB)
-			{
-				newData = new BYTE[width * height * 3];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i * 3 + 0] = data[i * 4 + 0];
-					newData[i * 3 + 1] = data[i * 4 + 1];
-					newData[i * 3 + 2] = data[i * 4 + 2];
-				}
-			}
-			else if (format == ImageFormat::BGR)
-			{
-				newData = new BYTE[width * height * 3];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i * 3 + 0] = data[i * 4 + 2];
-					newData[i * 3 + 1] = data[i * 4 + 1];
-					newData[i * 3 + 2] = data[i * 4 + 0];
-				}
-			}
-			else if (format == ImageFormat::BGRA)
-			{
-				newData = new BYTE[width * height * 4];
-				for (int i = 0; i < width * height; i++)
-				{
-					newData[i * 4 + 0] = data[i * 4 + 2];
-					newData[i * 4 + 1] = data[i * 4 + 1];
-					newData[i * 4 + 2] = data[i * 4 + 0];
-					newData[i * 4 + 3] = data[i * 4 + 3];
-				}
-			}
-
-			if (newData != data) delete[] data;
-			return newData;
+			y = m_Height - y - bitmap->GetHeight();
+			m_Graphics->gl_setSubTexture2D(this, bitmap->GetBytes(), x, y, bitmap->GetWidth(), bitmap->GetHeight(), bitmap->GetFormat());
 		}
 	}
 }

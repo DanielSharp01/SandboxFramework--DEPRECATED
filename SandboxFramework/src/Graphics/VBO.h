@@ -9,14 +9,14 @@ namespace Sand {
 			friend GraphicsDevice;
 		private:
 			GraphicsDevice* m_Graphics;
-			GLuint m_ID;
-			GLsizei m_Count;
+			unsigned int m_ID;
+			int m_Count;
 		public:
-			VBO(GraphicsDevice* graphics, GLvoid* vertices, GLsizei vertexSize, GLsizei count);
-			VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei vertexSize);
+			VBO(GraphicsDevice* graphics, void* vertices, int vertexSize, int count);
+			VBO(GraphicsDevice* graphics, int maxVertices, int vertexSize);
 			~VBO();
 
-			GLvoid* Map();
+			void* Map();
 			void Unmap();
 
 			void Bind() const;

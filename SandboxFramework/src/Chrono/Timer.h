@@ -13,26 +13,9 @@ namespace Chrono
 	protected:
 		TimePoint m_StartingPoint;
 		bool m_Running = false;
-
 	public:
-		void Start()
-		{
-			m_StartingPoint = Clock::now();
-			m_Running = true;
-		}
-
-		double Get()
-		{
-			if (!m_Running) return 0;
-			TimePoint endPoint = Clock::now();
-			return Duration(endPoint - m_StartingPoint).count();
-		}
-
-		double Stop()
-		{
-			double ret = Get();
-			m_Running = false;
-			return ret;
-		}
+		void Start();
+		double Get();
+		double Stop();
 	};
 }

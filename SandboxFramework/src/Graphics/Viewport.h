@@ -13,14 +13,14 @@ namespace Sand
 			friend GraphicsDevice;
 		private:
 			Viewport() = default;
-			Viewport(int width, int height, float near, float far);
-			unsigned int m_Width;
-			unsigned int m_Height;
+			Viewport(unsigned short width, unsigned short height, float near, float far);
+			unsigned short m_Width;
+			unsigned short m_Height;
 			float m_Near;
 			float m_Far;
 		public:
-			inline unsigned int GetWidth() const { return m_Width; }
-			inline unsigned int GetHeight() const { return m_Height; }
+			inline unsigned short GetWidth() const { return m_Width; }
+			inline unsigned short GetHeight() const { return m_Height; }
 			Math::Matrix GetOrthoProjectionMatrix() const;
 
 			void SetClipping(float near, float far);

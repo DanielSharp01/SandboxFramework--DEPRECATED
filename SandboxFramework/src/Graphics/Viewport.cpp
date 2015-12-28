@@ -4,7 +4,8 @@ namespace Sand
 {
 	namespace Graphics
 	{
-			Viewport::Viewport(int width, int height, float near, float far) : m_Width(width), m_Height(height), m_Near(near), m_Far(far)
+			Viewport::Viewport(unsigned short width, unsigned short height, float near, float far)
+				: m_Width(width), m_Height(height), m_Near(near), m_Far(far)
 			{}
 
 			Math::Matrix Viewport::GetOrthoProjectionMatrix() const

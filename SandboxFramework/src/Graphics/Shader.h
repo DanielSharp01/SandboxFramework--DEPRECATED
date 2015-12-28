@@ -14,8 +14,8 @@ namespace Sand
 		protected:
 			std::string m_VertexSrc, m_FragmentSrc;
 			GraphicsDevice* m_Graphics;
-			GLuint m_Program;
-			Collections::Dictionary<std::string, GLint>* m_LocationCache;
+			unsigned int m_Program;
+			Collections::Dictionary<std::string, int>* m_LocationCache;
 
 		public:
 			Shader(GraphicsDevice* graphics, std::string vertexSrc, std::string fragmentSrc);
@@ -36,7 +36,7 @@ namespace Sand
 			void SetUniformColor(std::string name, Color color);
 			void SetUniformMatrix(std::string name, Math::Matrix matrix);
 		private:
-			GLint getLocation(std::string uniformName) const;
+			int getLocation(std::string uniformName) const;
 			bool compile(std::string vertexSrc, std::string fragmentSrc);
 		};
 	}

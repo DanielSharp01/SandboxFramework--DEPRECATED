@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MouseState.h"
 #include <GLFW\glfw3.h>
+#include "MouseState.h"
 
 namespace Sand {
 	namespace Input {

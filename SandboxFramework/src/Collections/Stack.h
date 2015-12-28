@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Exceptions/EmptyException.h"
 #include "LinkedList.h"
 
 namespace Collections
@@ -21,15 +20,20 @@ namespace Collections
 			delete m_Data;
 		}
 
+		void Clear()
+		{
+			m_Data->Clear();
+		}
+
 		T Peek()
 		{
-			if (IsEmpty()) throw Exceptions::EmptyException("Cannot peek as the Stack ");
+			if (IsEmpty()) throw IndexOutOfBoundsException(0);
 			return (*m_Data)[0];
 		}
 
 		T Pop() 
 		{
-			if (IsEmpty()) throw Exceptions::EmptyException("Cannot pop as the Stack ");
+			if (IsEmpty()) throw IndexOutOfBoundsException(0);
 			return m_Data->RemoveAt(0);
 		}
 

@@ -12,9 +12,9 @@ namespace IO
 		for (int y = 0; y < height; y++) {
 			BYTE *pixel = (BYTE*)fdata;
 			for (int x = 0; x < width; x++) {
-				pixel[FI_RGBA_RED] = data[i * 4 + 0];
-				pixel[FI_RGBA_GREEN] = data[i * 4 + 1];
-				pixel[FI_RGBA_BLUE] = data[i * 4 + 2];
+				pixel[FI_RGBA_RED] = data[i * (bpp == 32 ? 4 : 3) + 0];
+				pixel[FI_RGBA_GREEN] = data[i * (bpp == 32 ? 4 : 3) + 1];
+				pixel[FI_RGBA_BLUE] = data[i * (bpp == 32 ? 4 : 3) + 2];
 				if (bpp == 32) pixel[FI_RGBA_ALPHA] = data[i * 4 + 3];
 				pixel += (bpp == 32 ? 4 : 3);
 				i++;

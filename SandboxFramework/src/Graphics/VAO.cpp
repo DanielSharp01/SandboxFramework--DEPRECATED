@@ -24,7 +24,7 @@ namespace Sand {
 			m_Graphics->gl_destroyVAO(this);
 		}
 
-		void VAO::BindVBOToLocation(VBO* vbo, GLint location, GLint componentCount, GLType componentType, GLint stride, const GLvoid* offset)
+		void VAO::BindVBOToLocation(VBO* vbo, int location, int componentCount, GLType componentType, int stride, const void* offset)
 		{
 			if (m_VBOLocations->ContainsKey(vbo))
 			{

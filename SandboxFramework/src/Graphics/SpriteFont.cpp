@@ -1,5 +1,7 @@
 #include "SpriteFont.h"
 
+#include "../StringUtils/Parser.h"
+#include "../StringUtils/Convert.h"
 #include "../XML/XDocument.h"
 #include "../XML/XTextElement.h"
 
@@ -7,90 +9,177 @@ namespace Sand
 {
 	namespace Graphics
 	{
+		SpriteFont::SpriteFont()
+			: m_Texture(NULL), m_LineHeight(0)
+		{
+			m_Glyphs = new Collections::Dictionary<char, GlyphMetric*>();
+		}
+
 		SpriteFont::SpriteFont(Texture2D* texture, int lineHeight)
 			: m_Texture(texture), m_LineHeight(lineHeight)
 		{
 			m_Glyphs = new Collections::Dictionary<char, GlyphMetric*>();
 		}
 
-		//TODO: Maybe error report!
 		SpriteFont* SpriteFont::Load(Game* game, std::string path)
 		{
 			using namespace XML;
+			using namespace StringUtils;
 
+			SpriteFont* ret = new SpriteFont();
+			ParserBundleException exceptions;
 			XDocument* doc = XDocument::Load(path);
 			if (!doc) return NULL;
 
 			XAttribute* attrib = doc->Root->GetAttribute("lineHeight");
-			if (!attrib) return NULL;
+			if (attrib)
+			{
+				if (!Convert::ToUnsignedInt(attrib->Value, ret->m_LineHeight))
+					exceptions.AddException(ParserException("Expected unsigned integer value for \"lineHeight\" attribute", 0, 0));
+			}
+			else exceptions.AddException(ParserException("Expected \"lineHeight\" attribute in ROOT element!", 0, 0));
 
-			int lineHeight = atoi(attrib->Value.c_str()); //TODO: If we ever create a convert class change this
 			XElement* element = doc->Root->GetElement("Texture");
-			if (!element) return NULL;
-			attrib = element->GetAttribute("path");
-			if (!attrib) return NULL;
-			Texture2D* texture = Texture2D::Load(game, attrib->Value);
-			SpriteFont* ret = new SpriteFont(texture, lineHeight);
+			if (element)
+			{
+				attrib = element->GetAttribute("path");
+				if (attrib) ret->m_Texture = Texture2D::Load(game, attrib->Value);
+				else exceptions.AddException(ParserException("Expected \"path\" attribute in element \"Texture\"!", 0, 0));
+			}
+			else exceptions.AddException(ParserException("Expected \"Texture\" element!", 0, 0));
 
 			element = doc->Root->GetElement("Glyphs");
-			if (!element) return NULL;
-
-			Collections::ArrayList<XElement*>* glyphs = element->GetAllElement("Glyph");
-
-			for (int i = 0; i < glyphs->GetCount(); i++)
+			if (element)
 			{
-				XElement* glyph = (*glyphs)[i];
-
-				GlyphMetric* metric = new GlyphMetric();
-				XAttribute* attrib = glyph->GetAttribute("char");
-				if (!attrib) return NULL;
-				char c = (char)atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("textureX");
-				if (!attrib) return NULL;
-				metric->TextureX = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("textureY");
-				if (!attrib) return NULL;
-				metric->TextureY = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("offsetX");
-				if (!attrib) return NULL;
-				metric->OffsetX = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("offsetY");
-				if (!attrib) return NULL;
-				metric->OffsetY = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("width");
-				if (!attrib) return NULL;
-				metric->Width = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("height");
-				if (!attrib) return NULL;
-				metric->Height = atoi(attrib->Value.c_str());
-				attrib = glyph->GetAttribute("advanceX");
-				if (!attrib) return NULL;
-				metric->AdvanceX = atoi(attrib->Value.c_str());
-
-				XElement* kernElement = glyph->GetElement("Kernings");
-				if (kernElement)
+				for (int i = 0; i < element->Children.GetCount(); i++)
 				{
-					Collections::ArrayList<XElement*>* kernings = kernElement->GetAllElement("Kerning");
-					for (int i = 0; i < kernings->GetCount(); i++)
+					XElement* glyph = dynamic_cast<XElement*>(element->Children[i]);
+
+					if (glyph && glyph->Name == "Glyph")
 					{
-						XElement* kerning = (*kernings)[i];
+						GlyphMetric* metric = new GlyphMetric();
+						char c = '\0';
+						XAttribute* attrib = glyph->GetAttribute("char");
+						if (attrib)
+						{
+							unsigned int out = 0;
+							if (Convert::ToUnsignedInt(attrib->Value, out)) c = (char)out;
+							else exceptions.AddException(ParserException("Expected unsigned integer value for \"char\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"char\" attribute in \"Glyph\" element", 0, 0));
+						
+						attrib = glyph->GetAttribute("textureX");
+						if (attrib)
+						{
+							if (!Convert::ToUnsignedInt(attrib->Value, metric->TextureX))
+								exceptions.AddException(ParserException("Expected unsigned integer value for \"textureX\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"textureX\" attribute in \"Glyph\" element", 0, 0));
+						
+						attrib = glyph->GetAttribute("textureY");
+						if (attrib)
+						{
+							if (!Convert::ToUnsignedInt(attrib->Value, metric->TextureY))
+								exceptions.AddException(ParserException("Expected unsigned integer value for \"textureY\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"textureY\" attribute in \"Glyph\" element", 0, 0));
+						
+						attrib = glyph->GetAttribute("offsetX");
+						if (attrib)
+						{
+							if (!Convert::ToInt(attrib->Value, metric->OffsetX))
+								exceptions.AddException(ParserException("Expected integer value for \"offsetX\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"offsetX\" attribute in \"Glyph\" element", 0, 0));
+						
+						attrib = glyph->GetAttribute("offsetY");
+						if (attrib)
+						{
+							if (!Convert::ToInt(attrib->Value, metric->OffsetY))
+								exceptions.AddException(ParserException("Expected integer value for \"offsetY\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"offsetY\" attribute in \"Glyph\" element", 0, 0));
+						
+						attrib = glyph->GetAttribute("width");
+						if (attrib)
+						{
+							if (!Convert::ToUnsignedInt(attrib->Value, metric->Width))
+								exceptions.AddException(ParserException("Expected unsigned integer value for \"width\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"width\" attribute in \"Glyph\" element", 0, 0));
 
-						KerningData kerningData;
-						attrib = kerning->GetAttribute("previous");
-						if (!attrib) return NULL;
-						kerningData.First = (char)atoi(attrib->Value.c_str());
-						attrib = kerning->GetAttribute("ammount");
-						if (!attrib) return NULL;
-						kerningData.Ammount = atoi(attrib->Value.c_str());
-						metric->Kerning.Add(kerningData);
+						attrib = glyph->GetAttribute("height");
+						if (attrib)
+						{
+							if (!Convert::ToUnsignedInt(attrib->Value, metric->Height))
+								exceptions.AddException(ParserException("Expected unsigned integer value for \"height\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"height\" attribute in \"Glyph\" element", 0, 0));
+
+						attrib = glyph->GetAttribute("advanceX");
+						if (attrib)
+						{
+							if (!Convert::ToInt(attrib->Value, metric->AdvanceX))
+								exceptions.AddException(ParserException("Expected integer value for \"advanceX\" attribute", 0, 0));
+						}
+						else exceptions.AddException(ParserException("Expected \"advanceX\" attribute in \"Glyph\" element", 0, 0));
+
+						for (int i = 0; i < glyph->Children.GetCount(); i++)
+						{
+							XElement* kernElement = dynamic_cast<XElement*>(glyph->Children[i]);
+							if (kernElement && kernElement->Name == "Kernings")
+							{
+								for (int i = 0; i < kernElement->Children.GetCount(); i++)
+								{
+									XElement* kerning = dynamic_cast<XElement*>(kernElement->Children[i]);
+
+									if (kerning && kerning->Name == "Kerning")
+									{
+										KerningData kerningData;
+										attrib = kerning->GetAttribute("previous");
+										if (attrib)
+										{
+											unsigned int out = 0;
+											if (Convert::ToUnsignedInt(attrib->Value, out)) kerningData.First = (char)out;
+											else exceptions.AddException(ParserException("Expected unsigned integer value for \"previous\" attribute", 0, 0));
+										}
+										else exceptions.AddException(ParserException("Expected \"previous\" attribute in \"Kerning\" element", 0, 0));
+										attrib = kerning->GetAttribute("ammount");
+										if (attrib)
+										{
+											if (!Convert::ToInt(attrib->Value, kerningData.Ammount))
+												exceptions.AddException(ParserException("Expected integer value for \"ammount\" attribute", 0, 0));
+										}
+										else exceptions.AddException(ParserException("Expected \"ammount\" attribute in \"Kerning\" element", 0, 0));
+										metric->Kerning.Add(kerningData);
+									}
+									else
+									{
+										if (kerning) exceptions.AddException(ParserException("Unexpected \"" + kerning->Name + "\" element in \"Kernings\" element", 0, 0));
+										else exceptions.AddException(ParserException("Unexpected TEXT element in \"Kernings\" element", 0, 0));
+									}
+								}
+							}
+							else
+							{
+								if (kernElement) exceptions.AddException(ParserException("Unexpected \"" + kernElement->Name + "\" element in \"Glyph\" element", 0, 0));
+								else exceptions.AddException(ParserException("Unexpected TEXT element in \"Glyph\" element", 0, 0));
+							}
+						}
+
+						if (!ret->m_Glyphs->ContainsKey(c)) ret->AddGlyph(c, metric);
+						else exceptions.AddException(ParserException("Glyph with character id \"" + std::to_string((int)c) + "\" was included more than once", 0, 0));
 					}
-					delete kernings;
+					else
+					{
+						if (glyph) exceptions.AddException(ParserException("Unexpected \"" + glyph->Name + "\" element in \"Glyphs\" element", 0, 0));
+						else exceptions.AddException(ParserException("Unexpected TEXT element in \"Glyphs\" element", 0, 0));
+					}
 				}
-
-				ret->AddGlyph(c, metric);
 			}
-			delete glyphs;
+			else exceptions.AddException(ParserException("Expected \"Glyphs\" element!", 0, 0));
 
+			if (exceptions.GetList().GetCount() > 0) throw exceptions;
 			return ret;
 		}
 		
@@ -143,7 +232,7 @@ namespace Sand
 			delete doc;
 		}
 
-		SpriteFont* SpriteFont::CreateFromFont(Game* game, std::string path, unsigned int size, int start, int end)
+		SpriteFont* SpriteFont::CreateFromFont(Game* game, std::string path, unsigned int size, int start, int end, bool premultiplied)
 		{
 			FT_Face face;
 			FT_New_Face(game->GetFreeType(), path.c_str(), 0, &face);
@@ -167,10 +256,10 @@ namespace Sand
 
 				metric->Width = w;
 				metric->Height = h;
-				metric->AdvanceX = face->glyph->advance.x / 64;
-				metric->OffsetX = face->glyph->metrics.horiBearingX / 64;
+				metric->AdvanceX = face->glyph->advance.x >> 6;
+				metric->OffsetX = face->glyph->metrics.horiBearingX >> 6;
 				//Minus because my stupid coordinate system
-				metric->OffsetY = -(face->glyph->metrics.horiBearingY) / 64;
+				metric->OffsetY = -(face->glyph->metrics.horiBearingY) >> 6;
 				if (FT_HAS_KERNING(face))
 				{
 					for (int j = start; j < end; j++)
@@ -180,30 +269,13 @@ namespace Sand
 
 						FT_Vector delta;
 						FT_Get_Kerning(face, prevGlyphId, glyphId, FT_KERNING_DEFAULT, &delta);
-						int kerning = delta.x / 64;
+						int kerning = delta.x >> 6;
 						if (kerning != 0) metric->Kerning.Add(KerningData((char)j, kerning));
 					}
 				}
 				tempGlyphs->Add((char)i, metric);
 
 			}
-
-			//Round to nearest power so that we don't have to unpack magic (for now)
-			cw--;
-			cw = cw | (cw >> 1);
-			cw = cw | (cw >> 2);
-			cw = cw | (cw >> 4);
-			cw = cw | (cw >> 8);
-			cw = cw | (cw >> 16);
-			cw++;
-
-			ch--;
-			ch = ch | (ch >> 1);
-			ch = ch | (ch >> 2);
-			ch = ch | (ch >> 4);
-			ch = ch | (ch >> 8);
-			ch = ch | (ch >> 16);
-			ch++;
 
 			int ems = end - start;
 			int cpr = (int)(sqrt(ems));
@@ -212,7 +284,7 @@ namespace Sand
 			int tw = cw * cpr;
 			int th = ch * rows;
 			BYTE* newData = new BYTE[tw * th * 4];
-			memset(newData, 0, tw * th * 4);
+			memset(newData, 0, tw * th * 4 * sizeof(BYTE));
 
 			for (int i = 0; i < ems; i++)
 			{
@@ -221,10 +293,8 @@ namespace Sand
 				int h = face->glyph->bitmap.rows;
 				int w = face->glyph->bitmap.width;
 
-				int cX = i % cpr;
-				int cY = i / cpr;
-				int tX = cX * cw;
-				int tY = cY * ch;
+				int tX = (i % cpr) * cw;
+				int tY = (i / cpr) * ch;
 
 				(*tempGlyphs)[(char)(i + start)]->TextureX = tX;
 				(*tempGlyphs)[(char)(i + start)]->TextureY = tY;
@@ -236,17 +306,18 @@ namespace Sand
 						int tbX = tX + x;
 						int tbY = tY + y;
 
-						//TODO: Option to premultiply
-						newData[((th - tbY - 1) * tw + tbX) * 4 + 0] = (255 * data[y * w + x]) / 255;
-						newData[((th - tbY - 1) * tw + tbX) * 4 + 1] = (255 * data[y * w + x]) / 255;
-						newData[((th - tbY - 1) * tw + tbX) * 4 + 2] = (255 * data[y * w + x]) / 255;
+						newData[((th - tbY - 1) * tw + tbX) * 4 + 0] = 255;
+						newData[((th - tbY - 1) * tw + tbX) * 4 + 1] = 255;
+						newData[((th - tbY - 1) * tw + tbX) * 4 + 2] = 255;
 						newData[((th - tbY - 1) * tw + tbX) * 4 + 3] = data[y * w + x];
 					}
 				}
 			}
 
-			Texture2D* oglTexture = new Texture2D(game->GetGraphics(), newData, tw, th);
-
+			Bitmap* bitmap = new Bitmap(newData, tw, th, ImageFormat::RGBA);
+			if (premultiplied) bitmap->Premultiply();
+			Texture2D* oglTexture = new Texture2D(game->GetGraphics(), bitmap);
+			delete bitmap;
 			SpriteFont* spriteFont = new SpriteFont(oglTexture, size);
 			delete spriteFont->m_Glyphs;
 			spriteFont->m_Glyphs = tempGlyphs;

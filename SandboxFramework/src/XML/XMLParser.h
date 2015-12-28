@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Utils/Parser.h"
+#include "../StringUtils/Parser.h"
 #include "XDocument.h"
 #include "XNode.h"
 #include "XElement.h"

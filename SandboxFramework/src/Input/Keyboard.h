@@ -1,7 +1,7 @@
 #pragma once
 
-#include "KeyboardState.h"
 #include <GLFW\glfw3.h>
+#include "KeyboardState.h"
 
 namespace Sand {
 	namespace Input {

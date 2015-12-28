@@ -17,7 +17,6 @@
 #define SPRITE_BATCH_VERTEX_SIZE sizeof(BatchVertex)
 #define SPRITE_BATCH_MAX_TEXTURES 32
 
-//TODO: Move shader inside
 namespace Sand
 {
 	namespace Graphics
@@ -40,7 +39,7 @@ namespace Sand
 			IBO* m_Ibo;
 			BatchVertex* m_Pointer;
 			int m_SpriteCount;
-			Collections::ArrayList<GLuint>* m_Textures;
+			Collections::ArrayList<unsigned int>* m_Textures;
 		public:
 			SpriteBatch(GraphicsDevice* graphics);
 			~SpriteBatch();
@@ -76,8 +75,6 @@ namespace Sand
 			void Draw(SpriteFont* spriteFont, std::string text, Math::Vector2 position, Color color, Math::Matrix matrix);
 
 			void End();
-		private:
-			float texDivisor();
 		};
 	}
 }

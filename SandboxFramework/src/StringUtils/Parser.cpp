@@ -51,14 +51,14 @@ namespace StringUtils
 		m_TmpStart = m_Buffer->GetPosition();
 	}
 
-	StringBuffer Parser::RetrieveTempBuffer()
+	StringBuffer Parser::RetrieveTempBuffer(bool excludeCurrent)
 	{
-		return StringBuffer(m_Buffer->GetToFrom(m_TmpStart));
+		return StringBuffer(m_Buffer->GetToFrom(m_TmpStart), excludeCurrent);
 	}
 
-	std::string Parser::RetrieveTempString()
+	std::string Parser::RetrieveTempString(bool excludeCurrent)
 	{
-		return m_Buffer->GetToFrom(m_TmpStart);
+		return m_Buffer->GetToFrom(m_TmpStart, excludeCurrent);
 	}
 
 	void Parser::StepUntil(CharType type)
@@ -89,7 +89,9 @@ namespace StringUtils
 
 	void Parser::SignError(std::string error)
 	{
-		errors.Add(error);
+		int line = 0, column = 0;
+		determineLineColumn(line, column);
+		m_Exception.AddException(ParserException(error, line, column));
 	}
 
 	bool Parser::onString(std::string str, int stopPoint)
@@ -118,5 +120,24 @@ namespace StringUtils
 
 		m_Buffer->JumpTo(pos);
 		return true;
+	}
+
+
+	void Parser::determineLineColumn(int& line, int& column)
+	{
+		line = 1;
+		column = 1;
+		const std::string& data = m_Buffer->GetAll();
+
+		for (int i = 0; i < m_Buffer->GetPosition(); i++)
+		{
+			if (data[i] == '\n')
+			{
+				line++;
+				column = 1;
+			}
+			else if (data[i] == '\t') column += 4;
+			else column++;
+		}
 	}
 }

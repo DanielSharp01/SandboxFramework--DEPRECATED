@@ -1,6 +1,6 @@
 #include "StringBuffer.h"
+#include "StringOutOfBoundsException.h"
 
-//TODO: Exceptions
 namespace StringUtils
 {
 	StringBuffer::StringBuffer()
@@ -10,16 +10,16 @@ namespace StringUtils
 	StringBuffer::StringBuffer(std::string data, unsigned int start)
 		: m_Data(data), m_Position(start) { }
 
-	//TODO: Clear position stack (Add Clear method to stack and queue)
 	void StringBuffer::Clear()
 	{
 		m_Data = "";
 		m_Position = 0;
+		m_PositionStack.Clear();
 	}
 
 	void StringBuffer::JumpTo(unsigned int position)
 	{
-		if (position > m_Data.length()) return;
+		if (position > m_Data.length()) throw StringOutOfBoundsException(m_Data, position);
 		m_Position = position;
 	}
 
@@ -35,7 +35,7 @@ namespace StringUtils
 
 	void StringBuffer::Step(int ammount)
 	{
-		if (m_Position + ammount > m_Data.length()) return;
+		if (m_Position + ammount > m_Data.length()) throw StringOutOfBoundsException(m_Data, m_Position + ammount);
 		m_Position += ammount;
 	}
 
@@ -51,7 +51,8 @@ namespace StringUtils
 
 	char StringBuffer::Get()
 	{
-		if (m_Position >= m_Data.length()) return '\0';
+		if (m_Position > m_Data.length()) throw StringOutOfBoundsException(m_Data, m_Position);
+		if (m_Position == m_Data.length()) return '\0';
 		return m_Data[m_Position];
 	}
 
@@ -67,9 +68,9 @@ namespace StringUtils
 		else return m_Data.substr(m_Position - length, length);
 	}
 
-	std::string StringBuffer::GetToFrom(unsigned int start)
+	std::string StringBuffer::GetToFrom(unsigned int start, bool excludeCurrent)
 	{
-		return m_Data.substr(start, m_Position - start + 1);
+		return m_Data.substr(start, m_Position - start + (excludeCurrent ? 0 : 1));
 	}
 
 	void StringBuffer::Add(std::string data)

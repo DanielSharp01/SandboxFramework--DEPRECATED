@@ -32,7 +32,10 @@ namespace XML
 		IO::StreamReader reader(new IO::FileStream(path, IO::FileAccess::ReadText, IO::FileOpenMode::Open));
 		std::string src = reader.ReadToEnd();
 		reader.Close();
+
 		XMLParser parser(src);
-		return parser.Parse();
+		XDocument* doc = parser.Parse();
+		if (doc) return doc;
+		else return NULL;
 	}
 }

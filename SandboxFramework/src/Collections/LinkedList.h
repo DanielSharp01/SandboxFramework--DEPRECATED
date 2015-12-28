@@ -41,7 +41,7 @@ namespace Collections {
 
 		T Insert(int index, T element) override
 		{
-			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index > m_Count) throw IndexOutOfBoundsException(index);
 			LinkedElement<T>* newEl = new LinkedElement<T>(element);
 			newEl->linkBefore(getLinkedElement(index));
 			m_Count++;
@@ -50,7 +50,7 @@ namespace Collections {
 
 		T RemoveAt(int index) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			LinkedElement<T>* linkedElement = getLinkedElement(index);
 			linkedElement->linkOut();
 			T removed = *(linkedElement->Value);
@@ -69,25 +69,25 @@ namespace Collections {
 
 		T Get(int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return *(getLinkedElement(index)->Value);
 		}
 
 		void Set(int index, T value) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			getLinkedElement(index)->Value = new T(value);
 		}
 
 		T& operator[](int index) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return *(getLinkedElement(index)->Value);
 		}
 
 		const T& operator[](int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return *(getLinkedElement(index)->Value);
 		}
 

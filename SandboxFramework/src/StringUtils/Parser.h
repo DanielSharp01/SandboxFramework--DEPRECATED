@@ -2,6 +2,7 @@
 
 #include "StringBuffer.h"
 #include "../Collections/ArrayList.h"
+#include "ParserBundleException.h"
 
 namespace StringUtils
 {
@@ -17,14 +18,13 @@ namespace StringUtils
 	{
 	protected:
 		StringBuffer* m_Buffer;
-		Collections::ArrayList<std::string> errors;
+		ParserBundleException m_Exception;
 		unsigned int m_TmpStart;
 	public:
 		Parser(std::string source);
 		~Parser();
 
 		inline StringBuffer* GetBuffer() { return m_Buffer; }
-		inline Collections::ArrayList<std::string> GetErrors() { return errors; }
 
 		void JumpTo(unsigned int position);
 		void JumpToStart();
@@ -37,8 +37,8 @@ namespace StringUtils
 		CharType GetType();
 
 		void StartTempBuffer();
-		StringBuffer RetrieveTempBuffer();
-		std::string RetrieveTempString();
+		StringBuffer RetrieveTempBuffer(bool excludeCurrent = true);
+		std::string RetrieveTempString(bool excludeCurrent = true);
 
 		void StepUntil(CharType type);
 		void StepUntil(char chr);
@@ -50,5 +50,6 @@ namespace StringUtils
 
 	protected:
 		bool onString(std::string str, int stopPoint = -1);
+		void determineLineColumn(int& line, int& column);
 	};
 }

@@ -9,10 +9,10 @@ namespace Sand {
 			friend GraphicsDevice;
 		private:
 			GraphicsDevice* m_Graphics;
-			GLuint m_ID;
-			GLsizei m_Count;
+			unsigned int m_ID;
+			int m_Count;
 		public:
-			IBO(GraphicsDevice* graphics, GLushort* indices, GLsizei count);
+			IBO(GraphicsDevice* graphics, GLushort* indices, int count);
 			~IBO();
 
 			void Bind() const;

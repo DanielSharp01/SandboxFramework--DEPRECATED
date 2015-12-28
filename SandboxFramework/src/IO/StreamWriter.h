@@ -9,43 +9,15 @@ namespace IO
 	private:
 		Stream* m_Stream;
 	public:
-		StreamWriter(Stream* stream)
-			: m_Stream(stream) { }
-		
-		~StreamWriter()
-		{
-			Close();
-			delete m_Stream;
-		}
+		StreamWriter(Stream* stream);
+		~StreamWriter();
 
-		void Write(char character)
-		{
-			m_Stream->Write(&character, 1);
-		}
+		void Write(char character);
+		void Write(char* buffer, unsigned long count);
+		void Write(std::string str);
+		void WriteLine(std::string line);
 
-		void Write(char* buffer, unsigned long count)
-		{
-			m_Stream->Write(buffer, count);
-		}
-
-		void Write(std::string str)
-		{
-			m_Stream->Write(str);
-		}
-
-		void WriteLine(std::string line)
-		{
-			m_Stream->Write(line + "\n");
-		}
-
-		void Flush()
-		{
-			m_Stream->Flush();
-		}
-
-		void Close()
-		{
-			if (m_Stream->IsOpen()) m_Stream->Close();
-		}
+		void Flush();
+		void Close();
 	};
 }

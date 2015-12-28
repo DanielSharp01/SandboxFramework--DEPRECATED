@@ -1,6 +1,7 @@
 #pragma once
 
-#define MAX_KEYS 512
+#include "Keys.h"
+#define MAX_KEYS GLFW_KEY_LAST
 
 namespace Sand {
 	namespace Input {
@@ -10,8 +11,8 @@ namespace Sand {
 		private:
 			bool m_States[MAX_KEYS];
 		public:
-			inline bool IsKeyDown(int key) { return m_States[key]; }
-			inline bool IsKeyUp(int key) { return !m_States[key]; }
+			inline bool IsKeyDown(Keys key) { return m_States[key]; }
+			inline bool IsKeyUp(Keys key) { return !m_States[key]; }
 		};
 	}
 }

@@ -58,7 +58,6 @@ namespace Sand
 			{
 				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->m_ID, 0);
-				texture->m_Refreshable = true;
 				GLenum buff[1] = { GL_COLOR_ATTACHMENT0 };
 				glDrawBuffers(1, buff);
 				m_SavedViewport = m_Viewport;
@@ -67,15 +66,14 @@ namespace Sand
 			}
 		}
 
-		void GraphicsDevice::SetRenderTargets(Texture2D** textures, unsigned int count)
+		void GraphicsDevice::SetRenderTargets(Texture2D** textures, unsigned short count)
 		{
 			if (count == 0) return;
 
 			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-			for (int i = 0; i < count; i++)
+			for (unsigned short i = 0; i < count; i++)
 			{
 				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, textures[i]->m_ID, 0);
-				textures[i]->m_Refreshable = true;
 			}
 
 			GLenum* buff = new GLenum[count];
@@ -157,29 +155,29 @@ namespace Sand
 			}
 		}
 
-		void GraphicsDevice::setViewportSize(unsigned int width, unsigned int height)
+		void GraphicsDevice::setViewportSize(unsigned short width, unsigned short height)
 		{
 			m_Viewport.m_Width = width;
 			m_Viewport.m_Height = height;
 			glViewport(0, 0, width, height);
 		}
 
-		GLuint GraphicsDevice::gl_createShaderProgram(std::string vertexSrc, std::string fragmentSrc)
+		unsigned int GraphicsDevice::gl_createShaderProgram(std::string vertexSrc, std::string fragmentSrc)
 		{
 			const char* cstrVert = vertexSrc.c_str();
 			const char* cstrFrag = fragmentSrc.c_str();
 
-			GLuint program = glCreateProgram();
+			unsigned int program = glCreateProgram();
 
-			GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+			unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
 			glShaderSource(vs, 1, &cstrVert, NULL);
 			glCompileShader(vs);
 
-			GLint result;
+			int result;
 			glGetShaderiv(vs, GL_COMPILE_STATUS, &result);
 			if (result == GL_FALSE)
 			{
-				GLint length;
+				int length;
 				glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &length);
 				GLchar* error = new GLchar[length + 1];
 				glGetShaderInfoLog(vs, length, &length, error);
@@ -189,7 +187,7 @@ namespace Sand
 				return 0;
 			}
 
-			GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+			unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
 			glShaderSource(fs, 1, &cstrFrag, NULL);
 			glCompileShader(fs);
 
@@ -197,7 +195,7 @@ namespace Sand
 			glGetShaderiv(fs, GL_COMPILE_STATUS, &result);
 			if (result == GL_FALSE)
 			{
-				GLint length;
+				int length;
 				glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &length);
 				GLchar* error = new GLchar[length + 1];
 				glGetShaderInfoLog(fs, length, &length, error);
@@ -248,50 +246,50 @@ namespace Sand
 			glDeleteProgram(shader->m_Program);
 		}
 
-		GLint GraphicsDevice::gl_getLocation(const Shader* shader, std::string uniformName)
+		int GraphicsDevice::gl_getLocation(const Shader* shader, std::string uniformName)
 		{
 			gl_bindShader(shader);
 			return glGetUniformLocation(shader->m_Program, uniformName.c_str());
 		}
 
-		void GraphicsDevice::gl_setUniformInt(GLint location, int value)
+		void GraphicsDevice::gl_setUniformInt(int location, int value)
 		{
 			glUniform1i(location, value);
 		}
 
-		void GraphicsDevice::gl_setUniformIntV(GLint location, int* value, unsigned int count)
+		void GraphicsDevice::gl_setUniformIntV(int location, int* value, unsigned int count)
 		{
 			glUniform1iv(location, count, value);
 		}
 
-		void GraphicsDevice::gl_setUniformFloat(GLint location, float value)
+		void GraphicsDevice::gl_setUniformFloat(int location, float value)
 		{
 			glUniform1f(location, value);
 		}
 
-		void GraphicsDevice::gl_setUniformVector2(GLint location, Math::Vector2 vector)
+		void GraphicsDevice::gl_setUniformVector2(int location, Math::Vector2 vector)
 		{
 			glUniform2f(location, vector.X, vector.Y);
 		}
 
-		void GraphicsDevice::gl_setUniformVector3(GLint location, Math::Vector3 vector)
+		void GraphicsDevice::gl_setUniformVector3(int location, Math::Vector3 vector)
 		{
 			glUniform3f(location, vector.X, vector.Y, vector.Z);
 		}
 
-		void GraphicsDevice::gl_setUniformVector4(GLint location, Math::Vector4 vector)
+		void GraphicsDevice::gl_setUniformVector4(int location, Math::Vector4 vector)
 		{
 			glUniform4f(location, vector.X, vector.Y, vector.Z, vector.W);
 		}
 
-		void GraphicsDevice::gl_setUniformMatrix(GLint location, Math::Matrix matrix)
+		void GraphicsDevice::gl_setUniformMatrix(int location, Math::Matrix matrix)
 		{
 			glUniformMatrix4fv(location, 1, GL_FALSE, matrix.Elements);
 		}
 
-		GLuint GraphicsDevice::gl_createVAO()
+		unsigned int GraphicsDevice::gl_createVAO()
 		{
-			GLuint ret;
+			unsigned int ret;
 			glGenVertexArrays(1, &ret);
 			return ret;
 		}
@@ -326,27 +324,25 @@ namespace Sand
 			glDeleteVertexArrays(1, &vao->m_ID);
 		}
 
-		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, GLint location, GLType componentType, GLsizei componentCount, GLsizei stride, const GLvoid* offset)
+		void GraphicsDevice::gl_bindVBOToLocation(const VBO* vbo, int location, GLType componentType, int componentCount, int stride, const void* offset)
 		{
 			vbo->Bind();
 			glEnableVertexAttribArray(location);
 			glVertexAttribPointer(location, componentCount, componentType, GL_FALSE, stride, offset);
 		}
-
 		
-
-		GLuint GraphicsDevice::gl_createVBO(GLsizei maxSize)
+		unsigned int GraphicsDevice::gl_createVBO(int maxSize)
 		{
-			GLuint ret;
+			unsigned int ret;
 			glGenBuffers(1, &ret);
 			glBindBuffer(GL_ARRAY_BUFFER, ret);
 			glBufferData(GL_ARRAY_BUFFER, maxSize, NULL, GL_DYNAMIC_DRAW);
 			return ret;
 		}
 
-		GLuint GraphicsDevice::gl_createVBO(GLvoid* data, GLsizei size)
+		unsigned int GraphicsDevice::gl_createVBO(void* data, int size)
 		{
-			GLuint ret;
+			unsigned int ret;
 			glGenBuffers(1, &ret);
 			glBindBuffer(GL_ARRAY_BUFFER, ret);
 			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -383,7 +379,7 @@ namespace Sand
 			glDeleteBuffers(1, &vbo->m_ID);
 		}
 
-		GLvoid* GraphicsDevice::gl_mapVBO(VBO* vbo)
+		void* GraphicsDevice::gl_mapVBO(VBO* vbo)
 		{
 			vbo->Bind();
 			return glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
@@ -395,9 +391,9 @@ namespace Sand
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 		}
 
-		GLuint GraphicsDevice::gl_createIBO(GLushort* indices, GLsizei count)
+		unsigned int GraphicsDevice::gl_createIBO(GLushort* indices, unsigned int count)
 		{
-			GLuint ret;
+			unsigned int ret;
 			glGenBuffers(1, &ret);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ret);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), indices, GL_STATIC_DRAW);
@@ -434,9 +430,9 @@ namespace Sand
 			glDeleteBuffers(1, &ibo->m_ID);
 		}
 
-		GLuint GraphicsDevice::gl_createTexture2D(BYTE* data, GLsizei width, GLsizei height, ImageFormat imageFormat)
+		unsigned int GraphicsDevice::gl_createTexture2D(BYTE* data, unsigned short width, unsigned short height, ImageFormat imageFormat)
 		{
-			GLuint ret;
+			unsigned int ret;
 			glGenTextures(1, &ret);
 			glBindTexture(GL_TEXTURE_2D, ret);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, imageFormat, GL_UNSIGNED_BYTE, data);
@@ -476,7 +472,7 @@ namespace Sand
 		}
 
 		//TODO: Think about throwing an exception
-		void GraphicsDevice::gl_SetActiveTexture(GLuint slot)
+		void GraphicsDevice::gl_SetActiveTexture(unsigned short slot)
 		{	
 			glActiveTexture(GL_TEXTURE0 + slot);
 		}
@@ -487,7 +483,7 @@ namespace Sand
 			glDeleteTextures(1, &texture->m_ID);
 		}
 
-		void GraphicsDevice::gl_refreshPixelData(Texture2D* texture)
+		Bitmap* GraphicsDevice::gl_getTexture2DAsBitmap(const Texture2D* texture)
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->m_ID, 0);
@@ -495,15 +491,22 @@ namespace Sand
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			BYTE* data = new BYTE[texture->m_Width * texture->m_Height * 4];
 			glReadPixels(0, 0, texture->m_Width, texture->m_Height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-			texture->m_Data = data;
+			Bitmap* ret = new Bitmap(data, texture->m_Width, texture->m_Height);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glViewport(0, 0, m_Viewport.m_Width, m_Viewport.m_Height);
+			return ret;
 		}
 
-		void GraphicsDevice::gl_setSubTexture2D(Texture2D* texture, BYTE* data, GLuint x, GLuint y, GLuint width, GLuint height)
+		void GraphicsDevice::gl_setTexture2D(Texture2D* texture, BYTE* data, unsigned short width, unsigned short height, ImageFormat format)
 		{
 			gl_bindTexture2D(texture);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		}
+
+		void GraphicsDevice::gl_setSubTexture2D(Texture2D* texture, BYTE* data, unsigned short x, unsigned short y, unsigned short width, unsigned short height, ImageFormat format)
+		{
+			gl_bindTexture2D(texture);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, format, GL_UNSIGNED_BYTE, data);
 		}
 	}
 }

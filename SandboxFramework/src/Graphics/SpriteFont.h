@@ -2,7 +2,6 @@
 
 #include "../Collections/Dictionary.h"
 #include "Texture2D.h"
-#include "../Utils/StringParser.h"
 
 namespace Sand
 {
@@ -40,10 +39,11 @@ namespace Sand
 
 			Collections::Dictionary<char, GlyphMetric*>* m_Glyphs;
 		public:
+			SpriteFont();
 			SpriteFont(Texture2D* texture, int lineHeight);
 
 			static SpriteFont* Load(Game* game, std::string path);
-			static SpriteFont* CreateFromFont(Game* game, std::string path, unsigned int size, int start = 32, int end = 128);
+			static SpriteFont* CreateFromFont(Game* game, std::string path, unsigned int size, int start = 32, int end = 128, bool premultiplied = true);
 			void Save(std::string path);
 
 			void AddGlyph(char character, GlyphMetric* metric);

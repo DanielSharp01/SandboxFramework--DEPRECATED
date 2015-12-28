@@ -10,10 +10,9 @@ namespace Collections {
 		int m_Count;
 		int m_Capacity;
 		int m_InitialCapacity;
-		float m_ReservedCapacity;
 	public:
-		ArrayList(int capacity = 4, float reservedCapacity = 0.5f)
-			: m_InitialCapacity(capacity), m_Capacity(capacity), m_ReservedCapacity(reservedCapacity)
+		ArrayList(int capacity = 4)
+			: m_InitialCapacity(capacity), m_Capacity(capacity)
 		{
 			m_Arr = new T[capacity];
 			m_Count = 0;
@@ -33,7 +32,7 @@ namespace Collections {
 
 		T Insert(int index, T element) override
 		{
-			if (index < 0 || index > m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index > m_Count) throw IndexOutOfBoundsException(index);
 			if (m_Capacity < m_Count + 1)
 			{
 				reallocate();
@@ -51,7 +50,7 @@ namespace Collections {
 
 		T RemoveAt(int index) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			T removed = m_Arr[index];
 			for (int i = index + 1; i < m_Count; i++)
 			{
@@ -65,25 +64,25 @@ namespace Collections {
 
 		T Get(int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return m_Arr[index];
 		}
 
 		void Set(int index, T value) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			m_Arr[index] = value;
 		}
 
 		T& operator[](int index) override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return m_Arr[index];
 		}
 
 		const T& operator[](int index) const override
 		{
-			if (index < 0 || index >= m_Count) throw Exceptions::IndexOutOfBoundsException(index);
+			if (index < 0 || index >= m_Count) throw IndexOutOfBoundsException(index);
 			return m_Arr[index];
 		}
 
@@ -91,7 +90,7 @@ namespace Collections {
 	private:
 		void reallocate()
 		{
-			m_Capacity = (unsigned int)((float)m_Capacity * (1.0f + m_ReservedCapacity));
+			m_Capacity = (int)(m_Capacity * 3 / 2);
 			T* newArr = new T[m_Capacity];
 			std::copy(m_Arr, m_Arr + m_Count, newArr);
 			delete[] m_Arr;

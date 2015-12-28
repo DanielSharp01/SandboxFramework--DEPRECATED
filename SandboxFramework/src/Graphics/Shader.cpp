@@ -9,7 +9,7 @@ namespace Sand
 		Shader::Shader(GraphicsDevice* graphics, std::string vertexSrc, std::string fragmentSrc)
 			: m_Graphics(graphics)
 		{
-			m_LocationCache = new Collections::Dictionary<std::string, GLint>();
+			m_LocationCache = new Collections::Dictionary<std::string, int>();
 			compile(vertexSrc, fragmentSrc); 
 		}
 
@@ -46,7 +46,7 @@ namespace Sand
 			m_Graphics->gl_unbindShader(this);
 		}
 
-		GLint Shader::getLocation(std::string uniformName) const
+		int Shader::getLocation(std::string uniformName) const
 		{
 			if (m_LocationCache->ContainsKey(uniformName))
 			{

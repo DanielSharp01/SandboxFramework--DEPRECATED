@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../Exceptions/IndexOutOfBoundsException.h"
-
+#include "IndexOutOfBoundsException.h"
 namespace Collections {
 	template<class T>
 	class List

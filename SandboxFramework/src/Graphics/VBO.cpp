@@ -5,13 +5,13 @@
 namespace Sand {
 	namespace Graphics {
 
-		VBO::VBO(GraphicsDevice* graphics, GLvoid* vertices, GLsizei vertexSize, GLsizei count)
+		VBO::VBO(GraphicsDevice* graphics, void* vertices, int vertexSize, int count)
 			: m_Graphics(graphics), m_Count(count)
 		{
 			m_ID = m_Graphics->gl_createVBO(vertices, vertexSize * count);
 		}
 
-		VBO::VBO(GraphicsDevice* graphics, GLsizei maxVertices, GLsizei vertexSize)
+		VBO::VBO(GraphicsDevice* graphics, int maxVertices, int vertexSize)
 			: m_Graphics(graphics), m_Count(maxVertices)
 		{
 			m_ID = m_Graphics->gl_createVBO(maxVertices * vertexSize);
@@ -22,7 +22,7 @@ namespace Sand {
 			m_Graphics->gl_destroyVBO(this);
 		}
 
-		GLvoid* VBO::Map()
+		void* VBO::Map()
 		{
 			return m_Graphics->gl_mapVBO(this);
 		}

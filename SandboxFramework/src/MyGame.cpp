@@ -38,7 +38,7 @@ void MyGame::LoadContent()
 	texture = Graphics::Texture2D::Load(this, "Resources/Textures/BoxTexture.jpg");
 	texture2 = Graphics::Texture2D::Load(this, "Resources/Textures/add.png");
 	spriteFont = Graphics::SpriteFont::CreateFromFont(this, "Resources/Fonts/arial.ttf", 28, 32, 128);
-	spriteFont->Save("Resources/Fonts/test.xml");
+	//spriteFont->Save("Resources/Fonts/test.xml");
 	spriteFont2 = Graphics::SpriteFont::Load(this, "Resources/Fonts/test.xml");
 
 	//texture2->SaveAsPNG("C:/Users/Danie/Desktop/random.jpg");
@@ -109,9 +109,11 @@ void MyGame::Draw()
 		white[i * 4 + 2] = 41;
 		white[i * 4 + 3] = 255;
 	}
-	renderTarget2->SetData(white, 750, 430, 50, 50);
-	delete white;
-	
+
+	Graphics::Bitmap* bitmap = new Graphics::Bitmap(white, 50, 50, Graphics::ImageFormat::RGBA);
+	renderTarget2->SetSubData(bitmap, 750, 430);
+	delete bitmap;
+
 	spriteBatch->Begin(shader);
 	spriteBatch->Draw(renderTarget2, Math::Rectangle(), Math::Rectangle(0, 0, 800, 480), Graphics::Color(1, 1, 1, 1));
 	spriteBatch->End();

@@ -10,7 +10,7 @@ namespace Sand
 			m_Vao = new VAO(graphics);
 
 			m_Vbo = new VBO(graphics, SPRITE_BATCH_MAX_VERTICES, SPRITE_BATCH_VERTEX_SIZE);
-			GLushort* allIndex = new GLushort[SPRITE_BATCH_MAX_INDICES];
+			unsigned short* allIndex = new unsigned short[SPRITE_BATCH_MAX_INDICES];
 
 			int bitch = SPRITE_BATCH_MAX_SPRITES;
 			int j = 0;
@@ -30,12 +30,12 @@ namespace Sand
 			m_Ibo = new IBO(graphics, allIndex, SPRITE_BATCH_MAX_INDICES);
 			delete allIndex;
 
-			m_Vao->BindVBOToLocation(m_Vbo, 0, 4, GLType::Float, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Position));
-			m_Vao->BindVBOToLocation(m_Vbo, 1, 4, GLType::Float, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, Color));
-			m_Vao->BindVBOToLocation(m_Vbo, 2, 2, GLType::Float, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, UV));
-			m_Vao->BindVBOToLocation(m_Vbo, 3, 1, GLType::Float, sizeof(BatchVertex), (const GLvoid*)offsetof(BatchVertex, TexID));
+			m_Vao->BindVBOToLocation(m_Vbo, 0, 4, GLType::Float, sizeof(BatchVertex), (const void*)offsetof(BatchVertex, Position));
+			m_Vao->BindVBOToLocation(m_Vbo, 1, 4, GLType::Float, sizeof(BatchVertex), (const void*)offsetof(BatchVertex, Color));
+			m_Vao->BindVBOToLocation(m_Vbo, 2, 2, GLType::Float, sizeof(BatchVertex), (const void*)offsetof(BatchVertex, UV));
+			m_Vao->BindVBOToLocation(m_Vbo, 3, 1, GLType::Float, sizeof(BatchVertex), (const void*)offsetof(BatchVertex, TexID));
 			
-			m_Textures = new Collections::ArrayList<GLuint>(SPRITE_BATCH_MAX_TEXTURES);
+			m_Textures = new Collections::ArrayList<unsigned int>(SPRITE_BATCH_MAX_TEXTURES);
 		}
 
 		SpriteBatch::~SpriteBatch()
