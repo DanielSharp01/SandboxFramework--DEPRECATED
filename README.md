@@ -1,13 +1,14 @@
 # SandboxEngine
 ======
 ### These namespaces are not directly part of the SandboxFramework (but are used in it):
-#### They might migrate to another repo called SharpFramework
+**They might migrate to another repo called SharpFramework**
 1. Collections
 2. Chrono
 3. StringUtils
 4. IO
 5. XML
 6. Debug
+
 ### The file test.wav was not included in the repo
 
 ## Features (work in progress):
