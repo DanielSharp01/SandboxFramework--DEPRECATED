@@ -38,7 +38,7 @@ namespace IO
 		int c = fgetc(m_File);
 		ungetc(c, m_File);
 
-		if (c == EOF) return '\0';
+		if (m_Position >= m_Length) return '\0';
 		return (char)c;
 	}
 
@@ -47,7 +47,7 @@ namespace IO
 		int c = fgetc(m_File);
 		m_Position++;
 
-		if (c == EOF) return '\0';
+		if (m_Position >= m_Length) return '\0';
 		return (char)c;
 	}
 

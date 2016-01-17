@@ -10,7 +10,12 @@ namespace Sand
 		{
 			float R, G, B, A;
 
+#ifdef VISUAL_SCHOOL
+			Color() : R(0), G(0), B(0), A(0) { }
+#else
 			Color() = default;
+#endif
+
 			Color(float r, float g, float b, float a);
 
 			Math::Vector4 ToVector4();

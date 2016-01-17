@@ -17,7 +17,11 @@ namespace Sand
 			Math::Vector2 BottomLeft;
 			Math::Vector2 BottomRight;
 			
+#ifdef VISUAL_SCHOOL
+			Rectangle() : TopLeft(Vector2()), TopRight(Vector2()), BottomLeft(Vector2()), BottomRight(Vector2()) {}
+#else
 			Rectangle() = default;
+#endif
 			Rectangle(float x, float y, float width, float height);
 
 			void Transform(Math::Matrix matrix);

@@ -12,7 +12,11 @@ namespace Sand
 		{
 			float X, Y;
 
+#ifdef VISUAL_SCHOOL
+			Vector2() : X(0), Y(0) {}
+#else
 			Vector2() = default;
+#endif
 			Vector2(float x, float y);
 
 			Vector2& Add(const Vector2& b);

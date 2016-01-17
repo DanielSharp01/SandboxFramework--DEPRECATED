@@ -13,14 +13,14 @@
 
 int main()
 {
-	/*using namespace Sand;
+	using namespace Sand;
 	MyGame* game = new MyGame();
 	game->Run();
-	delete game;*/
+	delete game;
 
-	Sand::Audio::AudioDevice* dev = new Sand::Audio::AudioDevice();
+	/*Sand::Audio::AudioDevice* dev = new Sand::Audio::AudioDevice();
 	
-	Sand::Audio::WaveFile* wav = Sand::Audio::WaveFile::Load("test.wav");
+	Sand::Audio::WaveFile* wav = Sand::Audio::WaveFile::Load("E:/Music/WAV/test.wav");
 	Sand::Audio::Sound* sound = new Sand::Audio::Sound(dev, wav);
 	Sand::Audio::AudioSource* source = dev->GetAudioSource(0);
 	
@@ -38,7 +38,7 @@ int main()
 
 	delete sound;
 	delete wav;
-	delete dev;
+	delete dev;*/
 
 	return 0;
 }

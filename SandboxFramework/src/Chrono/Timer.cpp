@@ -2,6 +2,11 @@
 
 namespace Chrono
 {
+	Timer::Timer()
+	{
+		m_Running = false;
+	}
+
 	void Timer::Start()
 	{
 		m_StartingPoint = Clock::now();

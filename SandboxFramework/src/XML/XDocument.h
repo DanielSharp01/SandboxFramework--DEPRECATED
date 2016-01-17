@@ -10,7 +10,11 @@ namespace XML
 		std::string Encoding;
 		Collections::ArrayList<std::string> Errors;
 
+#ifdef VISUAL_SCHOOL
+		XDocument() {}
+#else
 		XDocument() = default;
+#endif
 		~XDocument();
 
 		inline bool Success() { return Errors.GetCount() == 0; }

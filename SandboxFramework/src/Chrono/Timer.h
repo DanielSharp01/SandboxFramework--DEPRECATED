@@ -12,8 +12,9 @@ namespace Chrono
 	{
 	protected:
 		TimePoint m_StartingPoint;
-		bool m_Running = false;
+		bool m_Running;
 	public:
+		Timer();
 		void Start();
 		double Get();
 		double Stop();

@@ -20,8 +20,12 @@ namespace Sand
 			unsigned short m_Width;
 			unsigned short m_Height;
 		public:
-
+#ifdef VISUAL_SCHOOL
+			Texture2D() {}
+#else
 			Texture2D() = default;
+#endif
+
 			Texture2D(GraphicsDevice* graphics, int width, int height);
 			Texture2D(GraphicsDevice* graphics, Bitmap* data);
 			~Texture2D();

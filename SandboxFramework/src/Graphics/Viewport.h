@@ -12,7 +12,12 @@ namespace Sand
 		{
 			friend GraphicsDevice;
 		private:
+#ifdef VISUAL_SCHOOL
+			Viewport() {}
+#else
 			Viewport() = default;
+#endif
+
 			Viewport(unsigned short width, unsigned short height, float near, float far);
 			unsigned short m_Width;
 			unsigned short m_Height;

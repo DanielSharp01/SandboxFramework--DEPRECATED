@@ -12,7 +12,11 @@ namespace XML
 		Collections::ArrayList<XNode*> Children;
 		Collections::ArrayList<XAttribute*> Attributes;
 
+#ifdef VISUAL_SCHOOL
+		XElement() {}
+#else
 		XElement() = default;
+#endif
 		XElement(std::string name)
 			: Name(name) { }
 

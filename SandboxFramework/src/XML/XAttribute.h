@@ -9,7 +9,11 @@ namespace XML
 		std::string Name;
 		std::string Value;
 
+#ifdef VISUAL_SCHOOL
+		XAttribute() {}
+#else
 		XAttribute() = default;
+#endif
 
 		XAttribute(std::string name, std::string value)
 			: Name(name), Value(value)

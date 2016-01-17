@@ -12,7 +12,12 @@ namespace Sand
 			char First;
 			int Ammount;
 
+#ifdef VISUAL_SCHOOL
+			KerningData() {}
+#else
 			KerningData() = default;
+#endif
+
 			KerningData(char first, int ammount)
 				: First(first), Ammount(ammount)
 			{ }

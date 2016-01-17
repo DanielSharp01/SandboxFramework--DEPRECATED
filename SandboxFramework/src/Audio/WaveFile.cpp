@@ -25,7 +25,7 @@ namespace Sand
 			BYTE* data = NULL;
 			int dataSize = 0;
 
-			while (reader.Peek())
+			while (!reader.Peek())
 			{
 				reader.Read(&chunk, 1, sizeof(WaveSubChunk));
 				if (!strcmp(chunk.ID, "data"))

@@ -16,7 +16,11 @@ namespace Sand
 			Blend Source;
 			Blend Destination;
 
+#ifdef VISUAL_SCHOOL
+			BlendState() : Source(Blend::One), Destination(Blend::One) {}
+#else
 			BlendState() = default;
+#endif
 
 			BlendState(Blend source, Blend destination)
 				: Source(source), Destination(destination) {}
